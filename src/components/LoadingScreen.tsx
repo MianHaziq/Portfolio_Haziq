@@ -22,7 +22,7 @@ export default function LoadingScreen() {
     return () => clearInterval(interval);
   }, []);
 
-  const letters = "ALEX CHEN".split("");
+  const letters = "HAZIQ NAZEER".split("");
 
   return (
     <AnimatePresence>

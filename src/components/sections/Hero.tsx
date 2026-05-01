@@ -160,16 +160,16 @@ export default function Hero() {
         {/* ── Hero Name — Cormorant Garamond display ────────────── */}
         <h1
           className="text-hero mb-5 flex flex-wrap justify-center"
-          aria-label={siteConfig.name}
+          aria-label="Haziq Nazeer"
           style={{ fontFamily: "var(--font-display)" }}
         >
-          {/* "Alex" — white */}
+          {/* "Haziq" — white */}
           <HeroWord
-            word="Alex"
+            word="Haziq"
             delay={2.08}
             className="text-hero"
           />
-          {/* "Chen" — shimmering gradient */}
+          {/* "Nazeer" — shimmering gradient */}
           <span className="word-mask inline-block">
             <motion.span
               className="inline-block gradient-text-shimmer text-hero"
@@ -181,7 +181,7 @@ export default function Hero() {
                 fontStyle: "italic",
               }}
             >
-              Chen.
+              Nazeer.
             </motion.span>
           </span>
         </h1>

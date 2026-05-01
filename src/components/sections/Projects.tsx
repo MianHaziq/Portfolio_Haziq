@@ -247,7 +247,7 @@ export default function Projects() {
           className="mt-12 text-center"
         >
           <a
-            href="https://github.com/alexchen"
+            href="https://github.com/haziqnazeer"
             target="_blank"
             rel="noopener noreferrer"
             className="inline-flex items-center gap-2 text-sm font-medium transition-all duration-300"

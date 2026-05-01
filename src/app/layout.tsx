@@ -28,11 +28,11 @@ const manrope = Manrope({
 });
 
 export const metadata: Metadata = {
-  title: "Alex Chen — Software Engineer",
+  title: "Haziq Nazeer — Software Engineer",
   description:
-    "Alex Chen is a software engineer specializing in Next.js, React, NestJS, and FastAPI — building fast, elegant, production-ready applications.",
+    "Haziq Nazeer is a software engineer specializing in Next.js, React, NestJS, and FastAPI — building fast, elegant, production-ready applications.",
   keywords: [
-    "Alex Chen",
+    "Haziq Nazeer",
     "Software Engineer",
     "Next.js",
     "React",
@@ -41,9 +41,9 @@ export const metadata: Metadata = {
     "PostgreSQL",
     "Full Stack Developer",
   ],
-  authors: [{ name: "Alex Chen" }],
+  authors: [{ name: "Haziq Nazeer" }],
   openGraph: {
-    title: "Alex Chen — Software Engineer",
+    title: "Haziq Nazeer — Software Engineer",
     description:
       "Building elegant, high-performance applications from frontend to backend.",
     type: "website",
@@ -51,9 +51,9 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "Alex Chen — Software Engineer",
+    title: "Haziq Nazeer — Software Engineer",
     description: "Building elegant, high-performance applications.",
-    creator: "@alexchen",
+    creator: "@haziqnazeer",
   },
   robots: {
     index: true,

@@ -86,7 +86,7 @@ export default function Navbar() {
               letterSpacing: "-0.01em",
             }}
           >
-            Alex Chen
+            Haziq Nazeer
           </span>
         </button>
 
