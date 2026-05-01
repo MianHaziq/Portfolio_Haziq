@@ -3,6 +3,7 @@
 import { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import ThemeToggle from "@/components/ui/ThemeToggle";
+import { useIntro } from "@/contexts/IntroContext";
 
 const navLinks = [
   { label: "About", href: "#about" },
@@ -21,9 +22,13 @@ export default function Navbar() {
   const linkRefs = useRef<(HTMLButtonElement | null)[]>([]);
   const underlineRefs = useRef<(HTMLSpanElement | null)[]>([]);
 
-  // Logo bounce on mount
+  // Tied to the intro phase so the navbar slides in alongside the loader exit
+  // and the hero entrance — single coordinated handoff, not a third timeline.
+  const { isIntroDone } = useIntro();
+
+  // Logo elastic bounce — fires once when the intro hands off
   useEffect(() => {
-    if (typeof window === "undefined") return;
+    if (typeof window === "undefined" || !isIntroDone) return;
 
     const init = async () => {
       const { gsap } = await import("@/lib/gsap");
@@ -37,14 +42,14 @@ export default function Navbar() {
             opacity: 1,
             duration: 0.7,
             ease: "elastic.out(1, 0.6)",
-            delay: 2.2,
+            delay: 0.25,
           }
         );
       }
     };
 
     init();
-  }, []);
+  }, [isIntroDone]);
 
   useEffect(() => {
     const onScroll = () => {
@@ -98,8 +103,8 @@ export default function Navbar() {
     <>
       <motion.nav
         initial={{ y: -80, opacity: 0 }}
-        animate={{ y: 0, opacity: 1 }}
-        transition={{ delay: 2.2, duration: 0.6, ease: "easeOut" as const }}
+        animate={isIntroDone ? { y: 0, opacity: 1 } : { y: -80, opacity: 0 }}
+        transition={{ delay: 0.15, duration: 0.6, ease: "easeOut" as const }}
         className="fixed top-0 left-0 right-0 z-900 flex items-center justify-between px-6 md:px-10 h-16"
         style={{
           background: scrolled ? "var(--ph-nav-bg)" : "transparent",

@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import { Cormorant_Garamond, Sora, Manrope } from "next/font/google";
 import { ThemeProvider } from "@/contexts/ThemeContext";
+import { IntroProvider } from "@/contexts/IntroContext";
 import "./globals.css";
 
 const cormorant = Cormorant_Garamond({
@@ -88,7 +89,9 @@ export default function RootLayout({
         />
       </head>
       <body className="antialiased overflow-x-hidden">
-        <ThemeProvider>{children}</ThemeProvider>
+        <ThemeProvider>
+          <IntroProvider>{children}</IntroProvider>
+        </ThemeProvider>
       </body>
     </html>
   );
