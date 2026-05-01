@@ -3,6 +3,7 @@
 import { useRef, useState } from "react";
 import { motion, useInView, AnimatePresence } from "framer-motion";
 import { projects } from "@/lib/data";
+import { SectionHeading } from "@/components/ui/AnimatedText";
 
 function ProjectCard({
   project,
@@ -152,16 +153,19 @@ function ProjectCard({
 
         {/* Title */}
         <h3
-          className="font-bold text-lg mb-2 transition-colors duration-300"
-          style={{ color: hovered ? "#f8fafc" : "#e2e8f0" }}
+          className="text-title mb-2 transition-colors duration-300"
+          style={{
+            color: hovered ? "#f8fafc" : "#e2e8f0",
+            fontFamily: "var(--font-heading)",
+          }}
         >
           {project.title}
         </h3>
 
         {/* Description */}
         <p
-          className="text-sm leading-relaxed flex-1 mb-5"
-          style={{ color: "#64748b" }}
+          className="text-meta leading-relaxed flex-1 mb-5"
+          style={{ color: "#64748b", fontFamily: "var(--font-body)", fontWeight: 400 }}
         >
           {project.description}
         </p>
@@ -171,11 +175,12 @@ function ProjectCard({
           {project.tags.map((tag) => (
             <span
               key={tag}
-              className="px-2.5 py-0.5 rounded-full text-xs font-medium"
+              className="px-2.5 py-0.5 rounded-full text-eyebrow"
               style={{
                 background: "rgba(99, 102, 241, 0.08)",
                 color: "#818cf8",
                 border: "1px solid rgba(99, 102, 241, 0.15)",
+                fontFamily: "var(--font-body)",
               }}
             >
               {tag}
@@ -199,7 +204,7 @@ export default function Projects() {
       style={{ background: "#0c0c14" }}
     >
       <div
-        className="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-px"
+        className="absolute top-0 left-1/2 -translate-x-1/2 w-200 h-px"
         style={{
           background:
             "linear-gradient(90deg, transparent, rgba(99,102,241,0.25), transparent)",
@@ -208,7 +213,7 @@ export default function Projects() {
 
       {/* Background orb */}
       <div
-        className="absolute top-1/2 right-0 w-[500px] h-[500px] -translate-y-1/2 blur-[120px] pointer-events-none"
+        className="absolute top-1/2 right-0 w-125 h-125 -translate-y-1/2 blur-[120px] pointer-events-none"
         style={{
           background:
             "radial-gradient(circle, rgba(99,102,241,0.06) 0%, transparent 70%)",
@@ -217,32 +222,15 @@ export default function Projects() {
 
       <div className="max-w-6xl mx-auto px-6">
         {/* Header */}
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          animate={inView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.6 }}
-          className="mb-16 text-center"
-        >
-          <p
-            className="text-xs font-medium tracking-[0.3em] uppercase mb-3"
-            style={{ color: "#6366f1" }}
-          >
-            What I&apos;ve Built
-          </p>
-          <h2
-            className="text-3xl md:text-5xl font-bold"
-            style={{ color: "#f8fafc" }}
-          >
-            Featured{" "}
-            <span className="gradient-text">Projects</span>
-          </h2>
-          <p
-            className="mt-4 text-base max-w-lg mx-auto"
-            style={{ color: "#475569" }}
-          >
-            A selection of projects I&apos;ve built — from full-stack apps to open-source tools.
-          </p>
-        </motion.div>
+        <div className="mb-16">
+          <SectionHeading
+            eyebrow="What I've Built"
+            title="Featured"
+            accent="Projects"
+            description="A selection of projects I've built — from full-stack apps to open-source tools."
+            align="center"
+          />
+        </div>
 
         {/* Grid */}
         <div className="grid sm:grid-cols-2 gap-6">

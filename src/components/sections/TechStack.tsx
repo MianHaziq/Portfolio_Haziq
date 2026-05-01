@@ -3,6 +3,7 @@
 import { useRef } from "react";
 import { motion, useInView } from "framer-motion";
 import { techStack } from "@/lib/data";
+import { SectionHeading } from "@/components/ui/AnimatedText";
 
 const categoryColors: Record<string, { bg: string; border: string; glow: string }> = {
   Frontend: {
@@ -35,7 +36,7 @@ export default function TechStack() {
     >
       {/* Divider */}
       <div
-        className="absolute top-0 left-1/2 -translate-x-1/2 w-[600px] h-px"
+        className="absolute top-0 left-1/2 -translate-x-1/2 w-150 h-px"
         style={{
           background:
             "linear-gradient(90deg, transparent, rgba(139,92,246,0.3), transparent)",
@@ -44,32 +45,15 @@ export default function TechStack() {
 
       <div className="max-w-6xl mx-auto px-6">
         {/* Header */}
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          animate={inView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.6 }}
-          className="mb-16 text-center"
-        >
-          <p
-            className="text-xs font-medium tracking-[0.3em] uppercase mb-3"
-            style={{ color: "#8b5cf6" }}
-          >
-            What I Use
-          </p>
-          <h2
-            className="text-3xl md:text-5xl font-bold"
-            style={{ color: "#f8fafc" }}
-          >
-            Tech{" "}
-            <span className="gradient-text">Stack</span>
-          </h2>
-          <p
-            className="mt-4 text-base max-w-md mx-auto"
-            style={{ color: "#475569" }}
-          >
-            Tools and technologies I work with daily to build production-ready applications.
-          </p>
-        </motion.div>
+        <div className="mb-16">
+          <SectionHeading
+            eyebrow="What I Use"
+            title="Tech"
+            accent="Stack"
+            description="Tools and technologies I work with daily to build production-ready applications."
+            align="center"
+          />
+        </div>
 
         {/* Categories */}
         <div className="space-y-10">
@@ -88,8 +72,11 @@ export default function TechStack() {
                     style={{ background: colors.border.replace("0.3", "0.9") }}
                   />
                   <h3
-                    className="text-sm font-semibold tracking-widest uppercase"
-                    style={{ color: colors.border.replace("0.3", "0.9") }}
+                    className="text-eyebrow"
+                    style={{
+                      color: colors.border.replace("0.3", "0.9"),
+                      fontFamily: "var(--font-heading)",
+                    }}
                   >
                     {category}
                   </h3>
@@ -136,8 +123,8 @@ export default function TechStack() {
 
                       {/* Name */}
                       <span
-                        className="relative z-10 text-xs font-medium text-center leading-tight"
-                        style={{ color: "#94a3b8" }}
+                        className="relative z-10 text-meta text-center leading-tight"
+                        style={{ color: "#94a3b8", fontFamily: "var(--font-body)" }}
                       >
                         {tech.name}
                       </span>

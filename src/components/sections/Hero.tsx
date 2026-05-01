@@ -3,29 +3,64 @@
 import { motion } from "framer-motion";
 import { siteConfig } from "@/lib/data";
 
-const containerVariants = {
-  hidden: {},
-  visible: {
-    transition: {
-      staggerChildren: 0.12,
-      delayChildren: 2.0,
-    },
-  },
-};
+const EASE_EXPO = [0.22, 1, 0.36, 1] as const;
 
-const itemVariants = {
-  hidden: { opacity: 0, y: 40 },
-  visible: {
-    opacity: 1,
-    y: 0,
-    transition: { duration: 0.7, ease: "easeOut" as const },
+const socialLinks = [
+  {
+    label: "GitHub",
+    href: siteConfig.github,
+    icon: (
+      <svg viewBox="0 0 24 24" fill="currentColor" className="w-5 h-5">
+        <path d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z" />
+      </svg>
+    ),
   },
-};
+  {
+    label: "LinkedIn",
+    href: siteConfig.linkedin,
+    icon: (
+      <svg viewBox="0 0 24 24" fill="currentColor" className="w-5 h-5">
+        <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z" />
+      </svg>
+    ),
+  },
+  {
+    label: "Twitter",
+    href: siteConfig.twitter,
+    icon: (
+      <svg viewBox="0 0 24 24" fill="currentColor" className="w-5 h-5">
+        <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.744l7.73-8.835L1.254 2.25H8.08l4.259 5.63L18.244 2.25zm-1.161 17.52h1.833L7.084 4.126H5.117L17.083 19.77z" />
+      </svg>
+    ),
+  },
+];
+
+function HeroWord({
+  word,
+  delay,
+  className = "",
+}: {
+  word: string;
+  delay: number;
+  className?: string;
+}) {
+  return (
+    <span className="word-mask inline-block mr-[0.22em] last:mr-0">
+      <motion.span
+        className={`inline-block ${className}`}
+        initial={{ y: "115%", opacity: 0 }}
+        animate={{ y: "0%", opacity: 1 }}
+        transition={{ delay, duration: 0.82, ease: EASE_EXPO }}
+      >
+        {word}
+      </motion.span>
+    </span>
+  );
+}
 
 export default function Hero() {
-  const scrollToSection = (id: string) => {
+  const scrollTo = (id: string) =>
     document.getElementById(id)?.scrollIntoView({ behavior: "smooth" });
-  };
 
   return (
     <section
@@ -33,62 +68,62 @@ export default function Hero() {
       className="relative min-h-screen flex flex-col items-center justify-center overflow-hidden"
       style={{ background: "#0a0a0f" }}
     >
-      {/* Animated background orbs */}
+      {/* ── Background orbs ─────────────────────────────────────── */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        {/* Orb 1 */}
         <div
-          className="orb-1 absolute top-[15%] left-[10%] w-[500px] h-[500px] rounded-full blur-[100px]"
+          className="orb-1 absolute top-[15%] left-[8%] w-[560px] h-[560px] rounded-full blur-[110px]"
           style={{
             background:
-              "radial-gradient(circle, rgba(99,102,241,0.15) 0%, rgba(99,102,241,0.05) 50%, transparent 70%)",
+              "radial-gradient(circle, rgba(99,102,241,0.13) 0%, rgba(99,102,241,0.04) 55%, transparent 70%)",
           }}
         />
-        {/* Orb 2 */}
         <div
-          className="orb-2 absolute bottom-[10%] right-[5%] w-[600px] h-[600px] rounded-full blur-[120px]"
+          className="orb-2 absolute bottom-[8%] right-[4%] w-[640px] h-[640px] rounded-full blur-[130px]"
           style={{
             background:
-              "radial-gradient(circle, rgba(139,92,246,0.12) 0%, rgba(139,92,246,0.04) 50%, transparent 70%)",
+              "radial-gradient(circle, rgba(139,92,246,0.1) 0%, rgba(139,92,246,0.03) 55%, transparent 70%)",
           }}
         />
-        {/* Orb 3 */}
         <div
-          className="orb-3 absolute top-[50%] left-[50%] w-[400px] h-[400px] rounded-full blur-[80px] -translate-x-1/2 -translate-y-1/2"
+          className="orb-3 absolute top-[48%] left-[48%] w-[440px] h-[440px] rounded-full blur-[90px] -translate-x-1/2 -translate-y-1/2"
           style={{
             background:
-              "radial-gradient(circle, rgba(96,165,250,0.07) 0%, transparent 70%)",
+              "radial-gradient(circle, rgba(96,165,250,0.05) 0%, transparent 70%)",
           }}
         />
-        {/* Grid pattern */}
+        {/* Subtle dot grid */}
         <div
-          className="absolute inset-0 opacity-40"
+          className="absolute inset-0"
           style={{
             backgroundImage:
-              "linear-gradient(rgba(99, 102, 241, 0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(99, 102, 241, 0.03) 1px, transparent 1px)",
-            backgroundSize: "80px 80px",
+              "radial-gradient(rgba(99,102,241,0.12) 1px, transparent 1px)",
+            backgroundSize: "48px 48px",
+            maskImage:
+              "radial-gradient(ellipse 80% 80% at 50% 50%, black 40%, transparent 100%)",
           }}
         />
       </div>
 
-      {/* Content */}
-      <motion.div
-        variants={containerVariants}
-        initial="hidden"
-        animate="visible"
-        className="relative z-10 max-w-5xl mx-auto px-6 text-center"
-      >
-        {/* Badge */}
-        <motion.div variants={itemVariants} className="mb-6 flex justify-center">
+      {/* ── Content ─────────────────────────────────────────────── */}
+      <div className="relative z-10 max-w-5xl mx-auto px-6 text-center">
+
+        {/* Availability badge */}
+        <motion.div
+          initial={{ opacity: 0, y: 16, scale: 0.94 }}
+          animate={{ opacity: 1, y: 0, scale: 1 }}
+          transition={{ delay: 1.9, duration: 0.55, ease: "easeOut" }}
+          className="mb-10 flex justify-center"
+        >
           <div
-            className="inline-flex items-center gap-2 px-4 py-2 rounded-full text-xs font-medium tracking-widest uppercase"
+            className="inline-flex items-center gap-2.5 px-5 py-2 rounded-full text-eyebrow"
             style={{
-              background: "rgba(99, 102, 241, 0.1)",
-              border: "1px solid rgba(99, 102, 241, 0.3)",
+              background: "rgba(99, 102, 241, 0.08)",
+              border: "1px solid rgba(99, 102, 241, 0.22)",
               color: "#a5b4fc",
             }}
           >
             <span
-              className="w-1.5 h-1.5 rounded-full"
+              className="w-1.5 h-1.5 rounded-full flex-shrink-0"
               style={{
                 background: "#6366f1",
                 boxShadow: "0 0 8px #6366f1",
@@ -99,143 +134,235 @@ export default function Hero() {
           </div>
         </motion.div>
 
-        {/* Heading */}
-        <motion.h1
-          variants={itemVariants}
-          className="text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-bold leading-none tracking-tight mb-6"
-          style={{ fontFamily: "Inter, system-ui, sans-serif" }}
-        >
-          <span style={{ color: "#f8fafc" }}>Hi, I&apos;m </span>
-          <span className="gradient-text">{siteConfig.name}</span>
-        </motion.h1>
-
-        {/* Role */}
-        <motion.div variants={itemVariants} className="mb-6">
-          <h2
-            className="text-xl sm:text-2xl md:text-3xl font-light tracking-wide"
-            style={{ color: "#94a3b8" }}
+        {/* ── Greeting line ─────────────────────────────────────── */}
+        <div className="mb-2 flex justify-center">
+          <span
+            className="word-mask inline-block"
+            style={{
+              fontFamily: "var(--font-body)",
+              fontSize: "clamp(0.9rem, 1.8vw, 1.1rem)",
+              fontWeight: 400,
+              color: "#475569",
+              letterSpacing: "0.06em",
+            }}
           >
-            {siteConfig.role} &mdash;{" "}
-            <span style={{ color: "#e2e8f0" }}>building things for the web</span>
-          </h2>
-        </motion.div>
+            <motion.span
+              className="inline-block"
+              initial={{ y: "110%", opacity: 0 }}
+              animate={{ y: "0%", opacity: 1 }}
+              transition={{ delay: 2.0, duration: 0.7, ease: EASE_EXPO }}
+            >
+              Hi, I&apos;m
+            </motion.span>
+          </span>
+        </div>
 
-        {/* Tagline */}
+        {/* ── Hero Name — Cormorant Garamond display ────────────── */}
+        <h1
+          className="text-hero mb-5 flex flex-wrap justify-center"
+          aria-label={siteConfig.name}
+          style={{ fontFamily: "var(--font-display)" }}
+        >
+          {/* "Alex" — white */}
+          <HeroWord
+            word="Alex"
+            delay={2.08}
+            className="text-hero"
+          />
+          {/* "Chen" — shimmering gradient */}
+          <span className="word-mask inline-block">
+            <motion.span
+              className="inline-block gradient-text-shimmer text-hero"
+              initial={{ y: "115%", opacity: 0 }}
+              animate={{ y: "0%", opacity: 1 }}
+              transition={{ delay: 2.22, duration: 0.82, ease: EASE_EXPO }}
+              style={{
+                fontFamily: "var(--font-display)",
+                fontStyle: "italic",
+              }}
+            >
+              Chen.
+            </motion.span>
+          </span>
+        </h1>
+
+        {/* ── Role — Sora ───────────────────────────────────────── */}
+        <div
+          className="mb-6 flex justify-center"
+          style={{
+            fontFamily: "var(--font-heading)",
+            fontSize: "clamp(1.1rem, 2.8vw, 1.625rem)",
+            fontWeight: 300,
+            letterSpacing: "-0.01em",
+            color: "#64748b",
+          }}
+        >
+          <span className="word-mask inline-block mr-[0.25em]">
+            <motion.span
+              className="inline-block"
+              initial={{ y: "110%", opacity: 0 }}
+              animate={{ y: "0%", opacity: 1 }}
+              transition={{ delay: 2.38, duration: 0.72, ease: EASE_EXPO }}
+            >
+              Software
+            </motion.span>
+          </span>
+          <span className="word-mask inline-block mr-[0.25em]">
+            <motion.span
+              className="inline-block"
+              style={{ color: "#94a3b8" }}
+              initial={{ y: "110%", opacity: 0 }}
+              animate={{ y: "0%", opacity: 1 }}
+              transition={{ delay: 2.46, duration: 0.72, ease: EASE_EXPO }}
+            >
+              Engineer
+            </motion.span>
+          </span>
+          <span className="word-mask inline-block mr-[0.25em]">
+            <motion.span
+              className="inline-block"
+              initial={{ y: "110%", opacity: 0 }}
+              animate={{ y: "0%", opacity: 1 }}
+              transition={{ delay: 2.54, duration: 0.72, ease: EASE_EXPO }}
+            >
+              —
+            </motion.span>
+          </span>
+          <span className="word-mask inline-block">
+            <motion.span
+              className="inline-block"
+              style={{
+                fontStyle: "italic",
+                fontFamily: "var(--font-display)",
+                fontSize: "1.08em",
+                fontWeight: 400,
+                color: "#6366f1",
+              }}
+              initial={{ y: "110%", opacity: 0 }}
+              animate={{ y: "0%", opacity: 1 }}
+              transition={{ delay: 2.62, duration: 0.72, ease: EASE_EXPO }}
+            >
+              building things for the web
+            </motion.span>
+          </span>
+        </div>
+
+        {/* ── Bio — Manrope ─────────────────────────────────────── */}
         <motion.p
-          variants={itemVariants}
-          className="max-w-xl mx-auto text-base md:text-lg leading-relaxed mb-10"
-          style={{ color: "#64748b" }}
+          className="text-body max-w-[52ch] mx-auto mb-12"
+          style={{ color: "#475569" }}
+          initial={{ opacity: 0, y: 18 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 2.8, duration: 0.65, ease: "easeOut" }}
         >
           {siteConfig.bio}
         </motion.p>
 
-        {/* CTAs */}
+        {/* ── CTAs ──────────────────────────────────────────────── */}
         <motion.div
-          variants={itemVariants}
-          className="flex flex-col sm:flex-row gap-4 justify-center items-center"
+          className="flex flex-col sm:flex-row gap-4 justify-center items-center mb-14"
+          initial={{ opacity: 0, y: 18 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 2.95, duration: 0.55, ease: "easeOut" }}
         >
           <button
-            onClick={() => scrollToSection("projects")}
-            className="group relative px-8 py-3.5 rounded-full font-medium text-sm overflow-hidden transition-all duration-300 hover:scale-105"
+            onClick={() => scrollTo("projects")}
+            className="group relative px-9 py-3.5 rounded-full overflow-hidden transition-transform duration-300 hover:scale-105 active:scale-[0.98]"
             style={{
               background: "linear-gradient(135deg, #6366f1, #8b5cf6)",
               color: "#fff",
-              boxShadow: "0 8px 30px rgba(99, 102, 241, 0.35)",
+              fontFamily: "var(--font-body)",
+              fontWeight: 600,
+              fontSize: "0.9rem",
+              letterSpacing: "0.01em",
+              boxShadow: "0 8px 32px rgba(99, 102, 241, 0.38), 0 2px 8px rgba(0,0,0,0.3)",
             }}
           >
             <span className="relative z-10">View My Work</span>
             <div
               className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300"
-              style={{
-                background: "linear-gradient(135deg, #4f46e5, #7c3aed)",
-              }}
+              style={{ background: "linear-gradient(135deg, #4f46e5, #7c3aed)" }}
             />
           </button>
 
           <button
-            onClick={() => scrollToSection("contact")}
-            className="px-8 py-3.5 rounded-full font-medium text-sm transition-all duration-300 hover:scale-105"
+            onClick={() => scrollTo("contact")}
+            className="px-9 py-3.5 rounded-full transition-all duration-300 hover:scale-105 active:scale-[0.98]"
             style={{
               background: "rgba(255,255,255,0.04)",
-              border: "1px solid rgba(255,255,255,0.12)",
-              color: "#e2e8f0",
+              border: "1px solid rgba(255,255,255,0.1)",
+              color: "#cbd5e1",
+              fontFamily: "var(--font-body)",
+              fontWeight: 500,
+              fontSize: "0.9rem",
+              letterSpacing: "0.01em",
+            }}
+            onMouseEnter={(e) => {
+              (e.currentTarget as HTMLElement).style.background = "rgba(255,255,255,0.07)";
+              (e.currentTarget as HTMLElement).style.borderColor = "rgba(255,255,255,0.18)";
+            }}
+            onMouseLeave={(e) => {
+              (e.currentTarget as HTMLElement).style.background = "rgba(255,255,255,0.04)";
+              (e.currentTarget as HTMLElement).style.borderColor = "rgba(255,255,255,0.1)";
             }}
           >
             Get In Touch
           </button>
         </motion.div>
 
-        {/* Social links */}
+        {/* ── Social icons ──────────────────────────────────────── */}
         <motion.div
-          variants={itemVariants}
-          className="mt-12 flex justify-center items-center gap-6"
+          className="flex justify-center items-center gap-7"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 3.15, duration: 0.6 }}
         >
-          {[
-            {
-              label: "GitHub",
-              href: siteConfig.github,
-              icon: (
-                <svg viewBox="0 0 24 24" fill="currentColor" className="w-5 h-5">
-                  <path d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z" />
-                </svg>
-              ),
-            },
-            {
-              label: "LinkedIn",
-              href: siteConfig.linkedin,
-              icon: (
-                <svg viewBox="0 0 24 24" fill="currentColor" className="w-5 h-5">
-                  <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z" />
-                </svg>
-              ),
-            },
-            {
-              label: "Twitter",
-              href: siteConfig.twitter,
-              icon: (
-                <svg viewBox="0 0 24 24" fill="currentColor" className="w-5 h-5">
-                  <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.744l7.73-8.835L1.254 2.25H8.08l4.259 5.63L18.244 2.25zm-1.161 17.52h1.833L7.084 4.126H5.117L17.083 19.77z" />
-                </svg>
-              ),
-            },
-          ].map((social) => (
+          <div
+            className="h-px w-12 hidden sm:block"
+            style={{ background: "rgba(255,255,255,0.08)" }}
+          />
+          {socialLinks.map((s) => (
             <a
-              key={social.label}
-              href={social.href}
+              key={s.label}
+              href={s.href}
               target="_blank"
               rel="noopener noreferrer"
+              aria-label={s.label}
               className="transition-all duration-300 hover:scale-110"
-              style={{ color: "#475569" }}
+              style={{ color: "#334155" }}
               onMouseEnter={(e) =>
                 ((e.currentTarget as HTMLElement).style.color = "#6366f1")
               }
               onMouseLeave={(e) =>
-                ((e.currentTarget as HTMLElement).style.color = "#475569")
+                ((e.currentTarget as HTMLElement).style.color = "#334155")
               }
-              aria-label={social.label}
             >
-              {social.icon}
+              {s.icon}
             </a>
           ))}
+          <div
+            className="h-px w-12 hidden sm:block"
+            style={{ background: "rgba(255,255,255,0.08)" }}
+          />
         </motion.div>
-      </motion.div>
+      </div>
 
-      {/* Scroll indicator */}
+      {/* ── Scroll indicator ────────────────────────────────────── */}
       <motion.div
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
-        transition={{ delay: 3.5, duration: 0.8 }}
+        transition={{ delay: 3.4, duration: 0.8 }}
         className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2"
       >
         <span
-          className="text-xs tracking-widest uppercase"
-          style={{ color: "#334155" }}
+          className="text-eyebrow"
+          style={{ color: "#1e293b", letterSpacing: "0.3em" }}
         >
           Scroll
         </span>
         <div
           className="w-px h-12 relative overflow-hidden"
-          style={{ background: "rgba(255,255,255,0.08)" }}
+          style={{ background: "rgba(255,255,255,0.06)" }}
         >
           <motion.div
             className="absolute top-0 left-0 w-full"
@@ -244,7 +371,7 @@ export default function Hero() {
               height: "50%",
             }}
             animate={{ y: ["0%", "200%"] }}
-            transition={{ duration: 1.5, repeat: Infinity, ease: "linear" }}
+            transition={{ duration: 1.6, repeat: Infinity, ease: "linear" }}
           />
         </div>
       </motion.div>

@@ -64,17 +64,27 @@ export default function Navbar() {
           className="flex items-center gap-2 group"
         >
           <div
-            className="w-8 h-8 rounded-lg flex items-center justify-center text-white text-sm font-bold"
+            className="w-8 h-8 rounded-lg flex items-center justify-center text-white"
             style={{
               background: "linear-gradient(135deg, #6366f1, #8b5cf6)",
               boxShadow: "0 4px 15px rgba(99, 102, 241, 0.4)",
+              fontFamily: "var(--font-display)",
+              fontSize: "1.1rem",
+              fontWeight: 700,
+              fontStyle: "italic",
             }}
           >
             A
           </div>
           <span
-            className="font-semibold text-sm tracking-wide hidden sm:block"
-            style={{ color: "#f8fafc" }}
+            className="hidden sm:block"
+            style={{
+              color: "#f8fafc",
+              fontFamily: "var(--font-heading)",
+              fontWeight: 600,
+              fontSize: "0.875rem",
+              letterSpacing: "-0.01em",
+            }}
           >
             Alex Chen
           </span>
@@ -86,12 +96,13 @@ export default function Navbar() {
             <button
               key={link.href}
               onClick={() => scrollTo(link.href)}
-              className="animated-underline text-sm font-medium transition-colors duration-200"
+              className="animated-underline transition-colors duration-200"
               style={{
-                color:
-                  activeSection === link.href.slice(1)
-                    ? "#6366f1"
-                    : "#94a3b8",
+                fontFamily: "var(--font-heading)",
+                fontSize: "0.82rem",
+                fontWeight: 500,
+                letterSpacing: "0.01em",
+                color: activeSection === link.href.slice(1) ? "#6366f1" : "#64748b",
               }}
             >
               {link.label}
@@ -103,10 +114,14 @@ export default function Navbar() {
         <div className="hidden md:flex items-center gap-3">
           <button
             onClick={() => scrollTo("#contact")}
-            className="px-4 py-2 rounded-full text-sm font-medium transition-all duration-300 hover:scale-105"
+            className="px-4 py-2 rounded-full transition-all duration-300 hover:scale-105"
             style={{
               background: "linear-gradient(135deg, #6366f1, #8b5cf6)",
               color: "#fff",
+              fontFamily: "var(--font-heading)",
+              fontSize: "0.8rem",
+              fontWeight: 600,
+              letterSpacing: "0.01em",
               boxShadow: "0 4px 15px rgba(99, 102, 241, 0.3)",
             }}
           >
@@ -152,7 +167,7 @@ export default function Navbar() {
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -20 }}
             transition={{ duration: 0.3 }}
-            className="fixed top-16 inset-x-0 z-[899] flex flex-col gap-0 md:hidden"
+            className="fixed top-16 inset-x-0 z-899 flex flex-col gap-0 md:hidden"
             style={{
               background: "rgba(10, 10, 15, 0.97)",
               backdropFilter: "blur(20px)",
@@ -166,10 +181,12 @@ export default function Navbar() {
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ delay: i * 0.06 }}
                 onClick={() => scrollTo(link.href)}
-                className="px-8 py-4 text-left text-base font-medium transition-colors duration-200 border-b"
+                className="px-8 py-4 text-left transition-colors duration-200 border-b"
                 style={{
-                  color:
-                    activeSection === link.href.slice(1) ? "#6366f1" : "#94a3b8",
+                  fontFamily: "var(--font-heading)",
+                  fontSize: "0.95rem",
+                  fontWeight: 500,
+                  color: activeSection === link.href.slice(1) ? "#6366f1" : "#94a3b8",
                   borderColor: "rgba(255,255,255,0.05)",
                 }}
               >

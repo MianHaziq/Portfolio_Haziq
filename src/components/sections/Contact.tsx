@@ -3,6 +3,7 @@
 import { useRef, useState, FormEvent } from "react";
 import { motion, useInView } from "framer-motion";
 import { siteConfig } from "@/lib/data";
+import { SectionHeading } from "@/components/ui/AnimatedText";
 
 const socialLinks = [
   {
@@ -82,32 +83,15 @@ export default function Contact() {
 
       <div className="max-w-5xl mx-auto px-6">
         {/* Header */}
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          animate={inView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.6 }}
-          className="mb-16 text-center"
-        >
-          <p
-            className="text-xs font-medium tracking-[0.3em] uppercase mb-3"
-            style={{ color: "#6366f1" }}
-          >
-            Say Hello
-          </p>
-          <h2
-            className="text-3xl md:text-5xl font-bold mb-4"
-            style={{ color: "#f8fafc" }}
-          >
-            Get In{" "}
-            <span className="gradient-text">Touch</span>
-          </h2>
-          <p
-            className="max-w-md mx-auto text-base"
-            style={{ color: "#475569" }}
-          >
-            Have a project in mind, a question, or just want to say hi? My inbox is always open.
-          </p>
-        </motion.div>
+        <div className="mb-16">
+          <SectionHeading
+            eyebrow="Say Hello"
+            title="Get In"
+            accent="Touch"
+            description="Have a project in mind, a question, or just want to say hi? My inbox is always open."
+            align="center"
+          />
+        </div>
 
         <div className="grid md:grid-cols-5 gap-8">
           {/* Contact form */}
@@ -134,12 +118,12 @@ export default function Contact() {
                     ✓
                   </div>
                   <h3
-                    className="text-xl font-bold"
-                    style={{ color: "#f8fafc" }}
+                    className="text-heading"
+                    style={{ color: "#f8fafc", fontFamily: "var(--font-heading)" }}
                   >
                     Message sent!
                   </h3>
-                  <p className="text-sm text-center" style={{ color: "#64748b" }}>
+                  <p className="text-meta text-center" style={{ color: "#64748b" }}>
                     Thanks for reaching out. I&apos;ll get back to you within 24 hours.
                   </p>
                 </motion.div>
@@ -148,8 +132,8 @@ export default function Contact() {
                   <div className="grid sm:grid-cols-2 gap-5">
                     <div>
                       <label
-                        className="block text-xs font-medium mb-2 uppercase tracking-wider"
-                        style={{ color: "#64748b" }}
+                        className="block text-eyebrow mb-2"
+                        style={{ color: "#64748b", fontFamily: "var(--font-body)" }}
                       >
                         Name
                       </label>
@@ -180,8 +164,8 @@ export default function Contact() {
                     </div>
                     <div>
                       <label
-                        className="block text-xs font-medium mb-2 uppercase tracking-wider"
-                        style={{ color: "#64748b" }}
+                        className="block text-eyebrow mb-2"
+                        style={{ color: "#64748b", fontFamily: "var(--font-body)" }}
                       >
                         Email
                       </label>
@@ -214,8 +198,8 @@ export default function Contact() {
 
                   <div>
                     <label
-                      className="block text-xs font-medium mb-2 uppercase tracking-wider"
-                      style={{ color: "#64748b" }}
+                      className="block text-eyebrow mb-2"
+                      style={{ color: "#64748b", fontFamily: "var(--font-body)" }}
                     >
                       Message
                     </label>
@@ -248,7 +232,8 @@ export default function Contact() {
                   <button
                     type="submit"
                     disabled={sending}
-                    className="w-full py-3.5 rounded-xl font-medium text-sm transition-all duration-300 hover:scale-[1.02] disabled:opacity-70 disabled:cursor-not-allowed"
+                    className="w-full py-3.5 rounded-xl transition-all duration-300 hover:scale-[1.02] disabled:opacity-70 disabled:cursor-not-allowed"
+                  style={{ fontFamily: "var(--font-body)", fontWeight: 600, fontSize: "0.9rem" }}
                     style={{
                       background: "linear-gradient(135deg, #6366f1, #8b5cf6)",
                       color: "#fff",

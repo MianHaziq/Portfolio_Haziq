@@ -3,6 +3,7 @@
 import { useRef } from "react";
 import { motion, useInView } from "framer-motion";
 import { experience } from "@/lib/data";
+import { SectionHeading } from "@/components/ui/AnimatedText";
 
 export default function Experience() {
   const ref = useRef(null);
@@ -34,26 +35,14 @@ export default function Experience() {
 
       <div className="max-w-4xl mx-auto px-6">
         {/* Header */}
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          animate={inView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.6 }}
-          className="mb-16 text-center"
-        >
-          <p
-            className="text-xs font-medium tracking-[0.3em] uppercase mb-3"
-            style={{ color: "#8b5cf6" }}
-          >
-            My Journey
-          </p>
-          <h2
-            className="text-3xl md:text-5xl font-bold"
-            style={{ color: "#f8fafc" }}
-          >
-            Work{" "}
-            <span className="gradient-text">Experience</span>
-          </h2>
-        </motion.div>
+        <div className="mb-16">
+          <SectionHeading
+            eyebrow="My Journey"
+            title="Work"
+            accent="Experience"
+            align="center"
+          />
+        </div>
 
         {/* Timeline */}
         <div className="relative">
@@ -130,22 +119,22 @@ export default function Experience() {
 
                       {/* Role & Company */}
                       <h3
-                        className="font-bold text-lg mb-1"
-                        style={{ color: "#f8fafc" }}
+                        className="text-title mb-1"
+                        style={{ color: "#f8fafc", fontFamily: "var(--font-heading)" }}
                       >
                         {exp.role}
                       </h3>
                       <p
-                        className="text-sm font-medium mb-3"
-                        style={{ color: "#6366f1" }}
+                        className="text-meta mb-3"
+                        style={{ color: "#6366f1", fontFamily: "var(--font-body)", fontWeight: 600 }}
                       >
                         {exp.company}
                       </p>
 
                       {/* Description */}
                       <p
-                        className="text-sm leading-relaxed mb-4"
-                        style={{ color: "#64748b" }}
+                        className="text-meta leading-relaxed mb-4"
+                        style={{ color: "#64748b", fontFamily: "var(--font-body)", fontWeight: 400 }}
                       >
                         {exp.description}
                       </p>
@@ -155,8 +144,8 @@ export default function Experience() {
                         {exp.highlights.map((highlight, hi) => (
                           <li
                             key={hi}
-                            className="flex items-start gap-2 text-sm"
-                            style={{ color: "#94a3b8" }}
+                            className="flex items-start gap-2 text-meta"
+                            style={{ color: "#94a3b8", fontFamily: "var(--font-body)" }}
                           >
                             <svg
                               viewBox="0 0 24 24"

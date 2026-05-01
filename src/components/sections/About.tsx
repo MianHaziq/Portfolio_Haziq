@@ -3,6 +3,7 @@
 import { useRef } from "react";
 import { motion, useInView } from "framer-motion";
 import { siteConfig, skills } from "@/lib/data";
+import { SectionHeading } from "@/components/ui/AnimatedText";
 
 const fadeUp = {
   hidden: { opacity: 0, y: 40 },
@@ -20,10 +21,16 @@ function SkillBar({ name, level, index }: { name: string; level: number; index: 
   return (
     <div ref={ref} className="space-y-2">
       <div className="flex justify-between items-center">
-        <span className="text-sm font-medium" style={{ color: "#cbd5e1" }}>
+        <span
+          className="text-meta font-medium"
+          style={{ color: "#cbd5e1", fontFamily: "var(--font-body)" }}
+        >
           {name}
         </span>
-        <span className="text-xs font-mono" style={{ color: "#6366f1" }}>
+        <span
+          className="text-meta"
+          style={{ color: "#6366f1", fontFamily: "var(--font-heading)", fontWeight: 600 }}
+        >
           {level}%
         </span>
       </div>
@@ -72,26 +79,14 @@ export default function About() {
 
       <div className="max-w-6xl mx-auto px-6">
         {/* Section header */}
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          animate={inView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.6 }}
-          className="mb-16 text-center"
-        >
-          <p
-            className="text-xs font-medium tracking-[0.3em] uppercase mb-3"
-            style={{ color: "#6366f1" }}
-          >
-            Who I Am
-          </p>
-          <h2
-            className="text-3xl md:text-5xl font-bold"
-            style={{ color: "#f8fafc" }}
-          >
-            About{" "}
-            <span className="gradient-text">Me</span>
-          </h2>
-        </motion.div>
+        <div className="mb-16">
+          <SectionHeading
+            eyebrow="Who I Am"
+            title="About"
+            accent="Me"
+            align="center"
+          />
+        </div>
 
         <div className="grid md:grid-cols-2 gap-16 items-start">
           {/* Left – bio & education */}
@@ -103,17 +98,13 @@ export default function About() {
               variants={fadeUp}
               className="glass-card p-8"
             >
-              <p
-                className="text-base leading-relaxed mb-6"
-                style={{ color: "#94a3b8" }}
-              >
+              <p className="text-body mb-5" style={{ color: "#94a3b8" }}>
                 {siteConfig.bio}
               </p>
-              <p
-                className="text-base leading-relaxed"
-                style={{ color: "#94a3b8" }}
-              >
-                I thrive at the intersection of design and engineering — making things look great and work even better. Whether it&apos;s a silky smooth UI or a rock-solid API, I care deeply about the craft.
+              <p className="text-body" style={{ color: "#64748b" }}>
+                I thrive at the intersection of design and engineering — making
+                things look great and work even better. Whether it&apos;s a
+                silky-smooth UI or a rock-solid API, I care deeply about the craft.
               </p>
             </motion.div>
 
@@ -130,19 +121,19 @@ export default function About() {
                 { value: "10+", label: "Projects" },
                 { value: "∞", label: "Curiosity" },
               ].map((stat) => (
-                <div
-                  key={stat.label}
-                  className="glass-card p-5 text-center"
-                >
+                <div key={stat.label} className="glass-card p-5 text-center">
                   <div
-                    className="text-2xl font-bold mb-1 gradient-text"
+                    className="gradient-text mb-1"
+                    style={{
+                      fontFamily: "var(--font-display)",
+                      fontSize: "clamp(1.6rem, 3vw, 2.25rem)",
+                      fontWeight: 700,
+                      lineHeight: 1,
+                    }}
                   >
                     {stat.value}
                   </div>
-                  <div
-                    className="text-xs uppercase tracking-wider"
-                    style={{ color: "#475569" }}
-                  >
+                  <div className="text-eyebrow" style={{ color: "#475569" }}>
                     {stat.label}
                   </div>
                 </div>
@@ -168,15 +159,15 @@ export default function About() {
               </div>
               <div>
                 <h3
-                  className="font-semibold text-sm mb-0.5"
-                  style={{ color: "#f8fafc" }}
+                  className="text-title mb-0.5"
+                  style={{ color: "#f8fafc", fontFamily: "var(--font-heading)" }}
                 >
                   {siteConfig.education.degree}
                 </h3>
-                <p className="text-sm" style={{ color: "#6366f1" }}>
+                <p className="text-meta" style={{ color: "#6366f1", fontWeight: 500 }}>
                   {siteConfig.education.institution}
                 </p>
-                <p className="text-xs mt-1" style={{ color: "#475569" }}>
+                <p className="text-meta mt-1" style={{ color: "#475569", fontWeight: 400 }}>
                   Class of {siteConfig.education.year}
                 </p>
               </div>
@@ -192,8 +183,8 @@ export default function About() {
             className="glass-card p-8 space-y-6"
           >
             <h3
-              className="font-semibold text-base mb-6"
-              style={{ color: "#f8fafc" }}
+              className="text-title mb-6"
+              style={{ color: "#f8fafc", fontFamily: "var(--font-heading)" }}
             >
               Core Skills
             </h3>

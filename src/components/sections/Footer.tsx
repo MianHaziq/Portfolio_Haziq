@@ -16,7 +16,7 @@ export default function Footer() {
     >
       {/* Top gradient */}
       <div
-        className="absolute top-0 left-1/2 -translate-x-1/2 w-[400px] h-px"
+        className="absolute top-0 left-1/2 -translate-x-1/2 w-100 h-px"
         style={{
           background:
             "linear-gradient(90deg, transparent, rgba(99,102,241,0.4), transparent)",
@@ -28,20 +28,40 @@ export default function Footer() {
           {/* Logo */}
           <div className="flex items-center gap-3">
             <div
-              className="w-8 h-8 rounded-lg flex items-center justify-center text-white text-sm font-bold"
+              className="w-8 h-8 rounded-lg flex items-center justify-center text-white"
               style={{
                 background: "linear-gradient(135deg, #6366f1, #8b5cf6)",
+                fontFamily: "var(--font-display)",
+                fontSize: "1.1rem",
+                fontWeight: 700,
+                fontStyle: "italic",
               }}
             >
               A
             </div>
-            <span className="font-semibold text-sm" style={{ color: "#f8fafc" }}>
+            <span
+              style={{
+                color: "#f8fafc",
+                fontFamily: "var(--font-heading)",
+                fontWeight: 600,
+                fontSize: "0.875rem",
+                letterSpacing: "-0.01em",
+              }}
+            >
               {siteConfig.name}
             </span>
           </div>
 
           {/* Center text */}
-          <p className="text-xs text-center" style={{ color: "#334155" }}>
+          <p
+            className="text-center"
+            style={{
+              color: "#334155",
+              fontFamily: "var(--font-body)",
+              fontSize: "0.78rem",
+              fontWeight: 400,
+            }}
+          >
             Crafted with{" "}
             <span style={{ color: "#6366f1" }}>♥</span> using Next.js & Framer
             Motion · {year}

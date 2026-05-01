@@ -1,10 +1,29 @@
 import type { Metadata, Viewport } from "next";
-import { Inter } from "next/font/google";
+import { Cormorant_Garamond, Sora, Manrope } from "next/font/google";
 import "./globals.css";
 
-const inter = Inter({
+// Editorial luxury serif — hero display text
+const cormorant = Cormorant_Garamond({
   subsets: ["latin"],
-  variable: "--font-inter",
+  variable: "--font-display",
+  weight: ["300", "400", "500", "600", "700"],
+  style: ["normal", "italic"],
+  display: "swap",
+});
+
+// Modern geometric sans — section headings
+const sora = Sora({
+  subsets: ["latin"],
+  variable: "--font-heading",
+  weight: ["300", "400", "500", "600", "700", "800"],
+  display: "swap",
+});
+
+// Humanist sans — body, UI, labels
+const manrope = Manrope({
+  subsets: ["latin"],
+  variable: "--font-body",
+  weight: ["300", "400", "500", "600", "700", "800"],
   display: "swap",
 });
 
@@ -53,15 +72,11 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={`${inter.variable} scroll-smooth`}>
-      <body
-        className="antialiased overflow-x-hidden"
-        style={{
-          background: "#0a0a0f",
-          color: "#f8fafc",
-          fontFamily: "var(--font-inter), Inter, system-ui, sans-serif",
-        }}
-      >
+    <html
+      lang="en"
+      className={`${cormorant.variable} ${sora.variable} ${manrope.variable} scroll-smooth`}
+    >
+      <body className="antialiased overflow-x-hidden">
         {children}
       </body>
     </html>

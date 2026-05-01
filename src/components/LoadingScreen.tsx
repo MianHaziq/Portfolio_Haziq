@@ -32,13 +32,13 @@ export default function LoadingScreen() {
           initial={{ opacity: 1 }}
           exit={{ opacity: 0, scale: 1.05 }}
           transition={{ duration: 0.6, ease: "easeOut" as const }}
-          className="fixed inset-0 z-[9999] flex flex-col items-center justify-center"
+          className="fixed inset-0 z-9999 flex flex-col items-center justify-center"
           style={{ background: "#0a0a0f" }}
         >
           {/* Background gradient */}
           <div className="absolute inset-0 overflow-hidden">
             <div
-              className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] rounded-full blur-[120px] opacity-20"
+              className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-150 h-150 rounded-full blur-[120px] opacity-20"
               style={{
                 background:
                   "radial-gradient(circle, #6366f1 0%, #8b5cf6 50%, transparent 70%)",
@@ -59,9 +59,12 @@ export default function LoadingScreen() {
                     duration: 0.6,
                     ease: "easeOut" as const,
                   }}
-                  className="text-4xl md:text-6xl font-bold tracking-widest"
                   style={{
-                    fontFamily: "Inter, system-ui, sans-serif",
+                    fontFamily: "var(--font-display)",
+                    fontSize: "clamp(2.5rem, 8vw, 5rem)",
+                    fontWeight: 700,
+                    fontStyle: "italic",
+                    letterSpacing: "0.12em",
                     color: letter === " " ? "transparent" : "#f8fafc",
                     display: "inline-block",
                     minWidth: letter === " " ? "1rem" : "auto",
@@ -77,8 +80,8 @@ export default function LoadingScreen() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.8, duration: 0.5 }}
-              className="text-sm tracking-[0.4em] uppercase"
-              style={{ color: "#6366f1" }}
+              className="text-eyebrow"
+              style={{ color: "#6366f1", fontFamily: "var(--font-body)" }}
             >
               Software Engineer
             </motion.p>
@@ -102,8 +105,8 @@ export default function LoadingScreen() {
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ delay: 0.4 }}
-              className="text-xs font-mono"
-              style={{ color: "#475569" }}
+              className="text-meta"
+              style={{ color: "#334155", fontFamily: "var(--font-heading)", fontWeight: 600 }}
             >
               {Math.min(Math.round(progress), 100)}%
             </motion.span>
