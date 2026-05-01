@@ -21,7 +21,6 @@ export default function Experience() {
       if (!section) return;
 
       ctx = gsap.context(() => {
-        // Timeline line — draws from top with scrub
         if (line) {
           gsap.fromTo(
             line,
@@ -39,7 +38,6 @@ export default function Experience() {
           );
         }
 
-        // Experience cards — alternate slide-in from left/right
         const cards = section.querySelectorAll<HTMLElement>(".exp-card");
         cards.forEach((card, i) => {
           const isLeft = i % 2 === 0;
@@ -60,7 +58,6 @@ export default function Experience() {
           );
         });
 
-        // Timeline dots — pulse animation when in view
         const dots = section.querySelectorAll<HTMLElement>(".timeline-dot");
         dots.forEach((dot) => {
           ScrollTrigger.create({
@@ -77,7 +74,6 @@ export default function Experience() {
                   duration: 0.4,
                   ease: "back.out(2)",
                   onComplete: () => {
-                    // Subtle repeating pulse
                     gsap.to(dot, {
                       boxShadow: "0 0 24px rgba(99,102,241,0.9)",
                       repeat: -1,
@@ -112,7 +108,7 @@ export default function Experience() {
       id="experience"
       ref={sectionRef}
       className="relative section-padding overflow-hidden"
-      style={{ background: "#0a0a0f" }}
+      style={{ background: "var(--ph-bg-0)" }}
     >
       <div
         className="absolute top-0 left-1/2 -translate-x-1/2 w-150 h-px"
@@ -122,17 +118,16 @@ export default function Experience() {
         }}
       />
 
-      {/* Background orb left */}
+      {/* Background orb */}
       <div
         className="absolute top-1/2 left-0 w-100 h-100 -translate-y-1/2 blur-[100px] pointer-events-none"
         style={{
           background:
-            "radial-gradient(circle, rgba(99,102,241,0.07) 0%, transparent 70%)",
+            "radial-gradient(circle, var(--ph-orb-1) 0%, transparent 70%)",
         }}
       />
 
       <div className="max-w-4xl mx-auto px-6">
-        {/* Header */}
         <div className="mb-16">
           <SectionHeading
             eyebrow="My Journey"
@@ -144,7 +139,7 @@ export default function Experience() {
 
         {/* Timeline */}
         <div className="relative">
-          {/* Vertical line — draws on scroll via scrub */}
+          {/* Vertical line */}
           <div
             ref={timelineLineRef}
             className="absolute left-6 md:left-1/2 top-0 bottom-0 w-px origin-top"
@@ -174,7 +169,7 @@ export default function Experience() {
                     style={{
                       background: "#6366f1",
                       boxShadow: "0 0 16px rgba(99, 102, 241, 0.6)",
-                      border: "2px solid rgba(10, 10, 15, 1)",
+                      border: "2px solid var(--ph-bg-0)",
                       willChange: "transform, box-shadow",
                       opacity: 0,
                     }}
@@ -192,16 +187,15 @@ export default function Experience() {
                   >
                     <div
                       className="glass-card p-6 group hover:border-[rgba(99,102,241,0.2)] transition-all duration-300"
-                      style={{ background: "rgba(255,255,255,0.025)" }}
                     >
                       {/* Period badge */}
                       <div className="mb-4">
                         <span
                           className="inline-block px-3 py-1 rounded-full text-xs font-medium"
                           style={{
-                            background: "rgba(99, 102, 241, 0.1)",
-                            color: "#818cf8",
-                            border: "1px solid rgba(99, 102, 241, 0.2)",
+                            background: "var(--ph-badge-bg)",
+                            color: "var(--ph-badge-text)",
+                            border: "1px solid var(--ph-badge-border)",
                           }}
                         >
                           {exp.period}
@@ -211,7 +205,7 @@ export default function Experience() {
                       {/* Role & Company */}
                       <h3
                         className="text-title mb-1"
-                        style={{ color: "#f8fafc", fontFamily: "var(--font-heading)" }}
+                        style={{ color: "var(--ph-t0)", fontFamily: "var(--font-heading)" }}
                       >
                         {exp.role}
                       </h3>
@@ -230,7 +224,7 @@ export default function Experience() {
                       <p
                         className="text-meta leading-relaxed mb-4"
                         style={{
-                          color: "#64748b",
+                          color: "var(--ph-t3)",
                           fontFamily: "var(--font-body)",
                           fontWeight: 400,
                         }}
@@ -244,7 +238,7 @@ export default function Experience() {
                           <li
                             key={hi}
                             className="flex items-start gap-2 text-meta"
-                            style={{ color: "#94a3b8", fontFamily: "var(--font-body)" }}
+                            style={{ color: "var(--ph-t2)", fontFamily: "var(--font-body)" }}
                           >
                             <svg
                               viewBox="0 0 24 24"

@@ -39,7 +39,6 @@ export default function TechStack() {
       ctx = gsap.context(() => {
         const commonST = { start: "top 85%", toggleActions: "play none none reverse" };
 
-        // Category labels — slide in from left, staggered by category
         const categoryLabels = section.querySelectorAll<HTMLElement>(".category-label");
         categoryLabels.forEach((label, i) => {
           gsap.fromTo(
@@ -56,7 +55,6 @@ export default function TechStack() {
           );
         });
 
-        // Tech cards — staggered scale-up reveal per category group
         const cardGroups = section.querySelectorAll<HTMLElement>(".tech-card-group");
         cardGroups.forEach((group, gi) => {
           const cards = group.querySelectorAll<HTMLElement>(".tech-card");
@@ -92,7 +90,7 @@ export default function TechStack() {
       id="stack"
       ref={sectionRef}
       className="relative section-padding overflow-hidden"
-      style={{ background: "#0a0a0f" }}
+      style={{ background: "var(--ph-bg-0)" }}
     >
       {/* Divider */}
       <div
@@ -104,7 +102,6 @@ export default function TechStack() {
       />
 
       <div className="max-w-6xl mx-auto px-6">
-        {/* Header */}
         <div className="mb-16">
           <SectionHeading
             eyebrow="What I Use"
@@ -115,13 +112,11 @@ export default function TechStack() {
           />
         </div>
 
-        {/* Categories */}
         <div className="space-y-10">
           {Object.entries(techStack).map(([category, items], catIndex) => {
             const colors = categoryColors[category];
             return (
               <div key={category}>
-                {/* Category label */}
                 <div
                   className="category-label flex items-center gap-3 mb-6"
                   style={{ opacity: 0, willChange: "transform" }}
@@ -145,7 +140,6 @@ export default function TechStack() {
                   />
                 </div>
 
-                {/* Cards */}
                 <div
                   className="tech-card-group grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-4"
                   data-category-index={catIndex}
@@ -180,12 +174,7 @@ function TechCard({
     const card = cardRef.current;
     if (!card) return;
     const { gsap } = await import("@/lib/gsap");
-    gsap.to(card, {
-      scale: 1.08,
-      y: -4,
-      duration: 0.25,
-      ease: "power2.out",
-    });
+    gsap.to(card, { scale: 1.08, y: -4, duration: 0.25, ease: "power2.out" });
     const glowEl = card.querySelector<HTMLElement>(".card-glow");
     if (glowEl) gsap.to(glowEl, { opacity: 1, duration: 0.2 });
   };
@@ -194,12 +183,7 @@ function TechCard({
     const card = cardRef.current;
     if (!card) return;
     const { gsap } = await import("@/lib/gsap");
-    gsap.to(card, {
-      scale: 1,
-      y: 0,
-      duration: 0.35,
-      ease: "power2.out",
-    });
+    gsap.to(card, { scale: 1, y: 0, duration: 0.35, ease: "power2.out" });
     const glowEl = card.querySelector<HTMLElement>(".card-glow");
     if (glowEl) gsap.to(glowEl, { opacity: 0, duration: 0.25 });
   };
@@ -209,7 +193,6 @@ function TechCard({
       ref={cardRef}
       className="tech-card relative glass-card p-4 flex flex-col items-center gap-2 cursor-default overflow-hidden"
       style={{
-        borderColor: "rgba(255,255,255,0.06)",
         opacity: 0,
         willChange: "transform",
       }}
@@ -233,12 +216,12 @@ function TechCard({
       {/* Name */}
       <span
         className="relative z-10 text-meta text-center leading-tight"
-        style={{ color: "#94a3b8", fontFamily: "var(--font-body)" }}
+        style={{ color: "var(--ph-t2)", fontFamily: "var(--font-body)" }}
       >
         {tech.name}
       </span>
 
-      {/* Bottom accent bar on hover */}
+      {/* Bottom accent bar */}
       <div
         className="absolute bottom-0 left-0 right-0 h-0.5 scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-left"
         style={{

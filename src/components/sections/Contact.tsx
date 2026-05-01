@@ -16,7 +16,6 @@ const socialLinks = [
       </svg>
     ),
     label: "@haziqnazeer",
-    color: "#f8fafc",
   },
   {
     name: "LinkedIn",
@@ -27,7 +26,6 @@ const socialLinks = [
       </svg>
     ),
     label: "Haziq Nazeer",
-    color: "#0077b5",
   },
   {
     name: "Twitter",
@@ -38,7 +36,6 @@ const socialLinks = [
       </svg>
     ),
     label: "@haziqnazeer",
-    color: "#1d9bf0",
   },
 ];
 
@@ -54,7 +51,7 @@ function FocusInput({
     const { gsap } = await import("@/lib/gsap");
     gsap.to(elRef.current, {
       boxShadow:
-        "0 0 0 2px rgba(99,102,241,0.25), inset 0 0 0 1px rgba(99,102,241,0.4), 0 0 20px rgba(99,102,241,0.12)",
+        "0 0 0 2px rgba(99,102,241,0.25), inset 0 0 0 1px rgba(99,102,241,0.4), 0 0 20px rgba(99,102,241,0.1)",
       borderColor: "rgba(99,102,241,0.5)",
       duration: 0.3,
       ease: "power2.out",
@@ -66,7 +63,7 @@ function FocusInput({
     const { gsap } = await import("@/lib/gsap");
     gsap.to(elRef.current, {
       boxShadow: "none",
-      borderColor: "rgba(255,255,255,0.08)",
+      borderColor: "var(--ph-input-border)",
       duration: 0.3,
       ease: "power2.out",
     });
@@ -105,9 +102,6 @@ export default function Contact() {
       ctx = gsap.context(() => {
         const commonST = { start: "top 85%", toggleActions: "play none none reverse" };
 
-        // Section heading area — handled by SectionHeading component itself
-
-        // Form card — slides in from left
         if (formCardRef.current) {
           gsap.fromTo(
             formCardRef.current,
@@ -122,7 +116,6 @@ export default function Contact() {
           );
         }
 
-        // Sidebar cards — slide in from right, staggered
         if (sidebarRef.current) {
           const cards = sidebarRef.current.querySelectorAll<HTMLElement>(".sidebar-card");
           gsap.fromTo(
@@ -159,9 +152,9 @@ export default function Contact() {
   };
 
   const baseInputStyle: React.CSSProperties = {
-    background: "rgba(255,255,255,0.03)",
-    border: "1px solid rgba(255,255,255,0.08)",
-    color: "#f8fafc",
+    background: "var(--ph-input-bg)",
+    border: "1px solid var(--ph-input-border)",
+    color: "var(--ph-input-text)",
     outline: "none",
     borderRadius: "0.75rem",
     padding: "0.75rem 1rem",
@@ -176,7 +169,7 @@ export default function Contact() {
       id="contact"
       ref={sectionRef}
       className="relative section-padding overflow-hidden"
-      style={{ background: "#0c0c14" }}
+      style={{ background: "var(--ph-bg-1)" }}
     >
       <div
         className="absolute top-0 left-1/2 -translate-x-1/2 w-175 h-px"
@@ -191,12 +184,11 @@ export default function Contact() {
         className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-200 h-100 blur-[140px] pointer-events-none"
         style={{
           background:
-            "radial-gradient(ellipse, rgba(99,102,241,0.06) 0%, transparent 70%)",
+            "radial-gradient(ellipse, var(--ph-orb-1) 0%, transparent 70%)",
         }}
       />
 
       <div className="max-w-5xl mx-auto px-6">
-        {/* Header */}
         <div className="mb-16">
           <SectionHeading
             eyebrow="Say Hello"
@@ -224,19 +216,19 @@ export default function Contact() {
                   <div
                     className="w-16 h-16 rounded-full flex items-center justify-center text-3xl"
                     style={{
-                      background: "rgba(99, 102, 241, 0.15)",
-                      border: "1px solid rgba(99, 102, 241, 0.3)",
+                      background: "var(--ph-badge-bg)",
+                      border: "1px solid var(--ph-badge-border)",
                     }}
                   >
                     ✓
                   </div>
                   <h3
                     className="text-heading"
-                    style={{ color: "#f8fafc", fontFamily: "var(--font-heading)" }}
+                    style={{ color: "var(--ph-t0)", fontFamily: "var(--font-heading)" }}
                   >
                     Message sent!
                   </h3>
-                  <p className="text-meta text-center" style={{ color: "#64748b" }}>
+                  <p className="text-meta text-center" style={{ color: "var(--ph-t3)" }}>
                     Thanks for reaching out. I&apos;ll get back to you within 24 hours.
                   </p>
                 </motion.div>
@@ -246,7 +238,7 @@ export default function Contact() {
                     <div>
                       <label
                         className="block text-eyebrow mb-2"
-                        style={{ color: "#64748b", fontFamily: "var(--font-body)" }}
+                        style={{ color: "var(--ph-t3)", fontFamily: "var(--font-body)" }}
                       >
                         Name
                       </label>
@@ -265,7 +257,7 @@ export default function Contact() {
                     <div>
                       <label
                         className="block text-eyebrow mb-2"
-                        style={{ color: "#64748b", fontFamily: "var(--font-body)" }}
+                        style={{ color: "var(--ph-t3)", fontFamily: "var(--font-body)" }}
                       >
                         Email
                       </label>
@@ -286,7 +278,7 @@ export default function Contact() {
                   <div>
                     <label
                       className="block text-eyebrow mb-2"
-                      style={{ color: "#64748b", fontFamily: "var(--font-body)" }}
+                      style={{ color: "var(--ph-t3)", fontFamily: "var(--font-body)" }}
                     >
                       Message
                     </label>
@@ -356,19 +348,19 @@ export default function Contact() {
             <div className="sidebar-card glass-card p-6" style={{ opacity: 0 }}>
               <p
                 className="text-xs uppercase tracking-widest font-medium mb-3"
-                style={{ color: "#475569" }}
+                style={{ color: "var(--ph-t4)" }}
               >
                 Email
               </p>
               <a
                 href={`mailto:${siteConfig.email}`}
                 className="text-sm font-medium transition-colors duration-200"
-                style={{ color: "#a5b4fc" }}
+                style={{ color: "var(--ph-badge-text)" }}
                 onMouseEnter={(e) =>
-                  ((e.currentTarget as HTMLElement).style.color = "#f8fafc")
+                  ((e.currentTarget as HTMLElement).style.color = "var(--ph-t0)")
                 }
                 onMouseLeave={(e) =>
-                  ((e.currentTarget as HTMLElement).style.color = "#a5b4fc")
+                  ((e.currentTarget as HTMLElement).style.color = "var(--ph-badge-text)")
                 }
               >
                 {siteConfig.email}
@@ -382,7 +374,7 @@ export default function Contact() {
             >
               <p
                 className="text-xs uppercase tracking-widest font-medium mb-2"
-                style={{ color: "#475569" }}
+                style={{ color: "var(--ph-t4)" }}
               >
                 Socials
               </p>
@@ -393,13 +385,13 @@ export default function Contact() {
                   target="_blank"
                   rel="noopener noreferrer"
                   className="flex items-center gap-3 text-sm transition-all duration-200 group"
-                  style={{ color: "#64748b" }}
+                  style={{ color: "var(--ph-t3)" }}
                 >
                   <div
                     className="w-9 h-9 rounded-xl flex items-center justify-center transition-all duration-300 group-hover:scale-110"
                     style={{
-                      background: "rgba(255,255,255,0.04)",
-                      border: "1px solid rgba(255,255,255,0.06)",
+                      background: "var(--ph-icon-bg)",
+                      border: "1px solid var(--ph-icon-border)",
                     }}
                     onMouseEnter={(e) => {
                       (e.currentTarget as HTMLElement).style.background =
@@ -409,18 +401,18 @@ export default function Contact() {
                     }}
                     onMouseLeave={(e) => {
                       (e.currentTarget as HTMLElement).style.background =
-                        "rgba(255,255,255,0.04)";
+                        "var(--ph-icon-bg)";
                       (e.currentTarget as HTMLElement).style.borderColor =
-                        "rgba(255,255,255,0.06)";
+                        "var(--ph-icon-border)";
                     }}
                   >
                     {social.icon}
                   </div>
                   <div>
-                    <p className="text-xs font-medium" style={{ color: "#94a3b8" }}>
+                    <p className="text-xs font-medium" style={{ color: "var(--ph-t2)" }}>
                       {social.name}
                     </p>
-                    <p className="text-xs" style={{ color: "#475569" }}>
+                    <p className="text-xs" style={{ color: "var(--ph-t4)" }}>
                       {social.label}
                     </p>
                   </div>
@@ -441,7 +433,7 @@ export default function Contact() {
                   animation: "pulse 2s infinite",
                 }}
               />
-              <p className="text-sm" style={{ color: "#94a3b8" }}>
+              <p className="text-sm" style={{ color: "var(--ph-t2)" }}>
                 Currently{" "}
                 <span style={{ color: "#22c55e" }}>open</span> to new
                 opportunities

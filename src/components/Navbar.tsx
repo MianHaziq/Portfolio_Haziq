@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import ThemeToggle from "@/components/ui/ThemeToggle";
 
 const navLinks = [
   { label: "About", href: "#about" },
@@ -101,10 +102,10 @@ export default function Navbar() {
         transition={{ delay: 2.2, duration: 0.6, ease: "easeOut" as const }}
         className="fixed top-0 left-0 right-0 z-900 flex items-center justify-between px-6 md:px-10 h-16"
         style={{
-          background: scrolled ? "rgba(10, 10, 15, 0.85)" : "transparent",
+          background: scrolled ? "var(--ph-nav-bg)" : "transparent",
           backdropFilter: scrolled ? "blur(20px)" : "none",
           borderBottom: scrolled
-            ? "1px solid rgba(255,255,255,0.05)"
+            ? "1px solid var(--ph-border-subtle)"
             : "1px solid transparent",
           transition: "all 0.4s ease",
         }}
@@ -132,7 +133,7 @@ export default function Navbar() {
           <span
             className="hidden sm:block"
             style={{
-              color: "#f8fafc",
+              color: "var(--ph-t0)",
               fontFamily: "var(--font-heading)",
               fontWeight: 600,
               fontSize: "0.875rem",
@@ -160,11 +161,10 @@ export default function Navbar() {
                   fontSize: "0.82rem",
                   fontWeight: 500,
                   letterSpacing: "0.01em",
-                  color: isActive ? "#6366f1" : "#64748b",
+                  color: isActive ? "#6366f1" : "var(--ph-t3)",
                 }}
               >
                 {link.label}
-                {/* GSAP-powered underline — faster than CSS */}
                 <span
                   ref={(el) => { underlineRefs.current[i] = el; }}
                   className="absolute -bottom-0.5 left-0 w-full h-px"
@@ -179,8 +179,9 @@ export default function Navbar() {
           })}
         </div>
 
-        {/* CTA */}
+        {/* CTA + ThemeToggle */}
         <div className="hidden md:flex items-center gap-3">
+          <ThemeToggle />
           <button
             onClick={() => scrollTo("#contact")}
             className="px-4 py-2 rounded-full transition-all duration-300 hover:scale-105"
@@ -198,34 +199,37 @@ export default function Navbar() {
           </button>
         </div>
 
-        {/* Mobile menu toggle */}
-        <button
-          className="md:hidden flex flex-col gap-1.5 p-2"
-          onClick={() => setMenuOpen(!menuOpen)}
-          aria-label="Toggle menu"
-        >
-          <span
-            className="block w-5 h-0.5 transition-all duration-300"
-            style={{
-              background: "#f8fafc",
-              transform: menuOpen ? "rotate(45deg) translate(3px, 3px)" : "",
-            }}
-          />
-          <span
-            className="block w-5 h-0.5 transition-all duration-300"
-            style={{
-              background: "#f8fafc",
-              opacity: menuOpen ? 0 : 1,
-            }}
-          />
-          <span
-            className="block w-5 h-0.5 transition-all duration-300"
-            style={{
-              background: "#f8fafc",
-              transform: menuOpen ? "rotate(-45deg) translate(3px, -3px)" : "",
-            }}
-          />
-        </button>
+        {/* Mobile: ThemeToggle + menu toggle */}
+        <div className="md:hidden flex items-center gap-3">
+          <ThemeToggle />
+          <button
+            className="flex flex-col gap-1.5 p-2"
+            onClick={() => setMenuOpen(!menuOpen)}
+            aria-label="Toggle menu"
+          >
+            <span
+              className="block w-5 h-0.5 transition-all duration-300"
+              style={{
+                background: "var(--ph-t0)",
+                transform: menuOpen ? "rotate(45deg) translate(3px, 3px)" : "",
+              }}
+            />
+            <span
+              className="block w-5 h-0.5 transition-all duration-300"
+              style={{
+                background: "var(--ph-t0)",
+                opacity: menuOpen ? 0 : 1,
+              }}
+            />
+            <span
+              className="block w-5 h-0.5 transition-all duration-300"
+              style={{
+                background: "var(--ph-t0)",
+                transform: menuOpen ? "rotate(-45deg) translate(3px, -3px)" : "",
+              }}
+            />
+          </button>
+        </div>
       </motion.nav>
 
       {/* Mobile Menu */}
@@ -238,9 +242,9 @@ export default function Navbar() {
             transition={{ duration: 0.3 }}
             className="fixed top-16 inset-x-0 z-899 flex flex-col gap-0 md:hidden"
             style={{
-              background: "rgba(10, 10, 15, 0.97)",
+              background: "var(--ph-mobile-menu-bg)",
               backdropFilter: "blur(20px)",
-              borderBottom: "1px solid rgba(255,255,255,0.05)",
+              borderBottom: "1px solid var(--ph-border-subtle)",
             }}
           >
             {navLinks.map((link, i) => (
@@ -256,8 +260,8 @@ export default function Navbar() {
                   fontSize: "0.95rem",
                   fontWeight: 500,
                   color:
-                    activeSection === link.href.slice(1) ? "#6366f1" : "#94a3b8",
-                  borderColor: "rgba(255,255,255,0.05)",
+                    activeSection === link.href.slice(1) ? "#6366f1" : "var(--ph-t2)",
+                  borderColor: "var(--ph-border-subtle)",
                 }}
               >
                 {link.label}

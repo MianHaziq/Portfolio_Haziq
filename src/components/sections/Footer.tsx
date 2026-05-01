@@ -1,6 +1,5 @@
 "use client";
 
-import { motion } from "framer-motion";
 import { siteConfig } from "@/lib/data";
 
 export default function Footer() {
@@ -10,11 +9,11 @@ export default function Footer() {
     <footer
       className="relative overflow-hidden border-t"
       style={{
-        background: "#0a0a0f",
-        borderColor: "rgba(255,255,255,0.05)",
+        background: "var(--ph-bg-0)",
+        borderColor: "var(--ph-border-subtle)",
       }}
     >
-      {/* Top gradient */}
+      {/* Top gradient accent */}
       <div
         className="absolute top-0 left-1/2 -translate-x-1/2 w-100 h-px"
         style={{
@@ -41,7 +40,7 @@ export default function Footer() {
             </div>
             <span
               style={{
-                color: "#f8fafc",
+                color: "var(--ph-t0)",
                 fontFamily: "var(--font-heading)",
                 fontWeight: 600,
                 fontSize: "0.875rem",
@@ -56,7 +55,7 @@ export default function Footer() {
           <p
             className="text-center"
             style={{
-              color: "#334155",
+              color: "var(--ph-t5)",
               fontFamily: "var(--font-body)",
               fontSize: "0.78rem",
               fontWeight: 400,
@@ -105,12 +104,12 @@ export default function Footer() {
                 rel="noopener noreferrer"
                 aria-label={s.label}
                 className="transition-all duration-200 hover:scale-110"
-                style={{ color: "#334155" }}
+                style={{ color: "var(--ph-t5)" }}
                 onMouseEnter={(e) =>
                   ((e.currentTarget as HTMLElement).style.color = "#6366f1")
                 }
                 onMouseLeave={(e) =>
-                  ((e.currentTarget as HTMLElement).style.color = "#334155")
+                  ((e.currentTarget as HTMLElement).style.color = "var(--ph-t5)")
                 }
               >
                 {s.icon}

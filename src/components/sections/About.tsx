@@ -53,7 +53,7 @@ function SkillBar({ name, level, index }: { name: string; level: number; index: 
       <div className="flex justify-between items-center">
         <span
           className="text-meta font-medium"
-          style={{ color: "#cbd5e1", fontFamily: "var(--font-body)" }}
+          style={{ color: "var(--ph-t1)", fontFamily: "var(--font-body)" }}
         >
           {name}
         </span>
@@ -66,7 +66,7 @@ function SkillBar({ name, level, index }: { name: string; level: number; index: 
       </div>
       <div
         className="w-full h-1.5 rounded-full overflow-hidden"
-        style={{ background: "rgba(255,255,255,0.06)" }}
+        style={{ background: "var(--ph-skill-bg)" }}
       >
         <div
           ref={fillRef}
@@ -100,7 +100,6 @@ export default function About() {
       ctx = gsap.context(() => {
         const commonST = { start: "top 85%", toggleActions: "play none none reverse" };
 
-        // Bio card — slides in from left
         if (bioRef.current) {
           gsap.fromTo(
             bioRef.current,
@@ -109,7 +108,6 @@ export default function About() {
           );
         }
 
-        // Stats — staggered scale-up
         if (statsRef.current) {
           gsap.fromTo(
             statsRef.current.querySelectorAll(".stat-card"),
@@ -126,7 +124,6 @@ export default function About() {
           );
         }
 
-        // Education card — slides in from left with delay
         if (eduRef.current) {
           gsap.fromTo(
             eduRef.current,
@@ -135,7 +132,6 @@ export default function About() {
           );
         }
 
-        // Skills panel — slides in from right
         if (skillsPanelRef.current) {
           gsap.fromTo(
             skillsPanelRef.current,
@@ -157,9 +153,9 @@ export default function About() {
     <section
       id="about"
       className="relative section-padding overflow-hidden"
-      style={{ background: "#0a0a0f" }}
+      style={{ background: "var(--ph-bg-0)" }}
     >
-      {/* Background accent */}
+      {/* Top divider */}
       <div
         className="absolute top-0 left-1/2 -translate-x-1/2 w-200 h-px"
         style={{
@@ -169,7 +165,6 @@ export default function About() {
       />
 
       <div className="max-w-6xl mx-auto px-6">
-        {/* Section header */}
         <div className="mb-16">
           <SectionHeading
             eyebrow="Who I Am"
@@ -184,10 +179,10 @@ export default function About() {
           <div className="space-y-8">
             {/* Bio card */}
             <div ref={bioRef} className="glass-card p-8" style={{ opacity: 0 }}>
-              <p className="text-body mb-5" style={{ color: "#94a3b8" }}>
+              <p className="text-body mb-5" style={{ color: "var(--ph-t2)" }}>
                 {siteConfig.bio}
               </p>
-              <p className="text-body" style={{ color: "#64748b" }}>
+              <p className="text-body" style={{ color: "var(--ph-t3)" }}>
                 I thrive at the intersection of design and engineering — making
                 things look great and work even better. Whether it&apos;s a
                 silky-smooth UI or a rock-solid API, I care deeply about the craft.
@@ -217,7 +212,7 @@ export default function About() {
                   >
                     {stat.value}
                   </div>
-                  <div className="text-eyebrow" style={{ color: "#475569" }}>
+                  <div className="text-eyebrow" style={{ color: "var(--ph-t4)" }}>
                     {stat.label}
                   </div>
                 </div>
@@ -233,8 +228,8 @@ export default function About() {
               <div
                 className="shrink-0 w-10 h-10 rounded-xl flex items-center justify-center text-lg"
                 style={{
-                  background: "rgba(99, 102, 241, 0.15)",
-                  border: "1px solid rgba(99, 102, 241, 0.2)",
+                  background: "var(--ph-icon-bg)",
+                  border: "1px solid var(--ph-icon-border)",
                 }}
               >
                 🎓
@@ -242,14 +237,14 @@ export default function About() {
               <div>
                 <h3
                   className="text-title mb-0.5"
-                  style={{ color: "#f8fafc", fontFamily: "var(--font-heading)" }}
+                  style={{ color: "var(--ph-t0)", fontFamily: "var(--font-heading)" }}
                 >
                   {siteConfig.education.degree}
                 </h3>
                 <p className="text-meta" style={{ color: "#6366f1", fontWeight: 500 }}>
                   {siteConfig.education.institution}
                 </p>
-                <p className="text-meta mt-1" style={{ color: "#475569", fontWeight: 400 }}>
+                <p className="text-meta mt-1" style={{ color: "var(--ph-t4)", fontWeight: 400 }}>
                   Class of {siteConfig.education.year}
                 </p>
               </div>
@@ -264,7 +259,7 @@ export default function About() {
           >
             <h3
               className="text-title mb-6"
-              style={{ color: "#f8fafc", fontFamily: "var(--font-heading)" }}
+              style={{ color: "var(--ph-t0)", fontFamily: "var(--font-heading)" }}
             >
               Core Skills
             </h3>

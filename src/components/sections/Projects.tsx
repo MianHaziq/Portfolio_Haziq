@@ -93,10 +93,8 @@ function ProjectCard({
           opacity: 0,
           willChange: "transform",
           transition: "border-color 0.4s ease, box-shadow 0.4s ease",
-          borderColor: hovered ? "rgba(99,102,241,0.25)" : "rgba(255,255,255,0.06)",
-          boxShadow: hovered
-            ? "0 20px 60px rgba(99,102,241,0.12), 0 8px 24px rgba(0,0,0,0.3)"
-            : "none",
+          borderColor: hovered ? "rgba(99,102,241,0.25)" : "var(--ph-glass-border)",
+          boxShadow: hovered ? "var(--ph-card-shadow-hover)" : "var(--ph-card-shadow)",
         }}
       >
         {/* Top gradient bar */}
@@ -108,7 +106,7 @@ function ProjectCard({
           }}
         />
 
-        {/* Hover background glow */}
+        {/* Hover glow */}
         <AnimatePresence>
           {hovered && (
             <motion.div
@@ -131,8 +129,8 @@ function ProjectCard({
             <div
               className="w-10 h-10 rounded-xl flex items-center justify-center text-sm"
               style={{
-                background: "rgba(99, 102, 241, 0.15)",
-                border: "1px solid rgba(99, 102, 241, 0.2)",
+                background: "var(--ph-icon-bg)",
+                border: "1px solid var(--ph-icon-border)",
               }}
             >
               <svg
@@ -158,12 +156,12 @@ function ProjectCard({
                 target="_blank"
                 rel="noopener noreferrer"
                 className="w-8 h-8 rounded-full flex items-center justify-center transition-all duration-200"
-                style={{ background: "rgba(255,255,255,0.05)", color: "#64748b" }}
+                style={{ background: "var(--ph-icon-bg)", color: "var(--ph-t3)" }}
                 onMouseEnter={(e) =>
-                  ((e.currentTarget as HTMLElement).style.color = "#f8fafc")
+                  ((e.currentTarget as HTMLElement).style.color = "var(--ph-t0)")
                 }
                 onMouseLeave={(e) =>
-                  ((e.currentTarget as HTMLElement).style.color = "#64748b")
+                  ((e.currentTarget as HTMLElement).style.color = "var(--ph-t3)")
                 }
               >
                 <svg viewBox="0 0 24 24" fill="currentColor" className="w-3.5 h-3.5">
@@ -175,12 +173,12 @@ function ProjectCard({
                 target="_blank"
                 rel="noopener noreferrer"
                 className="w-8 h-8 rounded-full flex items-center justify-center transition-all duration-200"
-                style={{ background: "rgba(255,255,255,0.05)", color: "#64748b" }}
+                style={{ background: "var(--ph-icon-bg)", color: "var(--ph-t3)" }}
                 onMouseEnter={(e) =>
                   ((e.currentTarget as HTMLElement).style.color = "#6366f1")
                 }
                 onMouseLeave={(e) =>
-                  ((e.currentTarget as HTMLElement).style.color = "#64748b")
+                  ((e.currentTarget as HTMLElement).style.color = "var(--ph-t3)")
                 }
               >
                 <svg
@@ -204,7 +202,7 @@ function ProjectCard({
           <h3
             className="text-title mb-2 transition-colors duration-300"
             style={{
-              color: hovered ? "#f8fafc" : "#e2e8f0",
+              color: hovered ? "var(--ph-t0)" : "var(--ph-t1)",
               fontFamily: "var(--font-heading)",
             }}
           >
@@ -214,7 +212,7 @@ function ProjectCard({
           {/* Description */}
           <p
             className="text-meta leading-relaxed flex-1 mb-5"
-            style={{ color: "#64748b", fontFamily: "var(--font-body)", fontWeight: 400 }}
+            style={{ color: "var(--ph-t3)", fontFamily: "var(--font-body)", fontWeight: 400 }}
           >
             {project.description}
           </p>
@@ -226,9 +224,9 @@ function ProjectCard({
                 key={tag}
                 className="px-2.5 py-0.5 rounded-full text-eyebrow"
                 style={{
-                  background: "rgba(99, 102, 241, 0.08)",
-                  color: "#818cf8",
-                  border: "1px solid rgba(99, 102, 241, 0.15)",
+                  background: "var(--ph-badge-bg)",
+                  color: "var(--ph-badge-text)",
+                  border: "1px solid var(--ph-badge-border)",
                   fontFamily: "var(--font-body)",
                 }}
               >
@@ -286,7 +284,7 @@ export default function Projects() {
     <section
       id="projects"
       className="relative section-padding overflow-hidden"
-      style={{ background: "#0c0c14" }}
+      style={{ background: "var(--ph-bg-1)" }}
     >
       <div
         className="absolute top-0 left-1/2 -translate-x-1/2 w-200 h-px"
@@ -301,12 +299,11 @@ export default function Projects() {
         className="absolute top-1/2 right-0 w-125 h-125 -translate-y-1/2 blur-[120px] pointer-events-none"
         style={{
           background:
-            "radial-gradient(circle, rgba(99,102,241,0.06) 0%, transparent 70%)",
+            "radial-gradient(circle, var(--ph-orb-1) 0%, transparent 70%)",
         }}
       />
 
       <div className="max-w-6xl mx-auto px-6">
-        {/* Header */}
         <div className="mb-16">
           <SectionHeading
             eyebrow="What I've Built"
@@ -317,7 +314,6 @@ export default function Projects() {
           />
         </div>
 
-        {/* Grid */}
         <div className="grid sm:grid-cols-2 gap-6">
           {projects.map((project, i) => (
             <ProjectCard key={project.id} project={project} index={i} />

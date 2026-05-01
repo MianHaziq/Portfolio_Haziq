@@ -83,31 +83,15 @@ export default function Hero() {
       ctx = gsap.context(() => {
         const st = { trigger: "#hero", start: "top top", end: "bottom top" };
 
-        // Orb 1 — moves up fastest
         if (orb1Ref.current) {
-          gsap.to(orb1Ref.current, {
-            y: -150,
-            scrollTrigger: { ...st, scrub: 1.5 },
-          });
+          gsap.to(orb1Ref.current, { y: -150, scrollTrigger: { ...st, scrub: 1.5 } });
         }
-
-        // Orb 2 — medium speed
         if (orb2Ref.current) {
-          gsap.to(orb2Ref.current, {
-            y: -100,
-            scrollTrigger: { ...st, scrub: 2 },
-          });
+          gsap.to(orb2Ref.current, { y: -100, scrollTrigger: { ...st, scrub: 2 } });
         }
-
-        // Orb 3 — slowest
         if (orb3Ref.current) {
-          gsap.to(orb3Ref.current, {
-            y: -60,
-            scrollTrigger: { ...st, scrub: 2.5 },
-          });
+          gsap.to(orb3Ref.current, { y: -60, scrollTrigger: { ...st, scrub: 2.5 } });
         }
-
-        // Hero content subtle parallax
         if (contentRef.current) {
           gsap.to(contentRef.current, {
             y: -60,
@@ -132,16 +116,16 @@ export default function Hero() {
       id="hero"
       ref={sectionRef}
       className="relative min-h-screen flex flex-col items-center justify-center overflow-hidden"
-      style={{ background: "#0a0a0f" }}
+      style={{ background: "var(--ph-bg-0)" }}
     >
-      {/* ── Background orbs ─────────────────────────────────────── */}
+      {/* Background orbs */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
         <div
           ref={orb1Ref}
           className="hero-orb-1 orb-1 absolute top-[15%] left-[8%] w-140 h-140 rounded-full blur-[110px]"
           style={{
             background:
-              "radial-gradient(circle, rgba(99,102,241,0.13) 0%, rgba(99,102,241,0.04) 55%, transparent 70%)",
+              "radial-gradient(circle, var(--ph-orb-1) 0%, transparent 70%)",
             willChange: "transform",
           }}
         />
@@ -150,7 +134,7 @@ export default function Hero() {
           className="hero-orb-2 orb-2 absolute bottom-[8%] right-[4%] w-160 h-160 rounded-full blur-[130px]"
           style={{
             background:
-              "radial-gradient(circle, rgba(139,92,246,0.1) 0%, rgba(139,92,246,0.03) 55%, transparent 70%)",
+              "radial-gradient(circle, var(--ph-orb-2) 0%, transparent 70%)",
             willChange: "transform",
           }}
         />
@@ -159,16 +143,16 @@ export default function Hero() {
           className="hero-orb-3 orb-3 absolute top-[48%] left-[48%] w-110 h-110 rounded-full blur-[90px] -translate-x-1/2 -translate-y-1/2"
           style={{
             background:
-              "radial-gradient(circle, rgba(96,165,250,0.05) 0%, transparent 70%)",
+              "radial-gradient(circle, var(--ph-orb-3) 0%, transparent 70%)",
             willChange: "transform",
           }}
         />
-        {/* Subtle dot grid */}
+        {/* Dot grid */}
         <div
           className="absolute inset-0"
           style={{
             backgroundImage:
-              "radial-gradient(rgba(99,102,241,0.12) 1px, transparent 1px)",
+              "radial-gradient(var(--ph-dot-color) 1px, transparent 1px)",
             backgroundSize: "48px 48px",
             maskImage:
               "radial-gradient(ellipse 80% 80% at 50% 50%, black 40%, transparent 100%)",
@@ -176,7 +160,7 @@ export default function Hero() {
         />
       </div>
 
-      {/* ── Content ─────────────────────────────────────────────── */}
+      {/* Content */}
       <div
         ref={contentRef}
         className="relative z-10 max-w-5xl mx-auto px-6 text-center"
@@ -192,9 +176,9 @@ export default function Hero() {
           <div
             className="inline-flex items-center gap-2.5 px-5 py-2 rounded-full text-eyebrow"
             style={{
-              background: "rgba(99, 102, 241, 0.08)",
-              border: "1px solid rgba(99, 102, 241, 0.22)",
-              color: "#a5b4fc",
+              background: "var(--ph-badge-bg)",
+              border: "1px solid var(--ph-badge-border)",
+              color: "var(--ph-badge-text)",
             }}
           >
             <span
@@ -209,7 +193,7 @@ export default function Hero() {
           </div>
         </motion.div>
 
-        {/* ── Greeting line ─────────────────────────────────────── */}
+        {/* Greeting */}
         <div className="mb-2 flex justify-center">
           <span
             className="word-mask inline-block"
@@ -217,7 +201,7 @@ export default function Hero() {
               fontFamily: "var(--font-body)",
               fontSize: "clamp(0.9rem, 1.8vw, 1.1rem)",
               fontWeight: 400,
-              color: "#475569",
+              color: "var(--ph-t4)",
               letterSpacing: "0.06em",
             }}
           >
@@ -232,7 +216,7 @@ export default function Hero() {
           </span>
         </div>
 
-        {/* ── Hero Name — Cormorant Garamond display ────────────── */}
+        {/* Hero name */}
         <h1
           className="text-hero mb-5 flex flex-wrap justify-center"
           aria-label="Haziq Nazeer"
@@ -255,7 +239,7 @@ export default function Hero() {
           </span>
         </h1>
 
-        {/* ── Role — Sora ───────────────────────────────────────── */}
+        {/* Role */}
         <div
           className="mb-6 flex justify-center"
           style={{
@@ -263,7 +247,7 @@ export default function Hero() {
             fontSize: "clamp(1.1rem, 2.8vw, 1.625rem)",
             fontWeight: 300,
             letterSpacing: "-0.01em",
-            color: "#64748b",
+            color: "var(--ph-t3)",
           }}
         >
           <span className="word-mask inline-block mr-[0.25em]">
@@ -279,7 +263,7 @@ export default function Hero() {
           <span className="word-mask inline-block mr-[0.25em]">
             <motion.span
               className="inline-block"
-              style={{ color: "#94a3b8" }}
+              style={{ color: "var(--ph-t2)" }}
               initial={{ y: "110%", opacity: 0 }}
               animate={{ y: "0%", opacity: 1 }}
               transition={{ delay: 2.46, duration: 0.72, ease: EASE_EXPO }}
@@ -316,10 +300,10 @@ export default function Hero() {
           </span>
         </div>
 
-        {/* ── Bio — Manrope ─────────────────────────────────────── */}
+        {/* Bio */}
         <motion.p
           className="text-body max-w-[52ch] mx-auto mb-12"
-          style={{ color: "#475569" }}
+          style={{ color: "var(--ph-t4)" }}
           initial={{ opacity: 0, y: 18 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 2.8, duration: 0.65, ease: "easeOut" }}
@@ -327,7 +311,7 @@ export default function Hero() {
           {siteConfig.bio}
         </motion.p>
 
-        {/* ── CTAs ──────────────────────────────────────────────── */}
+        {/* CTAs */}
         <motion.div
           className="flex flex-col sm:flex-row gap-4 justify-center items-center mb-14"
           initial={{ opacity: 0, y: 18 }}
@@ -344,7 +328,7 @@ export default function Hero() {
               fontWeight: 600,
               fontSize: "0.9rem",
               letterSpacing: "0.01em",
-              boxShadow: "0 8px 32px rgba(99, 102, 241, 0.38), 0 2px 8px rgba(0,0,0,0.3)",
+              boxShadow: "0 8px 32px rgba(99, 102, 241, 0.38), 0 2px 8px rgba(0,0,0,0.2)",
             }}
           >
             <span className="relative z-10">View My Work</span>
@@ -358,28 +342,28 @@ export default function Hero() {
             onClick={() => scrollTo("contact")}
             className="px-9 py-3.5 rounded-full transition-all duration-300 hover:scale-105 active:scale-[0.98]"
             style={{
-              background: "rgba(255,255,255,0.04)",
-              border: "1px solid rgba(255,255,255,0.1)",
-              color: "#cbd5e1",
+              background: "var(--ph-surface)",
+              border: "1px solid var(--ph-border-medium)",
+              color: "var(--ph-t2)",
               fontFamily: "var(--font-body)",
               fontWeight: 500,
               fontSize: "0.9rem",
               letterSpacing: "0.01em",
             }}
             onMouseEnter={(e) => {
-              (e.currentTarget as HTMLElement).style.background = "rgba(255,255,255,0.07)";
-              (e.currentTarget as HTMLElement).style.borderColor = "rgba(255,255,255,0.18)";
+              (e.currentTarget as HTMLElement).style.background = "var(--ph-surface-hover)";
+              (e.currentTarget as HTMLElement).style.borderColor = "var(--ph-border-strong)";
             }}
             onMouseLeave={(e) => {
-              (e.currentTarget as HTMLElement).style.background = "rgba(255,255,255,0.04)";
-              (e.currentTarget as HTMLElement).style.borderColor = "rgba(255,255,255,0.1)";
+              (e.currentTarget as HTMLElement).style.background = "var(--ph-surface)";
+              (e.currentTarget as HTMLElement).style.borderColor = "var(--ph-border-medium)";
             }}
           >
             Get In Touch
           </button>
         </motion.div>
 
-        {/* ── Social icons ──────────────────────────────────────── */}
+        {/* Social icons */}
         <motion.div
           className="flex justify-center items-center gap-7"
           initial={{ opacity: 0 }}
@@ -388,7 +372,7 @@ export default function Hero() {
         >
           <div
             className="h-px w-12 hidden sm:block"
-            style={{ background: "rgba(255,255,255,0.08)" }}
+            style={{ background: "var(--ph-border)" }}
           />
           {socialLinks.map((s) => (
             <a
@@ -398,12 +382,12 @@ export default function Hero() {
               rel="noopener noreferrer"
               aria-label={s.label}
               className="transition-all duration-300 hover:scale-110"
-              style={{ color: "#334155" }}
+              style={{ color: "var(--ph-t5)" }}
               onMouseEnter={(e) =>
                 ((e.currentTarget as HTMLElement).style.color = "#6366f1")
               }
               onMouseLeave={(e) =>
-                ((e.currentTarget as HTMLElement).style.color = "#334155")
+                ((e.currentTarget as HTMLElement).style.color = "var(--ph-t5)")
               }
             >
               {s.icon}
@@ -411,12 +395,12 @@ export default function Hero() {
           ))}
           <div
             className="h-px w-12 hidden sm:block"
-            style={{ background: "rgba(255,255,255,0.08)" }}
+            style={{ background: "var(--ph-border)" }}
           />
         </motion.div>
       </div>
 
-      {/* ── Scroll indicator ────────────────────────────────────── */}
+      {/* Scroll indicator */}
       <motion.div
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
@@ -425,13 +409,13 @@ export default function Hero() {
       >
         <span
           className="text-eyebrow"
-          style={{ color: "#1e293b", letterSpacing: "0.3em" }}
+          style={{ color: "var(--ph-t6)", letterSpacing: "0.3em" }}
         >
           Scroll
         </span>
         <div
           className="w-px h-12 relative overflow-hidden"
-          style={{ background: "rgba(255,255,255,0.06)" }}
+          style={{ background: "var(--ph-border)" }}
         >
           <motion.div
             className="absolute top-0 left-0 w-full"

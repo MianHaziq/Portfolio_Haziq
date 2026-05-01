@@ -216,7 +216,7 @@ export function SectionHeading({
       {description && (
         <motion.p
           className="text-body mt-5 max-w-lg"
-          style={{ color: "#475569" }}
+          style={{ color: "var(--ph-t4)" }}
           initial={{ opacity: 0, y: 16 }}
           animate={shouldAnimate ? { opacity: 1, y: 0 } : { opacity: 0, y: 16 }}
           transition={{ delay: delay + 0.35, duration: 0.6, ease: "easeOut" }}

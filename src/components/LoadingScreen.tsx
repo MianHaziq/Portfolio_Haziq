@@ -106,7 +106,7 @@ export default function LoadingScreen() {
               animate={{ opacity: 1 }}
               transition={{ delay: 0.4 }}
               className="text-meta"
-              style={{ color: "#334155", fontFamily: "var(--font-heading)", fontWeight: 600 }}
+              style={{ color: "#475569", fontFamily: "var(--font-heading)", fontWeight: 600 }}
             >
               {Math.min(Math.round(progress), 100)}%
             </motion.span>
