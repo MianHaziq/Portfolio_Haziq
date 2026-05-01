@@ -1,8 +1,8 @@
 import type { Metadata, Viewport } from "next";
 import { Cormorant_Garamond, Sora, Manrope } from "next/font/google";
+import { ThemeProvider } from "@/contexts/ThemeContext";
 import "./globals.css";
 
-// Editorial luxury serif — hero display text
 const cormorant = Cormorant_Garamond({
   subsets: ["latin"],
   variable: "--font-display",
@@ -11,7 +11,6 @@ const cormorant = Cormorant_Garamond({
   display: "swap",
 });
 
-// Modern geometric sans — section headings
 const sora = Sora({
   subsets: ["latin"],
   variable: "--font-heading",
@@ -19,7 +18,6 @@ const sora = Sora({
   display: "swap",
 });
 
-// Humanist sans — body, UI, labels
 const manrope = Manrope({
   subsets: ["latin"],
   variable: "--font-body",
@@ -62,8 +60,11 @@ export const metadata: Metadata = {
 };
 
 export const viewport: Viewport = {
-  themeColor: "#0a0a0f",
-  colorScheme: "dark",
+  themeColor: [
+    { media: "(prefers-color-scheme: dark)", color: "#0a0a0f" },
+    { media: "(prefers-color-scheme: light)", color: "#f4f6ff" },
+  ],
+  colorScheme: "dark light",
 };
 
 export default function RootLayout({
@@ -74,10 +75,20 @@ export default function RootLayout({
   return (
     <html
       lang="en"
+      data-theme="dark"
+      suppressHydrationWarning
       className={`${cormorant.variable} ${sora.variable} ${manrope.variable} scroll-smooth`}
     >
+      <head>
+        {/* Prevent flash of wrong theme — runs before React hydrates */}
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `(function(){try{var t=localStorage.getItem('ph-theme');if(!t){t=window.matchMedia('(prefers-color-scheme: light)').matches?'light':'dark';}document.documentElement.setAttribute('data-theme',t);}catch(e){}})();`,
+          }}
+        />
+      </head>
       <body className="antialiased overflow-x-hidden">
-        {children}
+        <ThemeProvider>{children}</ThemeProvider>
       </body>
     </html>
   );

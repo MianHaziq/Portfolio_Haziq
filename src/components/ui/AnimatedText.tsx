@@ -10,7 +10,7 @@ interface WordRevealProps {
   className?: string;
   delay?: number;
   duration?: number;
-  /** When true, animation fires once the element enters the viewport */
+  /** When true, animation fires each time the element enters the viewport */
   inViewTrigger?: boolean;
   stagger?: number;
 }
@@ -18,6 +18,7 @@ interface WordRevealProps {
 /**
  * Splits text into words and slides each up from a mask — the classic
  * editorial "text reveal" seen on Awwwards-winning sites.
+ * Bidirectional: replays on scroll up and scroll down.
  */
 export function WordReveal({
   text,
@@ -28,7 +29,8 @@ export function WordReveal({
   stagger = 0.09,
 }: WordRevealProps) {
   const ref = useRef<HTMLSpanElement>(null);
-  const isInView = useInView(ref, { once: true, margin: "-60px" });
+  // once: false so animation replays every time element enters viewport
+  const isInView = useInView(ref, { once: false, margin: "-100px", amount: 0.3 });
   const shouldAnimate = inViewTrigger ? isInView : true;
 
   const words = text.split(" ");
@@ -73,6 +75,7 @@ interface CharRevealProps {
 /**
  * Character-by-character staggered reveal — for short, impactful
  * headings where you want maximum drama (hero section only).
+ * Bidirectional: replays on scroll up and scroll down.
  */
 export function CharReveal({
   text,
@@ -83,7 +86,8 @@ export function CharReveal({
   inViewTrigger = false,
 }: CharRevealProps) {
   const ref = useRef<HTMLSpanElement>(null);
-  const isInView = useInView(ref, { once: true, margin: "-60px" });
+  // once: false so animation replays every time element enters viewport
+  const isInView = useInView(ref, { once: false, margin: "-100px", amount: 0.3 });
   const shouldAnimate = inViewTrigger ? isInView : true;
 
   const chars = text.split("");
@@ -135,6 +139,7 @@ interface SectionHeadingProps {
 /**
  * Reusable premium section heading used across every section.
  * Pattern: small caps eyebrow → large Sora heading → italic serif gradient accent
+ * Bidirectional: all animations replay on scroll.
  */
 export function SectionHeading({
   eyebrow,
@@ -147,7 +152,8 @@ export function SectionHeading({
   delay = 0,
 }: SectionHeadingProps) {
   const ref = useRef<HTMLDivElement>(null);
-  const inView = useInView(ref, { once: true, margin: "-80px" });
+  // once: false so animation replays bidirectionally
+  const inView = useInView(ref, { once: false, margin: "-100px", amount: 0.3 });
   const shouldAnimate = inViewTrigger ? inView : true;
 
   const alignClass = align === "center" ? "text-center items-center" : "text-left items-start";
@@ -159,7 +165,7 @@ export function SectionHeading({
         className="text-eyebrow mb-4"
         style={{ color: "#6366f1" }}
         initial={{ opacity: 0, y: 12 }}
-        animate={shouldAnimate ? { opacity: 1, y: 0 } : {}}
+        animate={shouldAnimate ? { opacity: 1, y: 0 } : { opacity: 0, y: 12 }}
         transition={{ delay, duration: 0.5, ease: "easeOut" }}
       >
         {eyebrow}
@@ -167,7 +173,7 @@ export function SectionHeading({
 
       {/* Heading */}
       <h2 className="text-display overflow-hidden">
-        {/* White main title words */}
+        {/* White main title words — also bidirectional */}
         <WordReveal
           text={title}
           delay={delay + 0.08}
@@ -192,9 +198,9 @@ export function SectionHeading({
                   fontWeight: 400,
                 }}
                 initial={{ y: "110%", opacity: 0 }}
-                animate={shouldAnimate ? { y: "0%", opacity: 1 } : {}}
+                animate={shouldAnimate ? { y: "0%", opacity: 1 } : { y: "110%", opacity: 0 }}
                 transition={{
-                  delay: delay + 0.18 + (title.split(" ").length * 0.07),
+                  delay: delay + 0.18 + title.split(" ").length * 0.07,
                   duration: 0.72,
                   ease: EASE_EXPO,
                 }}
@@ -212,7 +218,7 @@ export function SectionHeading({
           className="text-body mt-5 max-w-lg"
           style={{ color: "#475569" }}
           initial={{ opacity: 0, y: 16 }}
-          animate={shouldAnimate ? { opacity: 1, y: 0 } : {}}
+          animate={shouldAnimate ? { opacity: 1, y: 0 } : { opacity: 0, y: 16 }}
           transition={{ delay: delay + 0.35, duration: 0.6, ease: "easeOut" }}
         >
           {description}

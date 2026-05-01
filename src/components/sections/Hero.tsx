@@ -1,5 +1,6 @@
 "use client";
 
+import { useEffect, useRef } from "react";
 import { motion } from "framer-motion";
 import { siteConfig } from "@/lib/data";
 
@@ -59,36 +60,107 @@ function HeroWord({
 }
 
 export default function Hero() {
+  const sectionRef = useRef<HTMLElement>(null);
+  const contentRef = useRef<HTMLDivElement>(null);
+  const orb1Ref = useRef<HTMLDivElement>(null);
+  const orb2Ref = useRef<HTMLDivElement>(null);
+  const orb3Ref = useRef<HTMLDivElement>(null);
+
   const scrollTo = (id: string) =>
     document.getElementById(id)?.scrollIntoView({ behavior: "smooth" });
+
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+
+    let ctx: { revert: () => void } | null = null;
+
+    const init = async () => {
+      const { gsap, ScrollTrigger } = await import("@/lib/gsap");
+
+      const section = sectionRef.current;
+      if (!section) return;
+
+      ctx = gsap.context(() => {
+        const st = { trigger: "#hero", start: "top top", end: "bottom top" };
+
+        // Orb 1 — moves up fastest
+        if (orb1Ref.current) {
+          gsap.to(orb1Ref.current, {
+            y: -150,
+            scrollTrigger: { ...st, scrub: 1.5 },
+          });
+        }
+
+        // Orb 2 — medium speed
+        if (orb2Ref.current) {
+          gsap.to(orb2Ref.current, {
+            y: -100,
+            scrollTrigger: { ...st, scrub: 2 },
+          });
+        }
+
+        // Orb 3 — slowest
+        if (orb3Ref.current) {
+          gsap.to(orb3Ref.current, {
+            y: -60,
+            scrollTrigger: { ...st, scrub: 2.5 },
+          });
+        }
+
+        // Hero content subtle parallax
+        if (contentRef.current) {
+          gsap.to(contentRef.current, {
+            y: -60,
+            opacity: 0.6,
+            scrollTrigger: { ...st, scrub: 1 },
+          });
+        }
+
+        ScrollTrigger.refresh();
+      }, section);
+    };
+
+    init();
+
+    return () => {
+      ctx?.revert();
+    };
+  }, []);
 
   return (
     <section
       id="hero"
+      ref={sectionRef}
       className="relative min-h-screen flex flex-col items-center justify-center overflow-hidden"
       style={{ background: "#0a0a0f" }}
     >
       {/* ── Background orbs ─────────────────────────────────────── */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
         <div
-          className="orb-1 absolute top-[15%] left-[8%] w-[560px] h-[560px] rounded-full blur-[110px]"
+          ref={orb1Ref}
+          className="hero-orb-1 orb-1 absolute top-[15%] left-[8%] w-140 h-140 rounded-full blur-[110px]"
           style={{
             background:
               "radial-gradient(circle, rgba(99,102,241,0.13) 0%, rgba(99,102,241,0.04) 55%, transparent 70%)",
+            willChange: "transform",
           }}
         />
         <div
-          className="orb-2 absolute bottom-[8%] right-[4%] w-[640px] h-[640px] rounded-full blur-[130px]"
+          ref={orb2Ref}
+          className="hero-orb-2 orb-2 absolute bottom-[8%] right-[4%] w-160 h-160 rounded-full blur-[130px]"
           style={{
             background:
               "radial-gradient(circle, rgba(139,92,246,0.1) 0%, rgba(139,92,246,0.03) 55%, transparent 70%)",
+            willChange: "transform",
           }}
         />
         <div
-          className="orb-3 absolute top-[48%] left-[48%] w-[440px] h-[440px] rounded-full blur-[90px] -translate-x-1/2 -translate-y-1/2"
+          ref={orb3Ref}
+          className="hero-orb-3 orb-3 absolute top-[48%] left-[48%] w-110 h-110 rounded-full blur-[90px] -translate-x-1/2 -translate-y-1/2"
           style={{
             background:
               "radial-gradient(circle, rgba(96,165,250,0.05) 0%, transparent 70%)",
+            willChange: "transform",
           }}
         />
         {/* Subtle dot grid */}
@@ -105,8 +177,11 @@ export default function Hero() {
       </div>
 
       {/* ── Content ─────────────────────────────────────────────── */}
-      <div className="relative z-10 max-w-5xl mx-auto px-6 text-center">
-
+      <div
+        ref={contentRef}
+        className="relative z-10 max-w-5xl mx-auto px-6 text-center"
+        style={{ willChange: "transform" }}
+      >
         {/* Availability badge */}
         <motion.div
           initial={{ opacity: 0, y: 16, scale: 0.94 }}
@@ -123,7 +198,7 @@ export default function Hero() {
             }}
           >
             <span
-              className="w-1.5 h-1.5 rounded-full flex-shrink-0"
+              className="w-1.5 h-1.5 rounded-full shrink-0"
               style={{
                 background: "#6366f1",
                 boxShadow: "0 0 8px #6366f1",
@@ -163,13 +238,7 @@ export default function Hero() {
           aria-label="Haziq Nazeer"
           style={{ fontFamily: "var(--font-display)" }}
         >
-          {/* "Haziq" — white */}
-          <HeroWord
-            word="Haziq"
-            delay={2.08}
-            className="text-hero"
-          />
-          {/* "Nazeer" — shimmering gradient */}
+          <HeroWord word="Haziq" delay={2.08} className="text-hero" />
           <span className="word-mask inline-block">
             <motion.span
               className="inline-block gradient-text-shimmer text-hero"

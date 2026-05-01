@@ -1,7 +1,6 @@
 "use client";
 
-import { useRef } from "react";
-import { motion, useInView } from "framer-motion";
+import { useEffect, useRef } from "react";
 import { techStack } from "@/lib/data";
 import { SectionHeading } from "@/components/ui/AnimatedText";
 
@@ -24,13 +23,74 @@ const categoryColors: Record<string, { bg: string; border: string; glow: string 
 };
 
 export default function TechStack() {
-  const ref = useRef(null);
-  const inView = useInView(ref, { once: true, margin: "-80px" });
+  const sectionRef = useRef<HTMLElement>(null);
+
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+
+    let ctx: { revert: () => void } | null = null;
+
+    const init = async () => {
+      const { gsap, ScrollTrigger } = await import("@/lib/gsap");
+
+      const section = sectionRef.current;
+      if (!section) return;
+
+      ctx = gsap.context(() => {
+        const commonST = { start: "top 85%", toggleActions: "play none none reverse" };
+
+        // Category labels — slide in from left, staggered by category
+        const categoryLabels = section.querySelectorAll<HTMLElement>(".category-label");
+        categoryLabels.forEach((label, i) => {
+          gsap.fromTo(
+            label,
+            { opacity: 0, x: -20 },
+            {
+              opacity: 1,
+              x: 0,
+              duration: 0.5,
+              ease: "power3.out",
+              delay: i * 0.15,
+              scrollTrigger: { trigger: label, ...commonST },
+            }
+          );
+        });
+
+        // Tech cards — staggered scale-up reveal per category group
+        const cardGroups = section.querySelectorAll<HTMLElement>(".tech-card-group");
+        cardGroups.forEach((group, gi) => {
+          const cards = group.querySelectorAll<HTMLElement>(".tech-card");
+          gsap.fromTo(
+            cards,
+            { opacity: 0, scale: 0.8, y: 20 },
+            {
+              opacity: 1,
+              scale: 1,
+              y: 0,
+              duration: 0.4,
+              ease: "back.out(1.4)",
+              stagger: 0.06,
+              delay: gi * 0.1,
+              scrollTrigger: { trigger: group, ...commonST },
+            }
+          );
+        });
+
+        ScrollTrigger.refresh();
+      }, section);
+    };
+
+    init();
+
+    return () => {
+      ctx?.revert();
+    };
+  }, []);
 
   return (
     <section
       id="stack"
-      ref={ref}
+      ref={sectionRef}
       className="relative section-padding overflow-hidden"
       style={{ background: "#0a0a0f" }}
     >
@@ -61,11 +121,10 @@ export default function TechStack() {
             const colors = categoryColors[category];
             return (
               <div key={category}>
-                <motion.div
-                  initial={{ opacity: 0, x: -20 }}
-                  animate={inView ? { opacity: 1, x: 0 } : {}}
-                  transition={{ delay: catIndex * 0.15, duration: 0.5 }}
-                  className="flex items-center gap-3 mb-6"
+                {/* Category label */}
+                <div
+                  className="category-label flex items-center gap-3 mb-6"
+                  style={{ opacity: 0, willChange: "transform" }}
                 >
                   <div
                     className="w-2 h-2 rounded-full"
@@ -84,59 +143,19 @@ export default function TechStack() {
                     className="flex-1 h-px"
                     style={{ background: colors.border.replace("0.3", "0.12") }}
                   />
-                </motion.div>
+                </div>
 
-                <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-4">
-                  {items.map((tech, i) => (
-                    <motion.div
+                {/* Cards */}
+                <div
+                  className="tech-card-group grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-4"
+                  data-category-index={catIndex}
+                >
+                  {items.map((tech) => (
+                    <TechCard
                       key={tech.name}
-                      initial={{ opacity: 0, scale: 0.8, y: 20 }}
-                      animate={inView ? { opacity: 1, scale: 1, y: 0 } : {}}
-                      transition={{
-                        delay: catIndex * 0.15 + i * 0.06,
-                        duration: 0.4,
-                        ease: "easeOut" as const,
-                      }}
-                      whileHover={{
-                        scale: 1.08,
-                        y: -4,
-                        transition: { duration: 0.2 },
-                      }}
-                      className="relative group glass-card p-4 flex flex-col items-center gap-2 cursor-default overflow-hidden"
-                      style={{
-                        borderColor: "rgba(255,255,255,0.06)",
-                      }}
-                    >
-                      {/* Hover glow */}
-                      <div
-                        className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-2xl"
-                        style={{ background: colors.glow }}
-                      />
-
-                      {/* Icon */}
-                      <span
-                        className="relative z-10 text-2xl leading-none"
-                        style={{ fontFamily: "system-ui" }}
-                      >
-                        {tech.icon}
-                      </span>
-
-                      {/* Name */}
-                      <span
-                        className="relative z-10 text-meta text-center leading-tight"
-                        style={{ color: "#94a3b8", fontFamily: "var(--font-body)" }}
-                      >
-                        {tech.name}
-                      </span>
-
-                      {/* Bottom accent bar on hover */}
-                      <div
-                        className="absolute bottom-0 left-0 right-0 h-0.5 scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-left"
-                        style={{
-                          background: `linear-gradient(90deg, ${colors.border.replace("0.3", "0.8")}, transparent)`,
-                        }}
-                      />
-                    </motion.div>
+                      tech={tech}
+                      colors={colors}
+                    />
                   ))}
                 </div>
               </div>
@@ -145,5 +164,87 @@ export default function TechStack() {
         </div>
       </div>
     </section>
+  );
+}
+
+function TechCard({
+  tech,
+  colors,
+}: {
+  tech: { name: string; icon: string };
+  colors: { bg: string; border: string; glow: string };
+}) {
+  const cardRef = useRef<HTMLDivElement>(null);
+
+  const handleMouseEnter = async () => {
+    const card = cardRef.current;
+    if (!card) return;
+    const { gsap } = await import("@/lib/gsap");
+    gsap.to(card, {
+      scale: 1.08,
+      y: -4,
+      duration: 0.25,
+      ease: "power2.out",
+    });
+    const glowEl = card.querySelector<HTMLElement>(".card-glow");
+    if (glowEl) gsap.to(glowEl, { opacity: 1, duration: 0.2 });
+  };
+
+  const handleMouseLeave = async () => {
+    const card = cardRef.current;
+    if (!card) return;
+    const { gsap } = await import("@/lib/gsap");
+    gsap.to(card, {
+      scale: 1,
+      y: 0,
+      duration: 0.35,
+      ease: "power2.out",
+    });
+    const glowEl = card.querySelector<HTMLElement>(".card-glow");
+    if (glowEl) gsap.to(glowEl, { opacity: 0, duration: 0.25 });
+  };
+
+  return (
+    <div
+      ref={cardRef}
+      className="tech-card relative glass-card p-4 flex flex-col items-center gap-2 cursor-default overflow-hidden"
+      style={{
+        borderColor: "rgba(255,255,255,0.06)",
+        opacity: 0,
+        willChange: "transform",
+      }}
+      onMouseEnter={handleMouseEnter}
+      onMouseLeave={handleMouseLeave}
+    >
+      {/* Hover glow */}
+      <div
+        className="card-glow absolute inset-0 opacity-0 rounded-2xl"
+        style={{ background: colors.glow }}
+      />
+
+      {/* Icon */}
+      <span
+        className="relative z-10 text-2xl leading-none"
+        style={{ fontFamily: "system-ui" }}
+      >
+        {tech.icon}
+      </span>
+
+      {/* Name */}
+      <span
+        className="relative z-10 text-meta text-center leading-tight"
+        style={{ color: "#94a3b8", fontFamily: "var(--font-body)" }}
+      >
+        {tech.name}
+      </span>
+
+      {/* Bottom accent bar on hover */}
+      <div
+        className="absolute bottom-0 left-0 right-0 h-0.5 scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-left"
+        style={{
+          background: `linear-gradient(90deg, ${colors.border.replace("0.3", "0.8")}, transparent)`,
+        }}
+      />
+    </div>
   );
 }

@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 
 const navLinks = [
@@ -16,11 +16,39 @@ export default function Navbar() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [activeSection, setActiveSection] = useState("");
 
+  const logoRef = useRef<HTMLButtonElement>(null);
+  const linkRefs = useRef<(HTMLButtonElement | null)[]>([]);
+  const underlineRefs = useRef<(HTMLSpanElement | null)[]>([]);
+
+  // Logo bounce on mount
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+
+    const init = async () => {
+      const { gsap } = await import("@/lib/gsap");
+
+      if (logoRef.current) {
+        gsap.fromTo(
+          logoRef.current,
+          { y: -20, opacity: 0 },
+          {
+            y: 0,
+            opacity: 1,
+            duration: 0.7,
+            ease: "elastic.out(1, 0.6)",
+            delay: 2.2,
+          }
+        );
+      }
+    };
+
+    init();
+  }, []);
+
   useEffect(() => {
     const onScroll = () => {
       setScrolled(window.scrollY > 40);
 
-      // Find active section
       const sections = navLinks.map((l) => l.href.slice(1));
       for (const id of [...sections].reverse()) {
         const el = document.getElementById(id);
@@ -42,13 +70,36 @@ export default function Navbar() {
     setMenuOpen(false);
   };
 
+  const handleLinkEnter = async (index: number) => {
+    const underline = underlineRefs.current[index];
+    if (!underline) return;
+    const { gsap } = await import("@/lib/gsap");
+    gsap.fromTo(
+      underline,
+      { scaleX: 0, transformOrigin: "left center" },
+      { scaleX: 1, duration: 0.22, ease: "power2.out" }
+    );
+  };
+
+  const handleLinkLeave = async (index: number) => {
+    const underline = underlineRefs.current[index];
+    if (!underline) return;
+    const { gsap } = await import("@/lib/gsap");
+    gsap.to(underline, {
+      scaleX: 0,
+      transformOrigin: "right center",
+      duration: 0.18,
+      ease: "power2.in",
+    });
+  };
+
   return (
     <>
       <motion.nav
         initial={{ y: -80, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
         transition={{ delay: 2.2, duration: 0.6, ease: "easeOut" as const }}
-        className="fixed top-0 left-0 right-0 z-[900] flex items-center justify-between px-6 md:px-10 h-16"
+        className="fixed top-0 left-0 right-0 z-900 flex items-center justify-between px-6 md:px-10 h-16"
         style={{
           background: scrolled ? "rgba(10, 10, 15, 0.85)" : "transparent",
           backdropFilter: scrolled ? "blur(20px)" : "none",
@@ -60,8 +111,10 @@ export default function Navbar() {
       >
         {/* Logo */}
         <button
+          ref={logoRef}
           onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
           className="flex items-center gap-2 group"
+          style={{ opacity: 0 }}
         >
           <div
             className="w-8 h-8 rounded-lg flex items-center justify-center text-white"
@@ -92,22 +145,38 @@ export default function Navbar() {
 
         {/* Desktop Links */}
         <div className="hidden md:flex items-center gap-8">
-          {navLinks.map((link) => (
-            <button
-              key={link.href}
-              onClick={() => scrollTo(link.href)}
-              className="animated-underline transition-colors duration-200"
-              style={{
-                fontFamily: "var(--font-heading)",
-                fontSize: "0.82rem",
-                fontWeight: 500,
-                letterSpacing: "0.01em",
-                color: activeSection === link.href.slice(1) ? "#6366f1" : "#64748b",
-              }}
-            >
-              {link.label}
-            </button>
-          ))}
+          {navLinks.map((link, i) => {
+            const isActive = activeSection === link.href.slice(1);
+            return (
+              <button
+                key={link.href}
+                ref={(el) => { linkRefs.current[i] = el; }}
+                onClick={() => scrollTo(link.href)}
+                onMouseEnter={() => handleLinkEnter(i)}
+                onMouseLeave={() => handleLinkLeave(i)}
+                className="relative transition-colors duration-200"
+                style={{
+                  fontFamily: "var(--font-heading)",
+                  fontSize: "0.82rem",
+                  fontWeight: 500,
+                  letterSpacing: "0.01em",
+                  color: isActive ? "#6366f1" : "#64748b",
+                }}
+              >
+                {link.label}
+                {/* GSAP-powered underline — faster than CSS */}
+                <span
+                  ref={(el) => { underlineRefs.current[i] = el; }}
+                  className="absolute -bottom-0.5 left-0 w-full h-px"
+                  style={{
+                    background: "linear-gradient(90deg, #6366f1, #8b5cf6)",
+                    transform: "scaleX(0)",
+                    transformOrigin: "left center",
+                  }}
+                />
+              </button>
+            );
+          })}
         </div>
 
         {/* CTA */}
@@ -186,7 +255,8 @@ export default function Navbar() {
                   fontFamily: "var(--font-heading)",
                   fontSize: "0.95rem",
                   fontWeight: 500,
-                  color: activeSection === link.href.slice(1) ? "#6366f1" : "#94a3b8",
+                  color:
+                    activeSection === link.href.slice(1) ? "#6366f1" : "#94a3b8",
                   borderColor: "rgba(255,255,255,0.05)",
                 }}
               >

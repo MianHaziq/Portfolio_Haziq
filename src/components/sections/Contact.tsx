@@ -1,9 +1,10 @@
 "use client";
 
-import { useRef, useState, FormEvent } from "react";
-import { motion, useInView } from "framer-motion";
+import { useEffect, useRef, useState, FormEvent } from "react";
+import { motion } from "framer-motion";
 import { siteConfig } from "@/lib/data";
 import { SectionHeading } from "@/components/ui/AnimatedText";
+import MagneticButton from "@/components/ui/MagneticButton";
 
 const socialLinks = [
   {
@@ -41,31 +42,144 @@ const socialLinks = [
   },
 ];
 
+function FocusInput({
+  as: Tag = "input",
+  ...props
+}: { as?: "input" | "textarea" } & React.InputHTMLAttributes<HTMLInputElement> &
+  React.TextareaHTMLAttributes<HTMLTextAreaElement>) {
+  const elRef = useRef<HTMLInputElement & HTMLTextAreaElement>(null);
+
+  const handleFocus = async () => {
+    if (!elRef.current) return;
+    const { gsap } = await import("@/lib/gsap");
+    gsap.to(elRef.current, {
+      boxShadow:
+        "0 0 0 2px rgba(99,102,241,0.25), inset 0 0 0 1px rgba(99,102,241,0.4), 0 0 20px rgba(99,102,241,0.12)",
+      borderColor: "rgba(99,102,241,0.5)",
+      duration: 0.3,
+      ease: "power2.out",
+    });
+  };
+
+  const handleBlur = async () => {
+    if (!elRef.current) return;
+    const { gsap } = await import("@/lib/gsap");
+    gsap.to(elRef.current, {
+      boxShadow: "none",
+      borderColor: "rgba(255,255,255,0.08)",
+      duration: 0.3,
+      ease: "power2.out",
+    });
+  };
+
+  return (
+    <Tag
+      ref={elRef}
+      {...props}
+      onFocus={handleFocus}
+      onBlur={handleBlur}
+    />
+  );
+}
+
 export default function Contact() {
-  const ref = useRef(null);
-  const inView = useInView(ref, { once: true, margin: "-80px" });
+  const sectionRef = useRef<HTMLElement>(null);
+  const formCardRef = useRef<HTMLDivElement>(null);
+  const sidebarRef = useRef<HTMLDivElement>(null);
+
   const [formState, setFormState] = useState({ name: "", email: "", message: "" });
   const [submitted, setSubmitted] = useState(false);
   const [sending, setSending] = useState(false);
 
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+
+    let ctx: { revert: () => void } | null = null;
+
+    const init = async () => {
+      const { gsap, ScrollTrigger } = await import("@/lib/gsap");
+
+      const section = sectionRef.current;
+      if (!section) return;
+
+      ctx = gsap.context(() => {
+        const commonST = { start: "top 85%", toggleActions: "play none none reverse" };
+
+        // Section heading area — handled by SectionHeading component itself
+
+        // Form card — slides in from left
+        if (formCardRef.current) {
+          gsap.fromTo(
+            formCardRef.current,
+            { opacity: 0, x: -50 },
+            {
+              opacity: 1,
+              x: 0,
+              duration: 0.7,
+              ease: "power3.out",
+              scrollTrigger: { trigger: formCardRef.current, ...commonST },
+            }
+          );
+        }
+
+        // Sidebar cards — slide in from right, staggered
+        if (sidebarRef.current) {
+          const cards = sidebarRef.current.querySelectorAll<HTMLElement>(".sidebar-card");
+          gsap.fromTo(
+            cards,
+            { opacity: 0, x: 50 },
+            {
+              opacity: 1,
+              x: 0,
+              duration: 0.6,
+              ease: "power3.out",
+              stagger: 0.1,
+              scrollTrigger: { trigger: sidebarRef.current, ...commonST },
+            }
+          );
+        }
+
+        ScrollTrigger.refresh();
+      }, section);
+    };
+
+    init();
+
+    return () => {
+      ctx?.revert();
+    };
+  }, []);
+
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
     setSending(true);
-    // Simulate API call
     await new Promise((r) => setTimeout(r, 1200));
     setSending(false);
     setSubmitted(true);
   };
 
+  const baseInputStyle: React.CSSProperties = {
+    background: "rgba(255,255,255,0.03)",
+    border: "1px solid rgba(255,255,255,0.08)",
+    color: "#f8fafc",
+    outline: "none",
+    borderRadius: "0.75rem",
+    padding: "0.75rem 1rem",
+    fontSize: "0.875rem",
+    width: "100%",
+    fontFamily: "var(--font-body)",
+    transition: "border-color 0.3s ease",
+  };
+
   return (
     <section
       id="contact"
-      ref={ref}
+      ref={sectionRef}
       className="relative section-padding overflow-hidden"
       style={{ background: "#0c0c14" }}
     >
       <div
-        className="absolute top-0 left-1/2 -translate-x-1/2 w-[700px] h-px"
+        className="absolute top-0 left-1/2 -translate-x-1/2 w-175 h-px"
         style={{
           background:
             "linear-gradient(90deg, transparent, rgba(99,102,241,0.3), transparent)",
@@ -74,7 +188,7 @@ export default function Contact() {
 
       {/* Center glow */}
       <div
-        className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[400px] blur-[140px] pointer-events-none"
+        className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-200 h-100 blur-[140px] pointer-events-none"
         style={{
           background:
             "radial-gradient(ellipse, rgba(99,102,241,0.06) 0%, transparent 70%)",
@@ -95,11 +209,10 @@ export default function Contact() {
 
         <div className="grid md:grid-cols-5 gap-8">
           {/* Contact form */}
-          <motion.div
-            initial={{ opacity: 0, x: -30 }}
-            animate={inView ? { opacity: 1, x: 0 } : {}}
-            transition={{ delay: 0.2, duration: 0.6 }}
+          <div
+            ref={formCardRef}
             className="md:col-span-3"
+            style={{ opacity: 0, willChange: "transform" }}
           >
             <div className="glass-card p-8">
               {submitted ? (
@@ -137,7 +250,8 @@ export default function Contact() {
                       >
                         Name
                       </label>
-                      <input
+                      <FocusInput
+                        as="input"
                         type="text"
                         required
                         value={formState.name}
@@ -145,21 +259,7 @@ export default function Contact() {
                           setFormState((s) => ({ ...s, name: e.target.value }))
                         }
                         placeholder="Your name"
-                        className="w-full px-4 py-3 rounded-xl text-sm transition-all duration-300"
-                        style={{
-                          background: "rgba(255,255,255,0.03)",
-                          border: "1px solid rgba(255,255,255,0.08)",
-                          color: "#f8fafc",
-                          outline: "none",
-                        }}
-                        onFocus={(e) =>
-                          ((e.target as HTMLElement).style.borderColor =
-                            "rgba(99, 102, 241, 0.5)")
-                        }
-                        onBlur={(e) =>
-                          ((e.target as HTMLElement).style.borderColor =
-                            "rgba(255,255,255,0.08)")
-                        }
+                        style={baseInputStyle}
                       />
                     </div>
                     <div>
@@ -169,7 +269,8 @@ export default function Contact() {
                       >
                         Email
                       </label>
-                      <input
+                      <FocusInput
+                        as="input"
                         type="email"
                         required
                         value={formState.email}
@@ -177,21 +278,7 @@ export default function Contact() {
                           setFormState((s) => ({ ...s, email: e.target.value }))
                         }
                         placeholder="your@email.com"
-                        className="w-full px-4 py-3 rounded-xl text-sm transition-all duration-300"
-                        style={{
-                          background: "rgba(255,255,255,0.03)",
-                          border: "1px solid rgba(255,255,255,0.08)",
-                          color: "#f8fafc",
-                          outline: "none",
-                        }}
-                        onFocus={(e) =>
-                          ((e.target as HTMLElement).style.borderColor =
-                            "rgba(99, 102, 241, 0.5)")
-                        }
-                        onBlur={(e) =>
-                          ((e.target as HTMLElement).style.borderColor =
-                            "rgba(255,255,255,0.08)")
-                        }
+                        style={baseInputStyle}
                       />
                     </div>
                   </div>
@@ -203,7 +290,8 @@ export default function Contact() {
                     >
                       Message
                     </label>
-                    <textarea
+                    <FocusInput
+                      as="textarea"
                       required
                       rows={5}
                       value={formState.message}
@@ -211,72 +299,61 @@ export default function Contact() {
                         setFormState((s) => ({ ...s, message: e.target.value }))
                       }
                       placeholder="Tell me about your project or just say hi..."
-                      className="w-full px-4 py-3 rounded-xl text-sm resize-none transition-all duration-300"
-                      style={{
-                        background: "rgba(255,255,255,0.03)",
-                        border: "1px solid rgba(255,255,255,0.08)",
-                        color: "#f8fafc",
-                        outline: "none",
-                      }}
-                      onFocus={(e) =>
-                        ((e.target as HTMLElement).style.borderColor =
-                          "rgba(99, 102, 241, 0.5)")
-                      }
-                      onBlur={(e) =>
-                        ((e.target as HTMLElement).style.borderColor =
-                          "rgba(255,255,255,0.08)")
-                      }
+                      style={{ ...baseInputStyle, resize: "none" }}
                     />
                   </div>
 
-                  <button
-                    type="submit"
-                    disabled={sending}
-                    className="w-full py-3.5 rounded-xl transition-all duration-300 hover:scale-[1.02] disabled:opacity-70 disabled:cursor-not-allowed"
-                  style={{ fontFamily: "var(--font-body)", fontWeight: 600, fontSize: "0.9rem" }}
-                    style={{
-                      background: "linear-gradient(135deg, #6366f1, #8b5cf6)",
-                      color: "#fff",
-                      boxShadow: "0 8px 25px rgba(99, 102, 241, 0.3)",
-                    }}
-                  >
-                    {sending ? (
-                      <span className="flex items-center justify-center gap-2">
-                        <svg
-                          className="animate-spin w-4 h-4"
-                          viewBox="0 0 24 24"
-                          fill="none"
-                        >
-                          <circle
-                            cx="12"
-                            cy="12"
-                            r="10"
-                            stroke="currentColor"
-                            strokeWidth="3"
-                            strokeDasharray="32"
-                            strokeDashoffset="10"
-                          />
-                        </svg>
-                        Sending...
-                      </span>
-                    ) : (
-                      "Send Message"
-                    )}
-                  </button>
+                  <MagneticButton strength={0.25} className="w-full">
+                    <button
+                      type="submit"
+                      disabled={sending}
+                      className="w-full py-3.5 rounded-xl transition-opacity duration-300 disabled:opacity-70 disabled:cursor-not-allowed"
+                      style={{
+                        background: "linear-gradient(135deg, #6366f1, #8b5cf6)",
+                        color: "#fff",
+                        fontFamily: "var(--font-body)",
+                        fontWeight: 600,
+                        fontSize: "0.9rem",
+                        boxShadow: "0 8px 25px rgba(99, 102, 241, 0.3)",
+                      }}
+                    >
+                      {sending ? (
+                        <span className="flex items-center justify-center gap-2">
+                          <svg
+                            className="animate-spin w-4 h-4"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                          >
+                            <circle
+                              cx="12"
+                              cy="12"
+                              r="10"
+                              stroke="currentColor"
+                              strokeWidth="3"
+                              strokeDasharray="32"
+                              strokeDashoffset="10"
+                            />
+                          </svg>
+                          Sending...
+                        </span>
+                      ) : (
+                        "Send Message"
+                      )}
+                    </button>
+                  </MagneticButton>
                 </form>
               )}
             </div>
-          </motion.div>
+          </div>
 
           {/* Right sidebar */}
-          <motion.div
-            initial={{ opacity: 0, x: 30 }}
-            animate={inView ? { opacity: 1, x: 0 } : {}}
-            transition={{ delay: 0.3, duration: 0.6 }}
+          <div
+            ref={sidebarRef}
             className="md:col-span-2 flex flex-col gap-6"
+            style={{ willChange: "transform" }}
           >
             {/* Email card */}
-            <div className="glass-card p-6">
+            <div className="sidebar-card glass-card p-6" style={{ opacity: 0 }}>
               <p
                 className="text-xs uppercase tracking-widest font-medium mb-3"
                 style={{ color: "#475569" }}
@@ -299,7 +376,10 @@ export default function Contact() {
             </div>
 
             {/* Social links */}
-            <div className="glass-card p-6 flex flex-col gap-4">
+            <div
+              className="sidebar-card glass-card p-6 flex flex-col gap-4"
+              style={{ opacity: 0 }}
+            >
               <p
                 className="text-xs uppercase tracking-widest font-medium mb-2"
                 style={{ color: "#475569" }}
@@ -337,10 +417,7 @@ export default function Contact() {
                     {social.icon}
                   </div>
                   <div>
-                    <p
-                      className="text-xs font-medium"
-                      style={{ color: "#94a3b8" }}
-                    >
+                    <p className="text-xs font-medium" style={{ color: "#94a3b8" }}>
                       {social.name}
                     </p>
                     <p className="text-xs" style={{ color: "#475569" }}>
@@ -352,9 +429,12 @@ export default function Contact() {
             </div>
 
             {/* Availability indicator */}
-            <div className="glass-card p-5 flex items-center gap-3">
+            <div
+              className="sidebar-card glass-card p-5 flex items-center gap-3"
+              style={{ opacity: 0 }}
+            >
               <div
-                className="w-2 h-2 rounded-full flex-shrink-0"
+                className="w-2 h-2 rounded-full shrink-0"
                 style={{
                   background: "#22c55e",
                   boxShadow: "0 0 8px #22c55e",
@@ -367,7 +447,7 @@ export default function Contact() {
                 opportunities
               </p>
             </div>
-          </motion.div>
+          </div>
         </div>
       </div>
     </section>
