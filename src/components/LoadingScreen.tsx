@@ -33,15 +33,21 @@ export default function LoadingScreen() {
           exit={{ opacity: 0, scale: 1.05 }}
           transition={{ duration: 0.6, ease: "easeOut" as const }}
           className="fixed inset-0 z-9999 flex flex-col items-center justify-center"
-          style={{ background: "#0a0a0f" }}
+          /*
+           * Background reads var(--ph-bg-0) which is resolved against the
+           * data-theme attribute set by the inline script in layout.tsx
+           * BEFORE React hydrates. No FOUC, no theme mismatch on refresh.
+           */
+          style={{ background: "var(--ph-bg-0)" }}
         >
-          {/* Background gradient */}
+          {/* Background gradient — brand colors, opacity tuned per theme */}
           <div className="absolute inset-0 overflow-hidden">
             <div
-              className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-150 h-150 rounded-full blur-[120px] opacity-20"
+              className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-150 h-150 rounded-full blur-[120px]"
               style={{
                 background:
                   "radial-gradient(circle, #6366f1 0%, #8b5cf6 50%, transparent 70%)",
+                opacity: "var(--ph-loader-orb-opacity)",
               }}
             />
           </div>
@@ -65,7 +71,7 @@ export default function LoadingScreen() {
                     fontWeight: 700,
                     fontStyle: "italic",
                     letterSpacing: "0.12em",
-                    color: letter === " " ? "transparent" : "#f8fafc",
+                    color: letter === " " ? "transparent" : "var(--ph-t0)",
                     display: "inline-block",
                     minWidth: letter === " " ? "1rem" : "auto",
                   }}
@@ -75,7 +81,7 @@ export default function LoadingScreen() {
               ))}
             </div>
 
-            {/* Role text */}
+            {/* Role text — brand indigo works in both themes */}
             <motion.p
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
@@ -86,8 +92,11 @@ export default function LoadingScreen() {
               Software Engineer
             </motion.p>
 
-            {/* Progress bar */}
-            <div className="w-48 h-px relative overflow-hidden" style={{ background: "rgba(255,255,255,0.1)" }}>
+            {/* Progress bar — track is theme-aware, fill stays brand */}
+            <div
+              className="w-48 h-px relative overflow-hidden"
+              style={{ background: "var(--ph-border)" }}
+            >
               <motion.div
                 initial={{ width: "0%" }}
                 animate={{ width: `${Math.min(progress, 100)}%` }}
@@ -106,7 +115,11 @@ export default function LoadingScreen() {
               animate={{ opacity: 1 }}
               transition={{ delay: 0.4 }}
               className="text-meta"
-              style={{ color: "#475569", fontFamily: "var(--font-heading)", fontWeight: 600 }}
+              style={{
+                color: "var(--ph-t4)",
+                fontFamily: "var(--font-heading)",
+                fontWeight: 600,
+              }}
             >
               {Math.min(Math.round(progress), 100)}%
             </motion.span>

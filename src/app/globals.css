@@ -90,6 +90,9 @@
   --ph-orb-1: rgba(99, 102, 241, 0.13);
   --ph-orb-2: rgba(139, 92, 246, 0.10);
   --ph-orb-3: rgba(96, 165, 250, 0.05);
+
+  /* Loader — softer in dark, slightly more present */
+  --ph-loader-orb-opacity: 0.22;
 }
 
 /* ─── Light Theme ────────────────────────────────────────────────────────────── */
@@ -159,6 +162,9 @@
   --ph-orb-1: rgba(99, 102, 241, 0.07);
   --ph-orb-2: rgba(139, 92, 246, 0.05);
   --ph-orb-3: rgba(96, 165, 250, 0.03);
+
+  /* Loader — gentler bloom against the off-white background */
+  --ph-loader-orb-opacity: 0.14;
 }
 
 /* ─── Base Reset ─────────────────────────────────────────────────────────────── */
