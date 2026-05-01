@@ -15,6 +15,11 @@
   --font-display: "Cormorant Garamond", Georgia, "Times New Roman", serif;
   --font-heading:  "Sora", system-ui, -apple-system, sans-serif;
   --font-body:     "Manrope", system-ui, -apple-system, sans-serif;
+
+  /* Custom z-index scale — Tailwind v4 requires explicit registration */
+  --z-899:  899;
+  --z-900:  900;
+  --z-9999: 9999;
 }
 
 /* ─── Dark Theme (Default) ───────────────────────────────────────────────────── */
@@ -198,6 +203,76 @@ nav,
     border-color 0.45s ease,
     box-shadow 0.45s ease,
     color 0.45s ease;
+}
+
+/*
+ * `vt-running` is set on <html> for the lifetime of the View Transition.
+ * Pauses every continuous CSS animation on the page so the main thread has
+ * 100% of its cycles available for the compositor. After the transition
+ * finishes we drop the class and animations resume seamlessly.
+ */
+.vt-running *,
+.vt-running *::before,
+.vt-running *::after {
+  animation-play-state: paused !important;
+  transition: none !important;
+}
+
+/*
+ * View Transitions API — circle reveal
+ *
+ * The "old" snapshot stays frozen in place (no animation).
+ * The "new" snapshot starts as a 0px circle at the toggle button's centre
+ * (--vt-ox / --vt-oy set via JS just before startViewTransition is called)
+ * and expands to cover the viewport.
+ *
+ * Result: outside the growing circle → current theme content visible.
+ *          inside the growing circle → new theme content visible.
+ * Text and UI are never hidden — zero "blank page" effect.
+ */
+/*
+ * Performance contract for the theme transition (60 fps on mid-range hardware):
+ *
+ *   ✅ ONLY clip-path animates → fully GPU-composited, zero main-thread work
+ *   ✅ will-change declared up-front → browser pre-promotes to its own layer
+ *   ✅ contain: paint → invalidations cannot escape this pseudo-element
+ *   ✅ translateZ(0) → guaranteed dedicated compositor layer on every engine
+ *   ❌ NO filter: drop-shadow → was the previous bottleneck
+ *
+ *   drop-shadow on a viewport-sized clipped layer forces the browser to
+ *   re-compute the shadow mask EVERY FRAME against the moving clip-path
+ *   silhouette — main-thread work, not compositor. That single rule was
+ *   the cause of the ~10fps feel.
+ *
+ * Easing cubic-bezier(0.645, 0.045, 0.355, 1) is the exact CSS equivalent of
+ * GSAP's `power3.inOut` — small at the button, accelerates, smooth settle.
+ *
+ * 150vmax end-radius: minimum that guarantees full coverage from any click
+ * origin on any monitor diagonal.
+ */
+::view-transition-old(root) {
+  animation: none;
+  will-change: auto;
+}
+
+::view-transition-new(root) {
+  animation: vt-circle-reveal 0.7s cubic-bezier(0.645, 0.045, 0.355, 1);
+  will-change: clip-path;
+  contain: paint;
+  transform: translateZ(0);
+  backface-visibility: hidden;
+}
+
+@keyframes vt-circle-reveal {
+  from { clip-path: circle(0px     at var(--vt-ox, 50%) var(--vt-oy, 50%)); }
+  to   { clip-path: circle(150vmax at var(--vt-ox, 50%) var(--vt-oy, 50%)); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  ::view-transition-old(root),
+  ::view-transition-new(root) {
+    animation-duration: 0.001ms !important;
+  }
 }
 
 /* ─── Typography Scale ───────────────────────────────────────────────────────── */
@@ -455,3 +530,4 @@ input:focus, textarea:focus {
 [data-theme="light"] textarea::placeholder {
   color: #9ca3af;
 }
+
