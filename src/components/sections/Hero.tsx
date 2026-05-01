@@ -3,6 +3,7 @@
 import { useEffect, useRef } from "react";
 import { motion } from "framer-motion";
 import { siteConfig } from "@/lib/data";
+import { useIntro } from "@/contexts/IntroContext";
 
 const EASE_EXPO = [0.22, 1, 0.36, 1] as const;
 
@@ -39,10 +40,12 @@ const socialLinks = [
 function HeroWord({
   word,
   delay,
+  isReady,
   className = "",
 }: {
   word: string;
   delay: number;
+  isReady: boolean;
   className?: string;
 }) {
   return (
@@ -50,7 +53,7 @@ function HeroWord({
       <motion.span
         className={`inline-block ${className}`}
         initial={{ y: "115%", opacity: 0 }}
-        animate={{ y: "0%", opacity: 1 }}
+        animate={isReady ? { y: "0%", opacity: 1 } : { y: "115%", opacity: 0 }}
         transition={{ delay, duration: 0.82, ease: EASE_EXPO }}
       >
         {word}
@@ -65,6 +68,10 @@ export default function Hero() {
   const orb1Ref = useRef<HTMLDivElement>(null);
   const orb2Ref = useRef<HTMLDivElement>(null);
   const orb3Ref = useRef<HTMLDivElement>(null);
+
+  // Intro phase — gates every entrance animation in this section so they
+  // begin exactly when the loader begins exiting (true overlap, no flash).
+  const { isIntroDone } = useIntro();
 
   const scrollTo = (id: string) =>
     document.getElementById(id)?.scrollIntoView({ behavior: "smooth" });
@@ -112,11 +119,21 @@ export default function Hero() {
   }, []);
 
   return (
-    <section
+    <motion.section
       id="hero"
       ref={sectionRef}
+      /*
+       * Cinematic envelope: a gentle 0.985 → 1 scale + opacity rise on the
+       * whole section, played in parallel with the loader's exit. The slow
+       * 1.4s expo-out curve makes the page feel like it "settles in" rather
+       * than just appearing — the foundation under all the staggered text
+       * reveals below.
+       */
+      initial={{ scale: 0.985, opacity: 0 }}
+      animate={isIntroDone ? { scale: 1, opacity: 1 } : { scale: 0.985, opacity: 0 }}
+      transition={{ duration: 1.4, ease: EASE_EXPO }}
       className="relative min-h-screen flex flex-col items-center justify-center overflow-hidden"
-      style={{ background: "var(--ph-bg-0)" }}
+      style={{ background: "var(--ph-bg-0)", willChange: "transform, opacity" }}
     >
       {/* Background orbs */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
@@ -169,8 +186,8 @@ export default function Hero() {
         {/* Availability badge */}
         <motion.div
           initial={{ opacity: 0, y: 16, scale: 0.94 }}
-          animate={{ opacity: 1, y: 0, scale: 1 }}
-          transition={{ delay: 1.9, duration: 0.55, ease: "easeOut" }}
+          animate={isIntroDone ? { opacity: 1, y: 0, scale: 1 } : { opacity: 0, y: 16, scale: 0.94 }}
+          transition={{ delay: 0, duration: 0.55, ease: "easeOut" }}
           className="mb-10 flex justify-center"
         >
           <div
@@ -208,8 +225,8 @@ export default function Hero() {
             <motion.span
               className="inline-block"
               initial={{ y: "110%", opacity: 0 }}
-              animate={{ y: "0%", opacity: 1 }}
-              transition={{ delay: 2.0, duration: 0.7, ease: EASE_EXPO }}
+              animate={isIntroDone ? { y: "0%", opacity: 1 } : { y: "110%", opacity: 0 }}
+              transition={{ delay: 0.08, duration: 0.7, ease: EASE_EXPO }}
             >
               Hi, I&apos;m
             </motion.span>
@@ -222,13 +239,13 @@ export default function Hero() {
           aria-label="Haziq Nazeer"
           style={{ fontFamily: "var(--font-display)" }}
         >
-          <HeroWord word="Haziq" delay={2.08} className="text-hero" />
+          <HeroWord word="Haziq" delay={0.16} isReady={isIntroDone} className="text-hero" />
           <span className="word-mask inline-block">
             <motion.span
               className="inline-block gradient-text-shimmer text-hero"
               initial={{ y: "115%", opacity: 0 }}
-              animate={{ y: "0%", opacity: 1 }}
-              transition={{ delay: 2.22, duration: 0.82, ease: EASE_EXPO }}
+              animate={isIntroDone ? { y: "0%", opacity: 1 } : { y: "115%", opacity: 0 }}
+              transition={{ delay: 0.30, duration: 0.82, ease: EASE_EXPO }}
               style={{
                 fontFamily: "var(--font-display)",
                 fontStyle: "italic",
@@ -254,8 +271,8 @@ export default function Hero() {
             <motion.span
               className="inline-block"
               initial={{ y: "110%", opacity: 0 }}
-              animate={{ y: "0%", opacity: 1 }}
-              transition={{ delay: 2.38, duration: 0.72, ease: EASE_EXPO }}
+              animate={isIntroDone ? { y: "0%", opacity: 1 } : { y: "110%", opacity: 0 }}
+              transition={{ delay: 0.46, duration: 0.72, ease: EASE_EXPO }}
             >
               Software
             </motion.span>
@@ -265,8 +282,8 @@ export default function Hero() {
               className="inline-block"
               style={{ color: "var(--ph-t2)" }}
               initial={{ y: "110%", opacity: 0 }}
-              animate={{ y: "0%", opacity: 1 }}
-              transition={{ delay: 2.46, duration: 0.72, ease: EASE_EXPO }}
+              animate={isIntroDone ? { y: "0%", opacity: 1 } : { y: "110%", opacity: 0 }}
+              transition={{ delay: 0.54, duration: 0.72, ease: EASE_EXPO }}
             >
               Engineer
             </motion.span>
@@ -275,8 +292,8 @@ export default function Hero() {
             <motion.span
               className="inline-block"
               initial={{ y: "110%", opacity: 0 }}
-              animate={{ y: "0%", opacity: 1 }}
-              transition={{ delay: 2.54, duration: 0.72, ease: EASE_EXPO }}
+              animate={isIntroDone ? { y: "0%", opacity: 1 } : { y: "110%", opacity: 0 }}
+              transition={{ delay: 0.62, duration: 0.72, ease: EASE_EXPO }}
             >
               —
             </motion.span>
@@ -292,8 +309,8 @@ export default function Hero() {
                 color: "#6366f1",
               }}
               initial={{ y: "110%", opacity: 0 }}
-              animate={{ y: "0%", opacity: 1 }}
-              transition={{ delay: 2.62, duration: 0.72, ease: EASE_EXPO }}
+              animate={isIntroDone ? { y: "0%", opacity: 1 } : { y: "110%", opacity: 0 }}
+              transition={{ delay: 0.70, duration: 0.72, ease: EASE_EXPO }}
             >
               building things for the web
             </motion.span>
@@ -305,8 +322,8 @@ export default function Hero() {
           className="text-body max-w-[52ch] mx-auto mb-12"
           style={{ color: "var(--ph-t4)" }}
           initial={{ opacity: 0, y: 18 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 2.8, duration: 0.65, ease: "easeOut" }}
+          animate={isIntroDone ? { opacity: 1, y: 0 } : { opacity: 0, y: 18 }}
+          transition={{ delay: 0.88, duration: 0.65, ease: "easeOut" }}
         >
           {siteConfig.bio}
         </motion.p>
@@ -315,8 +332,8 @@ export default function Hero() {
         <motion.div
           className="flex flex-col sm:flex-row gap-4 justify-center items-center mb-14"
           initial={{ opacity: 0, y: 18 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 2.95, duration: 0.55, ease: "easeOut" }}
+          animate={isIntroDone ? { opacity: 1, y: 0 } : { opacity: 0, y: 18 }}
+          transition={{ delay: 1.02, duration: 0.55, ease: "easeOut" }}
         >
           <button
             onClick={() => scrollTo("projects")}
@@ -367,8 +384,8 @@ export default function Hero() {
         <motion.div
           className="flex justify-center items-center gap-7"
           initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 3.15, duration: 0.6 }}
+          animate={isIntroDone ? { opacity: 1 } : { opacity: 0 }}
+          transition={{ delay: 1.20, duration: 0.6 }}
         >
           <div
             className="h-px w-12 hidden sm:block"
@@ -403,8 +420,8 @@ export default function Hero() {
       {/* Scroll indicator */}
       <motion.div
         initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ delay: 3.4, duration: 0.8 }}
+        animate={isIntroDone ? { opacity: 1 } : { opacity: 0 }}
+        transition={{ delay: 1.45, duration: 0.8 }}
         className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2"
       >
         <span
@@ -428,6 +445,6 @@ export default function Hero() {
           />
         </div>
       </motion.div>
-    </section>
+    </motion.section>
   );
 }

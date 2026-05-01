@@ -2,17 +2,31 @@
 
 import { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import { useIntro } from "@/contexts/IntroContext";
 
 export default function LoadingScreen() {
+  const { setPhase } = useIntro();
   const [loading, setLoading] = useState(true);
   const [progress, setProgress] = useState(0);
 
+  /*
+   * When progress hits 100% we wait 400 ms (lets the bar visually settle at
+   * 100), then flip BOTH state changes in the same render:
+   *   1. setPhase("exiting") → tells Hero/Navbar to begin their entrance
+   *   2. setLoading(false)   → AnimatePresence triggers loader's exit anim
+   *
+   * Because both fire in the same tick, the loader fade-out and the hero
+   * fade-in start on the exact same frame → no blank screen, true overlap.
+   */
   useEffect(() => {
     const interval = setInterval(() => {
       setProgress((prev) => {
         if (prev >= 100) {
           clearInterval(interval);
-          setTimeout(() => setLoading(false), 400);
+          setTimeout(() => {
+            setPhase("exiting");
+            setLoading(false);
+          }, 400);
           return 100;
         }
         return prev + Math.random() * 15 + 5;
@@ -20,25 +34,27 @@ export default function LoadingScreen() {
     }, 120);
 
     return () => clearInterval(interval);
-  }, []);
+  }, [setPhase]);
 
   const letters = "HAZIQ NAZEER".split("");
 
   return (
-    <AnimatePresence>
+    <AnimatePresence onExitComplete={() => setPhase("ready")}>
       {loading && (
         <motion.div
           key="loading"
           initial={{ opacity: 1 }}
-          exit={{ opacity: 0, scale: 1.05 }}
-          transition={{ duration: 0.6, ease: "easeOut" as const }}
-          className="fixed inset-0 z-9999 flex flex-col items-center justify-center"
           /*
-           * Background reads var(--ph-bg-0) which is resolved against the
-           * data-theme attribute set by the inline script in layout.tsx
-           * BEFORE React hydrates. No FOUC, no theme mismatch on refresh.
+           * Exit choreography: gentle fade with a subtle outward scale and
+           * micro upward drift — feels like the loader "lifts away" rather
+           * than blinks off. Long enough (0.85s) to overlap meaningfully with
+           * the hero entrance, expo-out so most of the dissolution happens
+           * in the first 200 ms while the hero is still ramping in.
            */
-          style={{ background: "var(--ph-bg-0)" }}
+          exit={{ opacity: 0, scale: 1.06, y: -8, filter: "blur(8px)" }}
+          transition={{ duration: 0.85, ease: [0.22, 1, 0.36, 1] }}
+          className="fixed inset-0 z-9999 flex flex-col items-center justify-center"
+          style={{ background: "var(--ph-bg-0)", willChange: "opacity, transform, filter" }}
         >
           {/* Background gradient — brand colors, opacity tuned per theme */}
           <div className="absolute inset-0 overflow-hidden">
@@ -81,7 +97,7 @@ export default function LoadingScreen() {
               ))}
             </div>
 
-            {/* Role text — brand indigo works in both themes */}
+            {/* Role text */}
             <motion.p
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
@@ -92,7 +108,7 @@ export default function LoadingScreen() {
               Software Engineer
             </motion.p>
 
-            {/* Progress bar — track is theme-aware, fill stays brand */}
+            {/* Progress bar */}
             <div
               className="w-48 h-px relative overflow-hidden"
               style={{ background: "var(--ph-border)" }}
