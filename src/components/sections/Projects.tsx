@@ -1,8 +1,9 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
-import { projects } from "@/lib/data";
+import { projects, siteConfig } from "@/lib/data";
 import { SectionHeading } from "@/components/ui/AnimatedText";
 import TiltCard from "@/components/ui/TiltCard";
 
@@ -73,14 +74,17 @@ function ProjectCard({
     gsap.to(bar, { scaleX: 1, duration: 0.3, ease: "power2.out" });
   };
 
-  const gradientColors =
-    project.gradient.includes("indigo")
-      ? "#6366f1, #8b5cf6"
-      : project.gradient.includes("violet")
-      ? "#8b5cf6, #a855f7"
-      : project.gradient.includes("sky")
-      ? "#0ea5e9, #6366f1"
-      : "#f43f5e, #ec4899";
+  const GRADIENTS: Record<string, string> = {
+    indigo: "#6366f1, #8b5cf6",
+    violet: "#8b5cf6, #a855f7",
+    sky: "#0ea5e9, #6366f1",
+    emerald: "#10b981, #14b8a6",
+    amber: "#f59e0b, #f97316",
+    rose: "#f43f5e, #ec4899",
+  };
+  const gradientKey =
+    Object.keys(GRADIENTS).find((k) => project.gradient.includes(k)) ?? "indigo";
+  const gradientColors = GRADIENTS[gradientKey];
 
   return (
     <TiltCard maxAngle={8} glare strength={0.7} className="flex flex-col h-full">
@@ -104,6 +108,75 @@ function ProjectCard({
           style={{
             background: `linear-gradient(90deg, ${gradientColors})`,
           }}
+        />
+
+        {/* Media — screenshot if provided, branded gradient placeholder otherwise */}
+        <div
+          className="relative w-full aspect-video overflow-hidden"
+          style={{ background: `linear-gradient(135deg, ${gradientColors})` }}
+        >
+          {project.image ? (
+            // eslint-disable-next-line @next/next/no-img-element
+            <img
+              src={project.image}
+              alt={`${project.title} screenshot`}
+              className="absolute inset-0 w-full h-full object-cover object-top transition-transform duration-500"
+              style={{ transform: hovered ? "scale(1.04)" : "scale(1)" }}
+            />
+          ) : (
+            <>
+              <div
+                className="absolute inset-0"
+                style={{
+                  backgroundImage:
+                    "radial-gradient(rgba(255,255,255,0.18) 1px, transparent 1px)",
+                  backgroundSize: "20px 20px",
+                }}
+              />
+              <span
+                className="absolute inset-0 flex items-center justify-center select-none"
+                style={{
+                  fontFamily: "var(--font-display)",
+                  fontWeight: 700,
+                  fontStyle: "italic",
+                  fontSize: "clamp(2.5rem, 6vw, 3.5rem)",
+                  color: "rgba(255,255,255,0.92)",
+                  textShadow: "0 2px 20px rgba(0,0,0,0.25)",
+                }}
+              >
+                {project.title.charAt(0)}
+              </span>
+            </>
+          )}
+          <div
+            className="absolute inset-0"
+            style={{
+              background:
+                "linear-gradient(180deg, transparent 55%, rgba(0,0,0,0.28) 100%)",
+            }}
+          />
+
+          {/* Kind badge (Full-stack / Backend) */}
+          <span
+            className="absolute top-3 left-3 px-2.5 py-1 rounded-full text-eyebrow"
+            style={{
+              background: "rgba(0,0,0,0.35)",
+              backdropFilter: "blur(6px)",
+              border: "1px solid rgba(255,255,255,0.18)",
+              color: "#fff",
+            }}
+          >
+            {project.kind}
+          </span>
+        </div>
+
+        {/* Whole-card link to the case study. Absolute overlay (z-20) keeps it a
+            real <a> without nesting inside the github/live anchors (z-30). */}
+        <Link
+          href={`/projects/${project.slug}`}
+          aria-label={`View the ${project.title} case study`}
+          data-cursor-text="View"
+          className="absolute inset-0 z-20"
         />
 
         {/* Hover glow */}
@@ -149,58 +222,73 @@ function ProjectCard({
               </svg>
             </div>
 
-            {/* Links */}
-            <div className="flex items-center gap-2">
-              <a
-                href={project.github}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="w-8 h-8 rounded-full flex items-center justify-center transition-all duration-200"
-                style={{ background: "var(--ph-icon-bg)", color: "var(--ph-t3)" }}
-                onMouseEnter={(e) =>
-                  ((e.currentTarget as HTMLElement).style.color = "var(--ph-t0)")
-                }
-                onMouseLeave={(e) =>
-                  ((e.currentTarget as HTMLElement).style.color = "var(--ph-t3)")
-                }
-              >
-                <svg viewBox="0 0 24 24" fill="currentColor" className="w-3.5 h-3.5">
-                  <path d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z" />
-                </svg>
-              </a>
-              <a
-                href={project.live}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="w-8 h-8 rounded-full flex items-center justify-center transition-all duration-200"
-                style={{ background: "var(--ph-icon-bg)", color: "var(--ph-t3)" }}
-                onMouseEnter={(e) =>
-                  ((e.currentTarget as HTMLElement).style.color = "#6366f1")
-                }
-                onMouseLeave={(e) =>
-                  ((e.currentTarget as HTMLElement).style.color = "var(--ph-t3)")
-                }
-              >
-                <svg
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth={1.5}
-                  className="w-3.5 h-3.5"
+            {/* Links — only render those that exist. relative z-30 sits above
+                the whole-card overlay link so these stay clickable. */}
+            <div className="relative z-30 flex items-center gap-2">
+              {project.github && (
+                <a
+                  href={project.github}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label={`${project.title} source code`}
+                  className="w-8 h-8 rounded-full flex items-center justify-center transition-all duration-200"
+                  style={{ background: "var(--ph-icon-bg)", color: "var(--ph-t3)" }}
+                  onMouseEnter={(e) =>
+                    ((e.currentTarget as HTMLElement).style.color = "var(--ph-t0)")
+                  }
+                  onMouseLeave={(e) =>
+                    ((e.currentTarget as HTMLElement).style.color = "var(--ph-t3)")
+                  }
                 >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    d="M13.5 6H5.25A2.25 2.25 0 003 8.25v10.5A2.25 2.25 0 005.25 21h10.5A2.25 2.25 0 0018 18.75V10.5m-10.5 6L21 3m0 0h-5.25M21 3v5.25"
-                  />
-                </svg>
-              </a>
+                  <svg viewBox="0 0 24 24" fill="currentColor" className="w-3.5 h-3.5">
+                    <path d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z" />
+                  </svg>
+                </a>
+              )}
+              {project.live && (
+                <a
+                  href={project.live}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label={`${project.title} live site`}
+                  className="w-8 h-8 rounded-full flex items-center justify-center transition-all duration-200"
+                  style={{ background: "var(--ph-icon-bg)", color: "var(--ph-t3)" }}
+                  onMouseEnter={(e) =>
+                    ((e.currentTarget as HTMLElement).style.color = "#6366f1")
+                  }
+                  onMouseLeave={(e) =>
+                    ((e.currentTarget as HTMLElement).style.color = "var(--ph-t3)")
+                  }
+                >
+                  <svg
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth={1.5}
+                    className="w-3.5 h-3.5"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      d="M13.5 6H5.25A2.25 2.25 0 003 8.25v10.5A2.25 2.25 0 005.25 21h10.5A2.25 2.25 0 0018 18.75V10.5m-10.5 6L21 3m0 0h-5.25M21 3v5.25"
+                    />
+                  </svg>
+                </a>
+              )}
             </div>
           </div>
 
+          {/* Role */}
+          <span
+            className="text-eyebrow mb-1.5"
+            style={{ color: "#6366f1", fontFamily: "var(--font-heading)" }}
+          >
+            {project.role}
+          </span>
+
           {/* Title */}
           <h3
-            className="text-title mb-2 transition-colors duration-300"
+            className="text-title mb-1 transition-colors duration-300"
             style={{
               color: hovered ? "var(--ph-t0)" : "var(--ph-t1)",
               fontFamily: "var(--font-heading)",
@@ -208,6 +296,14 @@ function ProjectCard({
           >
             {project.title}
           </h3>
+
+          {/* Subtitle */}
+          <p
+            className="text-meta mb-3"
+            style={{ color: "var(--ph-t4)", fontFamily: "var(--font-body)", fontWeight: 500 }}
+          >
+            {project.subtitle}
+          </p>
 
           {/* Description */}
           <p
@@ -233,6 +329,32 @@ function ProjectCard({
                 {tag}
               </span>
             ))}
+          </div>
+
+          {/* View case study affordance — overlay link above handles the click */}
+          <div
+            className="mt-5 pt-4 flex items-center gap-1.5 text-eyebrow"
+            style={{
+              borderTop: "1px solid var(--ph-border-subtle)",
+              color: hovered ? "#818cf8" : "#6366f1",
+              fontFamily: "var(--font-heading)",
+              transition: "color 0.3s ease",
+            }}
+          >
+            View case study
+            <svg
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth={2}
+              className="w-3.5 h-3.5"
+              style={{
+                transform: hovered ? "translateX(3px)" : "translateX(0)",
+                transition: "transform 0.3s ease",
+              }}
+            >
+              <path strokeLinecap="round" strokeLinejoin="round" d="M17.25 8.25L21 12m0 0l-3.75 3.75M21 12H3" />
+            </svg>
           </div>
         </div>
       </article>
@@ -309,7 +431,7 @@ export default function Projects() {
             eyebrow="What I've Built"
             title="Featured"
             accent="Projects"
-            description="A selection of projects I've built — from full-stack apps to open-source tools."
+            description="Production systems I've built — full-stack platforms first, then the scalable backends behind them."
             align="center"
           />
         </div>
@@ -323,7 +445,7 @@ export default function Projects() {
         {/* CTA */}
         <div ref={ctaRef} className="mt-12 text-center" style={{ opacity: 0 }}>
           <a
-            href="https://github.com/haziqnazeer"
+            href={siteConfig.github}
             target="_blank"
             rel="noopener noreferrer"
             className="inline-flex items-center gap-2 text-sm font-medium transition-all duration-300"

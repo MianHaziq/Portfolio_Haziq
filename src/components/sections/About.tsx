@@ -183,9 +183,11 @@ export default function About() {
                 {siteConfig.bio}
               </p>
               <p className="text-body" style={{ color: "var(--ph-t3)" }}>
-                I thrive at the intersection of design and engineering — making
-                things look great and work even better. Whether it&apos;s a
-                silky-smooth UI or a rock-solid API, I care deeply about the craft.
+                My focus is the backend — real-time pipelines, AI integrations,
+                secure auth and clean data models — but I&apos;m comfortable across
+                the full stack. Whether it&apos;s a streaming inference pipeline or a
+                rock-solid API, I care deeply about the craft. Currently open to
+                relocating to Germany / the EU.
               </p>
             </div>
 
@@ -193,7 +195,7 @@ export default function About() {
             <div ref={statsRef} className="grid grid-cols-3 gap-4">
               {[
                 { value: "1+", label: "Year Exp" },
-                { value: "10+", label: "Projects" },
+                { value: "6+", label: "Projects" },
                 { value: "∞", label: "Curiosity" },
               ].map((stat) => (
                 <div

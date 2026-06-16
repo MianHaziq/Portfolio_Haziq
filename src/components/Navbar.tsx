@@ -133,7 +133,7 @@ export default function Navbar() {
               fontStyle: "italic",
             }}
           >
-            A
+            H
           </div>
           <span
             className="hidden sm:block"

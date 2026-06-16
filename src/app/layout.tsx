@@ -52,7 +52,6 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "Haziq Nazeer — Software Engineer",
     description: "Building elegant, high-performance applications.",
-    creator: "@haziqnazeer",
   },
   robots: {
     index: true,

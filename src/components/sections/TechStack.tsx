@@ -15,7 +15,22 @@ const categoryColors: Record<string, { bg: string; border: string; glow: string 
     border: "rgba(139, 92, 246, 0.3)",
     glow: "rgba(139, 92, 246, 0.15)",
   },
-  DevOps: {
+  Databases: {
+    bg: "rgba(16, 185, 129, 0.1)",
+    border: "rgba(16, 185, 129, 0.3)",
+    glow: "rgba(16, 185, 129, 0.15)",
+  },
+  "Real-time & Queues": {
+    bg: "rgba(245, 158, 11, 0.1)",
+    border: "rgba(245, 158, 11, 0.3)",
+    glow: "rgba(245, 158, 11, 0.15)",
+  },
+  "AI APIs": {
+    bg: "rgba(244, 63, 94, 0.1)",
+    border: "rgba(244, 63, 94, 0.3)",
+    glow: "rgba(244, 63, 94, 0.15)",
+  },
+  "Cloud & Tools": {
     bg: "rgba(96, 165, 250, 0.1)",
     border: "rgba(96, 165, 250, 0.3)",
     glow: "rgba(96, 165, 250, 0.15)",
@@ -165,7 +180,7 @@ function TechCard({
   tech,
   colors,
 }: {
-  tech: { name: string; icon: string };
+  tech: { name: string; icon: string; mono?: boolean };
   colors: { bg: string; border: string; glow: string };
 }) {
   const cardRef = useRef<HTMLDivElement>(null);
@@ -206,12 +221,17 @@ function TechCard({
       />
 
       {/* Icon */}
-      <span
-        className="relative z-10 text-2xl leading-none"
-        style={{ fontFamily: "system-ui" }}
-      >
-        {tech.icon}
-      </span>
+      {/* eslint-disable-next-line @next/next/no-img-element */}
+      <img
+        src={tech.icon}
+        alt={`${tech.name} logo`}
+        width={36}
+        height={36}
+        loading="lazy"
+        className={`relative z-10 w-9 h-9 object-contain${
+          tech.mono ? " tech-icon-mono" : ""
+        }`}
+      />
 
       {/* Name */}
       <span
