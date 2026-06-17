@@ -170,6 +170,9 @@
 /* ─── Base Reset ─────────────────────────────────────────────────────────────── */
 *, *::before, *::after { box-sizing: border-box; }
 
+/* Remove the grey tap flash on mobile — interactions have their own feedback */
+a, button, [role="button"] { -webkit-tap-highlight-color: transparent; }
+
 html {
   scroll-behavior: smooth;
   overflow-x: hidden;
@@ -472,8 +475,8 @@ nav,
 
 /* ─── Section Padding ────────────────────────────────────────────────────────── */
 .section-padding {
-  padding-top: 5rem;
-  padding-bottom: 5rem;
+  padding-top: 4rem;
+  padding-bottom: 4rem;
 }
 @media (min-width: 768px) {
   .section-padding { padding-top: 7rem; padding-bottom: 7rem; }

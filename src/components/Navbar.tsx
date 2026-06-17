@@ -136,7 +136,7 @@ export default function Navbar() {
             H
           </div>
           <span
-            className="hidden sm:block"
+            className="block"
             style={{
               color: "var(--ph-t0)",
               fontFamily: "var(--font-heading)",
@@ -240,51 +240,83 @@ export default function Navbar() {
       {/* Mobile Menu */}
       <AnimatePresence>
         {menuOpen && (
-          <motion.div
-            initial={{ opacity: 0, y: -20 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -20 }}
-            transition={{ duration: 0.3 }}
-            className="fixed top-16 inset-x-0 z-899 flex flex-col gap-0 md:hidden"
-            style={{
-              background: "var(--ph-mobile-menu-bg)",
-              backdropFilter: "blur(20px)",
-              borderBottom: "1px solid var(--ph-border-subtle)",
-            }}
-          >
-            {navLinks.map((link, i) => (
-              <motion.button
-                key={link.href}
-                initial={{ opacity: 0, x: -20 }}
-                animate={{ opacity: 1, x: 0 }}
-                transition={{ delay: i * 0.06 }}
-                onClick={() => scrollTo(link.href)}
-                className="px-8 py-4 text-left transition-colors duration-200 border-b"
-                style={{
-                  fontFamily: "var(--font-heading)",
-                  fontSize: "0.95rem",
-                  fontWeight: 500,
-                  color:
-                    activeSection === link.href.slice(1) ? "#6366f1" : "var(--ph-t2)",
-                  borderColor: "var(--ph-border-subtle)",
-                }}
-              >
-                {link.label}
-              </motion.button>
-            ))}
-            <div className="px-8 py-4">
-              <button
-                onClick={() => scrollTo("#contact")}
-                className="w-full px-4 py-3 rounded-full text-sm font-medium"
-                style={{
-                  background: "linear-gradient(135deg, #6366f1, #8b5cf6)",
-                  color: "#fff",
-                }}
-              >
-                Hire Me
-              </button>
-            </div>
-          </motion.div>
+          <>
+            {/* Dim backdrop — tap to close */}
+            <motion.div
+              key="nav-overlay"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.25 }}
+              onClick={() => setMenuOpen(false)}
+              className="fixed inset-0 md:hidden"
+              style={{ zIndex: 898, background: "rgba(0,0,0,0.4)", backdropFilter: "blur(2px)" }}
+            />
+
+            {/* Floating glass panel */}
+            <motion.div
+              key="nav-menu"
+              initial={{ opacity: 0, y: -12, scale: 0.98 }}
+              animate={{ opacity: 1, y: 0, scale: 1 }}
+              exit={{ opacity: 0, y: -12, scale: 0.98 }}
+              transition={{ duration: 0.28, ease: "easeOut" }}
+              className="fixed top-18 left-3 right-3 z-899 md:hidden overflow-hidden rounded-2xl p-2"
+              style={{
+                background: "var(--ph-mobile-menu-bg)",
+                backdropFilter: "blur(24px)",
+                WebkitBackdropFilter: "blur(24px)",
+                border: "1px solid var(--ph-border-medium)",
+                boxShadow: "0 24px 60px rgba(0,0,0,0.35), 0 6px 20px rgba(0,0,0,0.2)",
+              }}
+            >
+              {navLinks.map((link, i) => {
+                const isActive = activeSection === link.href.slice(1);
+                return (
+                  <motion.button
+                    key={link.href}
+                    initial={{ opacity: 0, x: -12 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    transition={{ delay: 0.04 + i * 0.05 }}
+                    onClick={() => scrollTo(link.href)}
+                    className="w-full flex items-center justify-between px-4 py-3.5 rounded-xl transition-colors duration-200"
+                    style={{
+                      fontFamily: "var(--font-heading)",
+                      fontSize: "0.95rem",
+                      fontWeight: 500,
+                      color: isActive ? "#6366f1" : "var(--ph-t1)",
+                      background: isActive ? "var(--ph-badge-bg)" : "transparent",
+                    }}
+                  >
+                    <span className="flex items-center gap-3">
+                      <span
+                        className="w-1.5 h-1.5 rounded-full transition-opacity duration-200"
+                        style={{ background: "#6366f1", opacity: isActive ? 1 : 0 }}
+                      />
+                      {link.label}
+                    </span>
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} className="w-4 h-4" style={{ color: "var(--ph-t4)" }}>
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
+                    </svg>
+                  </motion.button>
+                );
+              })}
+
+              <div className="px-2 pt-2 pb-1">
+                <button
+                  onClick={() => scrollTo("#contact")}
+                  className="w-full px-4 py-3.5 rounded-xl text-sm font-semibold transition-transform duration-200 active:scale-[0.98]"
+                  style={{
+                    background: "linear-gradient(135deg, #6366f1, #8b5cf6)",
+                    color: "#fff",
+                    fontFamily: "var(--font-heading)",
+                    boxShadow: "0 8px 24px rgba(99,102,241,0.35)",
+                  }}
+                >
+                  Hire Me
+                </button>
+              </div>
+            </motion.div>
+          </>
         )}
       </AnimatePresence>
     </>

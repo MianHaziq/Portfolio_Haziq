@@ -192,7 +192,7 @@ export default function About() {
             </div>
 
             {/* Stats */}
-            <div ref={statsRef} className="grid grid-cols-3 gap-4">
+            <div ref={statsRef} className="grid grid-cols-3 gap-2.5 sm:gap-4">
               {[
                 { value: "1+", label: "Year Exp" },
                 { value: "6+", label: "Projects" },
@@ -200,7 +200,7 @@ export default function About() {
               ].map((stat) => (
                 <div
                   key={stat.label}
-                  className="stat-card glass-card p-5 text-center"
+                  className="stat-card glass-card p-3 sm:p-5 text-center"
                   style={{ opacity: 0 }}
                 >
                   <div
@@ -214,7 +214,10 @@ export default function About() {
                   >
                     {stat.value}
                   </div>
-                  <div className="text-eyebrow" style={{ color: "var(--ph-t4)" }}>
+                  <div
+                    className="text-eyebrow"
+                    style={{ color: "var(--ph-t4)", letterSpacing: "0.06em", fontSize: "clamp(0.5rem, 1.9vw, 0.68rem)" }}
+                  >
                     {stat.label}
                   </div>
                 </div>

@@ -180,8 +180,8 @@ export default function Experience() {
 
                   {/* Content card */}
                   <div
-                    className={`exp-card ml-14 md:ml-0 w-full md:w-1/2 ${
-                      isLeft ? "md:pr-10" : "md:pl-10"
+                    className={`exp-card pl-14 w-full md:w-1/2 ${
+                      isLeft ? "md:pl-0 md:pr-10" : "md:pl-10"
                     }`}
                     style={{ opacity: 0, willChange: "transform" }}
                   >

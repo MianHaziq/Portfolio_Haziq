@@ -132,7 +132,7 @@ export default function Hero() {
       initial={{ scale: 0.985, opacity: 0 }}
       animate={isIntroDone ? { scale: 1, opacity: 1 } : { scale: 0.985, opacity: 0 }}
       transition={{ duration: 1.4, ease: EASE_EXPO }}
-      className="relative min-h-screen flex flex-col items-center justify-center overflow-hidden"
+      className="relative min-h-screen flex flex-col items-center justify-start md:justify-center overflow-hidden pt-28 pb-20 md:py-0"
       style={{ background: "var(--ph-bg-0)", willChange: "transform, opacity" }}
     >
       {/* Background orbs */}
@@ -258,7 +258,7 @@ export default function Hero() {
 
         {/* Role */}
         <div
-          className="mb-6 flex justify-center"
+          className="mb-6 text-center"
           style={{
             fontFamily: "var(--font-heading)",
             fontSize: "clamp(1.1rem, 2.8vw, 1.625rem)",

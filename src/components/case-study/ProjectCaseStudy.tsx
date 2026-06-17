@@ -562,14 +562,16 @@ export default function ProjectCaseStudy({
             {project.challenges.map((c, i) => (
               <Reveal key={i} delay={0.05 * i}>
                 <div className="glass-card p-0 overflow-hidden grid md:grid-cols-2">
-                  <div className="p-7 md:p-8" style={{ borderBottom: "1px solid var(--ph-border-subtle)" }}>
+                  {/* Divider sits between the two halves: a bottom border when
+                      stacked (mobile), a right border when side-by-side (md). */}
+                  <div
+                    className="p-6 sm:p-7 md:p-8 border-b md:border-b-0 md:border-r"
+                    style={{ borderColor: "var(--ph-border-subtle)" }}
+                  >
                     <p className="text-eyebrow mb-3" style={{ color: "#f43f5e" }}>Challenge</p>
                     <p className="text-body" style={{ color: "var(--ph-t2)" }}>{c.challenge}</p>
                   </div>
-                  <div
-                    className="p-7 md:p-8"
-                    style={{ background: "var(--ph-surface-2)", borderLeft: "1px solid var(--ph-border-subtle)" }}
-                  >
+                  <div className="p-6 sm:p-7 md:p-8" style={{ background: "var(--ph-surface-2)" }}>
                     <p className="text-eyebrow mb-3" style={{ color: "#10b981" }}>Solution</p>
                     <p className="text-body" style={{ color: "var(--ph-t2)" }}>{c.solution}</p>
                   </div>

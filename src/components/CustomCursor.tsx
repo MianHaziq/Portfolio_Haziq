@@ -1,11 +1,23 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 
 export default function CustomCursor() {
   const dotRef = useRef<HTMLDivElement>(null);
   const ringRef = useRef<HTMLDivElement>(null);
   const labelRef = useRef<HTMLDivElement>(null);
+
+  // Only enable on devices with a fine pointer (mouse/trackpad). On touch
+  // devices we render nothing at all — no stray dot, ring or label.
+  const [enabled, setEnabled] = useState(false);
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    const mq = window.matchMedia("(pointer: fine)");
+    const update = () => setEnabled(mq.matches);
+    update();
+    mq.addEventListener?.("change", update);
+    return () => mq.removeEventListener?.("change", update);
+  }, []);
 
   // Raw mouse position
   const mousePos = useRef({ x: -200, y: -200 });
@@ -21,9 +33,8 @@ export default function CustomCursor() {
   const labelTextRef = useRef("");
 
   useEffect(() => {
-    // Only activate on non-touch devices
-    if (typeof window === "undefined") return;
-    if (window.matchMedia("(pointer: coarse)").matches) return;
+    // Wait until enabled (fine pointer) so the refs are mounted.
+    if (!enabled || typeof window === "undefined") return;
 
     const dot = dotRef.current;
     const ring = ringRef.current;
@@ -157,7 +168,9 @@ export default function CustomCursor() {
       cancelAnimationFrame(rafRef.current);
       mutationObserver.disconnect();
     };
-  }, []);
+  }, [enabled]);
+
+  if (!enabled) return null;
 
   return (
     <>
