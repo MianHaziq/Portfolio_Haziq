@@ -116,13 +116,38 @@ function ProjectCard({
           style={{ background: `linear-gradient(135deg, ${gradientColors})` }}
         >
           {project.image ? (
-            // eslint-disable-next-line @next/next/no-img-element
-            <img
-              src={project.image}
-              alt={`${project.title} screenshot`}
-              className="absolute inset-0 w-full h-full object-cover object-top transition-transform duration-500"
-              style={{ transform: hovered ? "scale(1.04)" : "scale(1)" }}
-            />
+            project.media === "mobile" ? (
+              // Portrait phone screenshot — float it as a centered product shot
+              // so it never gets sliced into the widescreen card.
+              <>
+                <div
+                  className="absolute inset-0"
+                  style={{
+                    backgroundImage: "radial-gradient(rgba(255,255,255,0.16) 1px, transparent 1px)",
+                    backgroundSize: "20px 20px",
+                  }}
+                />
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img
+                  src={project.image}
+                  alt={`${project.title} app screenshot`}
+                  className="absolute left-1/2 top-6 w-2/5 rounded-2xl transition-transform duration-500"
+                  style={{
+                    border: "1px solid rgba(255,255,255,0.14)",
+                    boxShadow: "0 18px 50px rgba(0,0,0,0.45)",
+                    transform: hovered ? "translateX(-50%) scale(1.04)" : "translateX(-50%) scale(1)",
+                  }}
+                />
+              </>
+            ) : (
+              // eslint-disable-next-line @next/next/no-img-element
+              <img
+                src={project.image}
+                alt={`${project.title} screenshot`}
+                className="absolute inset-0 w-full h-full object-cover object-top transition-transform duration-500"
+                style={{ transform: hovered ? "scale(1.04)" : "scale(1)" }}
+              />
+            )
           ) : (
             <>
               <div

@@ -72,65 +72,98 @@ const PlaceholderIcon = (
   </svg>
 );
 
-/* A screenshot slot — renders the image if present, else a branded gradient
-   placeholder with the caption, so the layout is complete before real shots. */
+/* A macOS-style browser window used to frame web screenshots. */
+function BrowserChrome({ children }: { children: React.ReactNode }) {
+  return (
+    <div
+      className="overflow-hidden rounded-2xl"
+      style={{
+        border: "1px solid var(--ph-glass-border)",
+        boxShadow: "var(--ph-card-shadow-hover)",
+        background: "var(--ph-surface)",
+      }}
+    >
+      <div
+        className="flex items-center gap-1.5 px-4"
+        style={{ height: 36, borderBottom: "1px solid var(--ph-border-subtle)", background: "var(--ph-surface-2)" }}
+      >
+        <span className="w-2.5 h-2.5 rounded-full" style={{ background: "#ff5f57" }} />
+        <span className="w-2.5 h-2.5 rounded-full" style={{ background: "#febc2e" }} />
+        <span className="w-2.5 h-2.5 rounded-full" style={{ background: "#28c840" }} />
+        <div className="ml-3 hidden sm:block h-4 flex-1 max-w-[55%] rounded-full" style={{ background: "var(--ph-glass-border)" }} />
+      </div>
+      {children}
+    </div>
+  );
+}
+
+/* A screenshot slot. Web shots sit inside a browser frame at the screenshots'
+   native ~7:5 ratio (no awkward cropping); mobile shots are clean portrait
+   tiles. Empty src → branded gradient placeholder. Captions are rendered by
+   the caller, beneath the figure. */
 function Shot({
   shot,
   gradient,
   className = "",
-  rounded = "rounded-2xl",
   media = "web",
 }: {
   shot: GalleryShot;
   gradient: string;
   className?: string;
-  rounded?: string;
   media?: "web" | "mobile";
 }) {
   const stops = gradientStops(gradient);
-  return (
-    <figure
-      className={`group relative overflow-hidden ${rounded} ${className}`}
-      style={{ border: "1px solid var(--ph-glass-border)" }}
+
+  const placeholder = (
+    <div
+      className="absolute inset-0 flex flex-col items-center justify-center gap-3 p-6 text-center"
+      style={{ background: `linear-gradient(135deg, ${stops})` }}
     >
-      {shot.src ? (
-        <>
-          {/* eslint-disable-next-line @next/next/no-img-element */}
+      <div
+        className="absolute inset-0"
+        style={{ backgroundImage: "radial-gradient(rgba(255,255,255,0.16) 1px, transparent 1px)", backgroundSize: "22px 22px" }}
+      />
+      <span className="relative z-10" style={{ color: "rgba(255,255,255,0.92)" }}>{PlaceholderIcon}</span>
+      <span className="relative z-10 text-meta" style={{ color: "rgba(255,255,255,0.92)", fontWeight: 600 }}>{shot.caption}</span>
+    </div>
+  );
+
+  if (media === "mobile") {
+    return (
+      <figure
+        className={`group relative overflow-hidden rounded-3xl ${className}`}
+        style={{ border: "1px solid var(--ph-glass-border)", background: `linear-gradient(135deg, ${stops})` }}
+      >
+        {shot.src ? (
+          // eslint-disable-next-line @next/next/no-img-element
           <img
             src={shot.src}
             alt={shot.caption}
-            className={`w-full h-full object-cover ${media === "web" ? "object-top" : "object-center"} transition-transform duration-700 group-hover:scale-[1.04]`}
+            className="w-full h-full object-cover object-center transition-transform duration-700 group-hover:scale-[1.04]"
           />
-          <figcaption
-            className="absolute bottom-0 inset-x-0 px-4 py-3 text-meta opacity-0 group-hover:opacity-100 transition-opacity duration-300"
-            style={{ color: "#fff", background: "linear-gradient(to top, rgba(0,0,0,0.6), transparent)" }}
-          >
-            {shot.caption}
-          </figcaption>
-        </>
-      ) : (
-        <div
-          className="w-full h-full flex flex-col items-center justify-center gap-3 p-6 text-center"
-          style={{ background: `linear-gradient(135deg, ${stops})` }}
-        >
-          <div
-            className="absolute inset-0"
-            style={{
-              backgroundImage: "radial-gradient(rgba(255,255,255,0.16) 1px, transparent 1px)",
-              backgroundSize: "22px 22px",
-            }}
-          />
-          <span className="relative z-10" style={{ color: "rgba(255,255,255,0.92)" }}>
-            {PlaceholderIcon}
-          </span>
-          <figcaption
-            className="relative z-10 text-meta"
-            style={{ color: "rgba(255,255,255,0.92)", fontWeight: 600 }}
-          >
-            {shot.caption}
-          </figcaption>
+        ) : (
+          placeholder
+        )}
+      </figure>
+    );
+  }
+
+  return (
+    <figure className={`group ${className}`}>
+      <BrowserChrome>
+        <div className="relative aspect-7/5 overflow-hidden" style={{ background: `linear-gradient(135deg, ${stops})` }}>
+          {shot.src ? (
+            // eslint-disable-next-line @next/next/no-img-element
+            <img
+              src={shot.src}
+              alt={shot.caption}
+              className="absolute inset-0 w-full h-full object-cover object-top transition-transform duration-700 group-hover:scale-[1.03]"
+            />
+          ) : (
+            placeholder
+          )}
         </div>
-      )}
+      </BrowserChrome>
     </figure>
   );
 }
@@ -326,19 +359,12 @@ export default function ProjectCaseStudy({
             style={{ y: imgY }}
           >
             <TiltCard maxAngle={5} glare strength={0.4} className="rounded-3xl">
-              <motion.div
-                className="relative aspect-video w-full overflow-hidden rounded-3xl"
-                style={{
-                  border: "1px solid var(--ph-glass-border)",
-                  boxShadow: "var(--ph-card-shadow-hover)",
-                  scale: imgScale,
-                }}
-              >
+              <motion.div style={{ scale: imgScale }}>
                 {project.image ? (
                   project.media === "mobile" ? (
                     <div
-                      className="w-full h-full flex items-center justify-center"
-                      style={{ background: `linear-gradient(135deg, ${stops})` }}
+                      className="relative aspect-video w-full overflow-hidden rounded-3xl flex items-center justify-center"
+                      style={{ border: "1px solid var(--ph-glass-border)", boxShadow: "var(--ph-card-shadow-hover)", background: `linear-gradient(135deg, ${stops})` }}
                     >
                       <div
                         className="absolute inset-0"
@@ -348,16 +374,23 @@ export default function ProjectCaseStudy({
                       <img
                         src={project.image}
                         alt={`${project.title} preview`}
-                        className="relative z-10 max-h-[90%] w-auto object-contain rounded-2xl"
-                        style={{ boxShadow: "0 24px 60px rgba(0,0,0,0.35)" }}
+                        className="relative z-10 max-h-[88%] w-auto object-contain rounded-3xl"
+                        style={{ boxShadow: "0 24px 60px rgba(0,0,0,0.4)", border: "1px solid rgba(255,255,255,0.12)" }}
                       />
                     </div>
                   ) : (
-                    // eslint-disable-next-line @next/next/no-img-element
-                    <img src={project.image} alt={`${project.title} preview`} className="w-full h-full object-cover object-top" />
+                    <BrowserChrome>
+                      <div className="relative aspect-7/5 overflow-hidden" style={{ background: `linear-gradient(135deg, ${stops})` }}>
+                        {/* eslint-disable-next-line @next/next/no-img-element */}
+                        <img src={project.image} alt={`${project.title} preview`} className="absolute inset-0 w-full h-full object-cover object-top" />
+                      </div>
+                    </BrowserChrome>
                   )
                 ) : (
-                  <div className="w-full h-full flex items-center justify-center" style={{ background: `linear-gradient(135deg, ${stops})` }}>
+                  <div
+                    className="relative aspect-video w-full overflow-hidden rounded-3xl flex items-center justify-center"
+                    style={{ border: "1px solid var(--ph-glass-border)", boxShadow: "var(--ph-card-shadow-hover)", background: `linear-gradient(135deg, ${stops})` }}
+                  >
                     <div
                       className="absolute inset-0"
                       style={{ backgroundImage: "radial-gradient(rgba(255,255,255,0.16) 1px, transparent 1px)", backgroundSize: "26px 26px" }}
@@ -443,24 +476,30 @@ export default function ProjectCaseStudy({
         <div className="max-w-6xl mx-auto px-6">
           <SectionLabel eyebrow="03 — Showcase" title="A closer look" />
           {project.media === "mobile" ? (
-            <div className="grid grid-cols-2 sm:grid-cols-3 gap-4 sm:gap-6 max-w-3xl mx-auto">
+            <div className="grid grid-cols-2 sm:grid-cols-3 gap-5 sm:gap-7 max-w-3xl mx-auto">
               {project.gallery.map((shot, i) => (
                 <Reveal key={shot.caption} delay={0.06 * i}>
-                  <Shot shot={shot} gradient={project.gradient} media="mobile" rounded="rounded-3xl" className="aspect-9/19" />
+                  <Shot shot={shot} gradient={project.gradient} media="mobile" className="aspect-9/19" />
                   <p className="text-meta mt-3 text-center px-1" style={{ color: "var(--ph-t4)" }}>{shot.caption}</p>
                 </Reveal>
               ))}
             </div>
           ) : (
-            <div className="grid md:grid-cols-2 gap-5">
-              <Reveal className="md:row-span-2">
-                <Shot shot={project.gallery[0]} gradient={project.gradient} media={project.media} className="aspect-4/5 md:h-full" />
+            <div className="space-y-8">
+              {/* Featured shot — full width */}
+              <Reveal>
+                <Shot shot={project.gallery[0]} gradient={project.gradient} media="web" />
+                <p className="text-meta mt-3" style={{ color: "var(--ph-t4)" }}>{project.gallery[0].caption}</p>
               </Reveal>
-              {project.gallery.slice(1).map((shot, i) => (
-                <Reveal key={shot.caption} delay={0.08 * (i + 1)}>
-                  <Shot shot={shot} gradient={project.gradient} media={project.media} className="aspect-video" />
-                </Reveal>
-              ))}
+              {/* Remaining shots — two up */}
+              <div className="grid md:grid-cols-2 gap-6 md:gap-8">
+                {project.gallery.slice(1).map((shot, i) => (
+                  <Reveal key={shot.caption} delay={0.08 * (i + 1)}>
+                    <Shot shot={shot} gradient={project.gradient} media="web" />
+                    <p className="text-meta mt-3" style={{ color: "var(--ph-t4)" }}>{shot.caption}</p>
+                  </Reveal>
+                ))}
+              </div>
             </div>
           )}
         </div>
