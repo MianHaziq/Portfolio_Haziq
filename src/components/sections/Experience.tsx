@@ -60,11 +60,30 @@ export default function Experience() {
 
         const dots = section.querySelectorAll<HTMLElement>(".timeline-dot");
         dots.forEach((dot) => {
+          // Build the infinite glow pulse once, paused. We play it only while
+          // the dot is on screen and pause it otherwise, so dots scrolled out
+          // of view stop repainting box-shadow on the main thread.
+          const pulse = gsap.to(dot, {
+            boxShadow: "0 0 24px rgba(99,102,241,0.9)",
+            repeat: -1,
+            yoyo: true,
+            duration: 1.2,
+            ease: "power1.inOut",
+            paused: true,
+          });
+
+          let revealed = false;
+
           ScrollTrigger.create({
             trigger: dot,
             start: "top 85%",
-            toggleActions: "play none none reverse",
+            end: "bottom top",
             onEnter: () => {
+              if (revealed) {
+                pulse.play();
+                return;
+              }
+              revealed = true;
               gsap.fromTo(
                 dot,
                 { scale: 0, opacity: 0 },
@@ -73,26 +92,21 @@ export default function Experience() {
                   opacity: 1,
                   duration: 0.4,
                   ease: "back.out(2)",
-                  onComplete: () => {
-                    gsap.to(dot, {
-                      boxShadow: "0 0 24px rgba(99,102,241,0.9)",
-                      repeat: -1,
-                      yoyo: true,
-                      duration: 1.2,
-                      ease: "power1.inOut",
-                    });
-                  },
+                  onComplete: () => pulse.play(),
                 }
               );
             },
+            // Pause the pulse whenever the dot leaves the viewport (either
+            // direction) — no off-screen paint cost.
+            onLeave: () => pulse.pause(),
+            onEnterBack: () => pulse.play(),
             onLeaveBack: () => {
-              gsap.killTweensOf(dot);
+              pulse.pause();
+              revealed = false;
               gsap.to(dot, { scale: 0, opacity: 0, duration: 0.3 });
             },
           });
         });
-
-        ScrollTrigger.refresh();
       }, section);
     };
 
@@ -170,7 +184,6 @@ export default function Experience() {
                       background: "#6366f1",
                       boxShadow: "0 0 16px rgba(99, 102, 241, 0.6)",
                       border: "2px solid var(--ph-bg-0)",
-                      willChange: "transform, box-shadow",
                       opacity: 0,
                     }}
                   />
@@ -183,7 +196,7 @@ export default function Experience() {
                     className={`exp-card pl-14 w-full md:w-1/2 ${
                       isLeft ? "md:pl-0 md:pr-10" : "md:pl-10"
                     }`}
-                    style={{ opacity: 0, willChange: "transform" }}
+                    style={{ opacity: 0 }}
                   >
                     <div
                       className="glass-card p-6 group hover:border-[rgba(99,102,241,0.2)] transition-all duration-300"

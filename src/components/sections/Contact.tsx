@@ -194,7 +194,7 @@ export default function Contact() {
           <div
             ref={formCardRef}
             className="md:col-span-3"
-            style={{ opacity: 0, willChange: "transform" }}
+            style={{ opacity: 0 }}
           >
             <div className="glass-card p-8">
               {submitted ? (
@@ -332,7 +332,6 @@ export default function Contact() {
           <div
             ref={sidebarRef}
             className="md:col-span-2 flex flex-col gap-6"
-            style={{ willChange: "transform" }}
           >
             {/* Email card */}
             <div className="sidebar-card glass-card p-6" style={{ opacity: 0 }}>

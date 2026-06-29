@@ -1,7 +1,6 @@
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
 import { projects, getProjectBySlug, getNextProject } from "@/lib/data";
-import CustomCursor from "@/components/CustomCursor";
 import ScrollProgress from "@/components/ScrollProgress";
 import ProjectCaseStudy from "@/components/case-study/ProjectCaseStudy";
 
@@ -42,9 +41,7 @@ export default async function ProjectPage({
 
   return (
     <>
-      {/* Custom cursor + reading progress — body sets `cursor: none`, so the
-          case-study route must render its own chrome to stay consistent. */}
-      <CustomCursor />
+      {/* Reading progress bar for the case-study route. */}
       <ScrollProgress />
       <ProjectCaseStudy project={project} next={next} />
     </>

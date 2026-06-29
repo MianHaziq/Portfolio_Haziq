@@ -84,7 +84,6 @@ export default function ThemeToggle() {
         border: `1px solid ${isDark ? "rgba(255,255,255,0.10)" : "rgba(99,102,241,0.20)"}`,
         color:       isDark ? "#94a3b8" : "#6366f1",
         transition:  "background 0.3s ease, border-color 0.3s ease, color 0.3s ease, box-shadow 0.3s ease",
-        willChange:  "transform",
       }}
       onMouseEnter={(e) => {
         const el = e.currentTarget as HTMLElement;

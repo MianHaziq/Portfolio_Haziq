@@ -24,7 +24,7 @@ function ProjectCard({
     let ctx: { revert: () => void } | null = null;
 
     const init = async () => {
-      const { gsap, ScrollTrigger } = await import("@/lib/gsap");
+      const { gsap } = await import("@/lib/gsap");
 
       const card = cardRef.current;
       if (!card) return;
@@ -47,8 +47,6 @@ function ProjectCard({
           }
         );
       }, card);
-
-      ScrollTrigger.refresh();
     };
 
     init();
@@ -95,7 +93,6 @@ function ProjectCard({
         className="relative glass-card overflow-hidden flex flex-col h-full"
         style={{
           opacity: 0,
-          willChange: "transform",
           transition: "border-color 0.4s ease, box-shadow 0.4s ease",
           borderColor: hovered ? "rgba(99,102,241,0.25)" : "var(--ph-glass-border)",
           boxShadow: hovered ? "var(--ph-card-shadow-hover)" : "var(--ph-card-shadow)",

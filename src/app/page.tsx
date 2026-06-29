@@ -1,5 +1,4 @@
 import LoadingScreen from "@/components/LoadingScreen";
-import CustomCursor from "@/components/CustomCursor";
 import ScrollProgress from "@/components/ScrollProgress";
 import Navbar from "@/components/Navbar";
 import Hero from "@/components/sections/Hero";
@@ -15,7 +14,6 @@ export default function Home() {
     <>
       {/* Overlay & chrome components */}
       <LoadingScreen />
-      <CustomCursor />
       <ScrollProgress />
 
       {/* Layout */}

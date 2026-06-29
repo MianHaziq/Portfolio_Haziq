@@ -174,9 +174,16 @@
 a, button, [role="button"] { -webkit-tap-highlight-color: transparent; }
 
 html {
-  scroll-behavior: smooth;
+  /* Smooth scrolling is handled by Lenis (see SmoothScroll.tsx). Native
+     `scroll-behavior: smooth` fights with Lenis + ScrollTrigger and causes
+     stutter, so it's intentionally omitted here. */
   overflow-x: hidden;
   -webkit-text-size-adjust: 100%;
+}
+
+/* Reduced-motion users get native instant scrolling (Lenis is disabled). */
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
 }
 
 body {
@@ -187,16 +194,10 @@ body {
   line-height: 1.75;
   font-weight: 400;
   overflow-x: hidden;
-  cursor: none;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-rendering: optimizeLegibility;
   transition: background-color 0.45s ease, color 0.45s ease;
-}
-
-/* Restore cursor on touch screens */
-@media (pointer: coarse) {
-  body { cursor: auto; }
 }
 
 /* ─── Smooth Theme Transition ────────────────────────────────────────────────── */
@@ -394,11 +395,27 @@ nav,
 /* ─── Glassmorphism ──────────────────────────────────────────────────────────── */
 .glass-card {
   background: var(--ph-glass-bg);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
   border: 1px solid var(--ph-glass-border);
   border-radius: 16px;
   box-shadow: var(--ph-card-shadow);
+}
+
+/*
+ * Tech-stack cards are small and numerous (~36 visible at once). A real
+ * backdrop-filter on each is the single heaviest paint cost while scrolling —
+ * the browser must re-sample and blur the backdrop behind every card every
+ * frame. They sit over a solid section background, so a flat translucent
+ * surface looks near-identical and composites for almost nothing.
+ */
+.tech-card {
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+  background: rgba(255, 255, 255, 0.045);
+}
+[data-theme="light"] .tech-card {
+  background: rgba(255, 255, 255, 0.85);
 }
 
 .glass-card-hover {
@@ -429,37 +446,6 @@ nav,
 .orb-1 { animation: orb-float-1 12s ease-in-out infinite; }
 .orb-2 { animation: orb-float-2 16s ease-in-out infinite; }
 .orb-3 { animation: orb-float-3 10s ease-in-out infinite; }
-
-/* ─── Custom Cursor ──────────────────────────────────────────────────────────── */
-.cursor {
-  width: 10px;
-  height: 10px;
-  background: #6366f1;
-  border-radius: 50%;
-  position: fixed;
-  top: 0; left: 0;
-  pointer-events: none;
-  z-index: 9999;
-  mix-blend-mode: difference;
-  transition: transform 0.1s ease;
-}
-.cursor-follower {
-  width: 34px;
-  height: 34px;
-  border: 1px solid rgba(99, 102, 241, 0.45);
-  border-radius: 50%;
-  position: fixed;
-  top: 0; left: 0;
-  pointer-events: none;
-  z-index: 9998;
-  transition: transform 0.18s ease, width 0.3s ease, height 0.3s ease, background 0.3s ease;
-}
-.cursor.hover      { transform: scale(2.5); }
-.cursor-follower.hover {
-  width: 56px; height: 56px;
-  background: rgba(99, 102, 241, 0.07);
-  border-color: rgba(99, 102, 241, 0.55);
-}
 
 /* ─── Scrollbar ──────────────────────────────────────────────────────────────── */
 ::-webkit-scrollbar       { width: 4px; }
