@@ -3,8 +3,6 @@
 import { siteConfig } from "@/lib/data";
 
 export default function Footer() {
-  const year = new Date().getFullYear();
-
   return (
     <footer
       className="relative overflow-hidden border-t"
@@ -51,20 +49,6 @@ export default function Footer() {
             </span>
           </div>
 
-          {/* Center text */}
-          <p
-            className="text-center"
-            style={{
-              color: "var(--ph-t5)",
-              fontFamily: "var(--font-body)",
-              fontSize: "0.78rem",
-              fontWeight: 400,
-            }}
-          >
-            Crafted with{" "}
-            <span style={{ color: "#6366f1" }}>♥</span> using Next.js & Framer
-            Motion · {year}
-          </p>
 
           {/* Social icons */}
           <div className="flex items-center gap-4">

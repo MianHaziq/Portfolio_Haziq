@@ -128,7 +128,7 @@ export default function Hero() {
       {/* Background orbs */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
         <div
-          className="hero-orb-1 orb-1 absolute top-[15%] left-[8%] w-140 h-140 rounded-full blur-[110px]"
+          className="hero-orb-1 orb-1 absolute top-[15%] left-[8%] w-140 h-140 rounded-full blur-[72px]"
           style={{
             background:
               "radial-gradient(circle, var(--ph-orb-1) 0%, transparent 70%)",
@@ -136,7 +136,7 @@ export default function Hero() {
           }}
         />
         <div
-          className="hero-orb-2 orb-2 absolute bottom-[8%] right-[4%] w-160 h-160 rounded-full blur-[130px]"
+          className="hero-orb-2 orb-2 absolute bottom-[8%] right-[4%] w-160 h-160 rounded-full blur-[88px]"
           style={{
             background:
               "radial-gradient(circle, var(--ph-orb-2) 0%, transparent 70%)",
@@ -144,7 +144,7 @@ export default function Hero() {
           }}
         />
         <div
-          className="hero-orb-3 orb-3 absolute top-[48%] left-[48%] w-110 h-110 rounded-full blur-[90px] -translate-x-1/2 -translate-y-1/2"
+          className="hero-orb-3 orb-3 absolute top-[48%] left-[48%] w-110 h-110 rounded-full blur-[60px] -translate-x-1/2 -translate-y-1/2"
           style={{
             background:
               "radial-gradient(circle, var(--ph-orb-3) 0%, transparent 70%)",

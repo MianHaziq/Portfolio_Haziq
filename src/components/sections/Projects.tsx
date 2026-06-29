@@ -1,9 +1,10 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import Image from "next/image";
 import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
-import { projects, siteConfig } from "@/lib/data";
+import { projects } from "@/lib/data";
 import { SectionHeading } from "@/components/ui/AnimatedText";
 import TiltCard from "@/components/ui/TiltCard";
 
@@ -124,11 +125,13 @@ function ProjectCard({
                     backgroundSize: "20px 20px",
                   }}
                 />
-                {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img
+                <Image
                   src={project.image}
                   alt={`${project.title} app screenshot`}
-                  className="absolute left-1/2 top-6 w-2/5 rounded-2xl transition-transform duration-500"
+                  width={508}
+                  height={1100}
+                  sizes="(max-width: 768px) 40vw, 240px"
+                  className="absolute left-1/2 top-6 w-2/5 h-auto rounded-2xl transition-transform duration-500"
                   style={{
                     border: "1px solid rgba(255,255,255,0.14)",
                     boxShadow: "0 18px 50px rgba(0,0,0,0.45)",
@@ -137,11 +140,12 @@ function ProjectCard({
                 />
               </>
             ) : (
-              // eslint-disable-next-line @next/next/no-img-element
-              <img
+              <Image
                 src={project.image}
                 alt={`${project.title} screenshot`}
-                className="absolute inset-0 w-full h-full object-cover object-top transition-transform duration-500"
+                fill
+                sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 600px"
+                className="object-cover object-top transition-transform duration-500"
                 style={{ transform: hovered ? "scale(1.04)" : "scale(1)" }}
               />
             )
@@ -385,45 +389,6 @@ function ProjectCard({
 }
 
 export default function Projects() {
-  const ctaRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    if (typeof window === "undefined") return;
-
-    let ctx: { revert: () => void } | null = null;
-
-    const init = async () => {
-      const { gsap } = await import("@/lib/gsap");
-
-      const cta = ctaRef.current;
-      if (!cta) return;
-
-      ctx = gsap.context(() => {
-        gsap.fromTo(
-          cta,
-          { opacity: 0, y: 20 },
-          {
-            opacity: 1,
-            y: 0,
-            duration: 0.5,
-            ease: "power3.out",
-            scrollTrigger: {
-              trigger: cta,
-              start: "top 90%",
-              toggleActions: "play none none reverse",
-            },
-          }
-        );
-      }, cta);
-    };
-
-    init();
-
-    return () => {
-      ctx?.revert();
-    };
-  }, []);
-
   return (
     <section
       id="projects"
@@ -462,38 +427,6 @@ export default function Projects() {
           {projects.map((project, i) => (
             <ProjectCard key={project.id} project={project} index={i} />
           ))}
-        </div>
-
-        {/* CTA */}
-        <div ref={ctaRef} className="mt-12 text-center" style={{ opacity: 0 }}>
-          <a
-            href={siteConfig.github}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="inline-flex items-center gap-2 text-sm font-medium transition-all duration-300"
-            style={{ color: "#6366f1" }}
-            onMouseEnter={(e) =>
-              ((e.currentTarget as HTMLElement).style.color = "#a5b4fc")
-            }
-            onMouseLeave={(e) =>
-              ((e.currentTarget as HTMLElement).style.color = "#6366f1")
-            }
-          >
-            View all projects on GitHub
-            <svg
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth={2}
-              className="w-4 h-4"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                d="M17.25 8.25L21 12m0 0l-3.75 3.75M21 12H3"
-              />
-            </svg>
-          </a>
         </div>
       </div>
     </section>

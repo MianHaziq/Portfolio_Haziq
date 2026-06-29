@@ -1,6 +1,7 @@
 "use client";
 
 import { useRef } from "react";
+import Image from "next/image";
 import Link from "next/link";
 import { motion, useScroll, useTransform } from "framer-motion";
 import type { GalleryShot, Project } from "@/lib/data";
@@ -135,11 +136,12 @@ function Shot({
         style={{ border: "1px solid var(--ph-glass-border)", background: `linear-gradient(135deg, ${stops})` }}
       >
         {shot.src ? (
-          // eslint-disable-next-line @next/next/no-img-element
-          <img
+          <Image
             src={shot.src}
             alt={shot.caption}
-            className="w-full h-full object-cover object-center transition-transform duration-700 group-hover:scale-[1.04]"
+            fill
+            sizes="(max-width: 640px) 50vw, 240px"
+            className="object-cover object-center transition-transform duration-700 group-hover:scale-[1.04]"
           />
         ) : (
           placeholder
@@ -153,11 +155,12 @@ function Shot({
       <BrowserChrome>
         <div className="relative aspect-7/5 overflow-hidden" style={{ background: `linear-gradient(135deg, ${stops})` }}>
           {shot.src ? (
-            // eslint-disable-next-line @next/next/no-img-element
-            <img
+            <Image
               src={shot.src}
               alt={shot.caption}
-              className="absolute inset-0 w-full h-full object-cover object-top transition-transform duration-700 group-hover:scale-[1.03]"
+              fill
+              sizes="(max-width: 768px) 100vw, 560px"
+              className="object-cover object-top transition-transform duration-700 group-hover:scale-[1.03]"
             />
           ) : (
             placeholder
@@ -370,19 +373,28 @@ export default function ProjectCaseStudy({
                         className="absolute inset-0"
                         style={{ backgroundImage: "radial-gradient(rgba(255,255,255,0.14) 1px, transparent 1px)", backgroundSize: "26px 26px" }}
                       />
-                      {/* eslint-disable-next-line @next/next/no-img-element */}
-                      <img
+                      <Image
                         src={project.image}
                         alt={`${project.title} preview`}
-                        className="relative z-10 max-h-[88%] w-auto object-contain rounded-3xl"
+                        width={508}
+                        height={1100}
+                        priority
+                        sizes="(max-width: 768px) 60vw, 360px"
+                        className="relative z-10 max-h-[88%] w-auto h-auto object-contain rounded-3xl"
                         style={{ boxShadow: "0 24px 60px rgba(0,0,0,0.4)", border: "1px solid rgba(255,255,255,0.12)" }}
                       />
                     </div>
                   ) : (
                     <BrowserChrome>
                       <div className="relative aspect-7/5 overflow-hidden" style={{ background: `linear-gradient(135deg, ${stops})` }}>
-                        {/* eslint-disable-next-line @next/next/no-img-element */}
-                        <img src={project.image} alt={`${project.title} preview`} className="absolute inset-0 w-full h-full object-cover object-top" />
+                        <Image
+                          src={project.image}
+                          alt={`${project.title} preview`}
+                          fill
+                          priority
+                          sizes="(max-width: 1024px) 100vw, 900px"
+                          className="object-cover object-top"
+                        />
                       </div>
                     </BrowserChrome>
                   )

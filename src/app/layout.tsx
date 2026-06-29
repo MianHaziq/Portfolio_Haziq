@@ -1,29 +1,35 @@
 import type { Metadata, Viewport } from "next";
-import { Cormorant_Garamond, Sora, Manrope } from "next/font/google";
+import localFont from "next/font/local";
 import { ThemeProvider } from "@/contexts/ThemeContext";
 import { IntroProvider } from "@/contexts/IntroContext";
 import SmoothScroll from "@/components/SmoothScroll";
 import "./globals.css";
 
-const cormorant = Cormorant_Garamond({
-  subsets: ["latin"],
+// Fonts are self-hosted (woff2 in ./fonts) rather than fetched from Google at
+// build time. This removes the build/dev-time network dependency on
+// fonts.gstatic.com (which caused the "Module not found" font errors),
+// eliminates a third-party runtime request, and avoids layout shift. All three
+// are variable fonts, so one file per family covers the whole weight range.
+const cormorant = localFont({
+  src: [
+    { path: "./fonts/cormorant-latin.woff2", weight: "300 700", style: "normal" },
+    { path: "./fonts/cormorant-italic-latin.woff2", weight: "400 600", style: "italic" },
+  ],
   variable: "--font-display",
-  weight: ["300", "400", "500", "600", "700"],
-  style: ["normal", "italic"],
   display: "swap",
 });
 
-const sora = Sora({
-  subsets: ["latin"],
+const sora = localFont({
+  src: "./fonts/sora-latin.woff2",
+  weight: "300 800",
   variable: "--font-heading",
-  weight: ["300", "400", "500", "600", "700", "800"],
   display: "swap",
 });
 
-const manrope = Manrope({
-  subsets: ["latin"],
+const manrope = localFont({
+  src: "./fonts/manrope-latin.woff2",
+  weight: "300 800",
   variable: "--font-body",
-  weight: ["300", "400", "500", "600", "700", "800"],
   display: "swap",
 });
 
