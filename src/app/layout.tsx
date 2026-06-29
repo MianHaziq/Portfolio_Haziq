@@ -2,6 +2,7 @@ import type { Metadata, Viewport } from "next";
 import { Cormorant_Garamond, Sora, Manrope } from "next/font/google";
 import { ThemeProvider } from "@/contexts/ThemeContext";
 import { IntroProvider } from "@/contexts/IntroContext";
+import SmoothScroll from "@/components/SmoothScroll";
 import "./globals.css";
 
 const cormorant = Cormorant_Garamond({
@@ -77,7 +78,7 @@ export default function RootLayout({
       lang="en"
       data-theme="dark"
       suppressHydrationWarning
-      className={`${cormorant.variable} ${sora.variable} ${manrope.variable} scroll-smooth`}
+      className={`${cormorant.variable} ${sora.variable} ${manrope.variable}`}
     >
       <head>
         {/* Prevent flash of wrong theme — runs before React hydrates */}
@@ -88,6 +89,7 @@ export default function RootLayout({
         />
       </head>
       <body className="antialiased overflow-x-hidden">
+        <SmoothScroll />
         <ThemeProvider>
           <IntroProvider>{children}</IntroProvider>
         </ThemeProvider>

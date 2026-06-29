@@ -4,6 +4,7 @@ import { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import ThemeToggle from "@/components/ui/ThemeToggle";
 import { useIntro } from "@/contexts/IntroContext";
+import { scrollToId } from "@/lib/lenis";
 
 const navLinks = [
   { label: "About", href: "#about" },
@@ -71,8 +72,7 @@ export default function Navbar() {
   }, []);
 
   const scrollTo = (href: string) => {
-    const id = href.slice(1);
-    document.getElementById(id)?.scrollIntoView({ behavior: "smooth" });
+    scrollToId(href.slice(1));
     setMenuOpen(false);
   };
 
@@ -112,13 +112,14 @@ export default function Navbar() {
           borderBottom: scrolled
             ? "1px solid var(--ph-border-subtle)"
             : "1px solid transparent",
-          transition: "all 0.4s ease",
+          transition:
+            "background 0.4s ease, backdrop-filter 0.4s ease, border-color 0.4s ease",
         }}
       >
         {/* Logo */}
         <button
           ref={logoRef}
-          onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
+          onClick={() => scrollToId("top")}
           className="flex items-center gap-2 group"
           style={{ opacity: 0 }}
         >
@@ -247,19 +248,26 @@ export default function Navbar() {
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
-              transition={{ duration: 0.25 }}
+              transition={{ duration: 0.2, ease: "easeOut" }}
               onClick={() => setMenuOpen(false)}
               className="fixed inset-0 md:hidden"
-              style={{ zIndex: 898, background: "rgba(0,0,0,0.4)", backdropFilter: "blur(2px)" }}
+              style={{
+                zIndex: 898,
+                background: "rgba(0,0,0,0.4)",
+                willChange: "opacity",
+              }}
             />
 
             {/* Floating glass panel */}
             <motion.div
               key="nav-menu"
-              initial={{ opacity: 0, y: -12, scale: 0.98 }}
-              animate={{ opacity: 1, y: 0, scale: 1 }}
-              exit={{ opacity: 0, y: -12, scale: 0.98 }}
-              transition={{ duration: 0.28, ease: "easeOut" }}
+              initial={{ opacity: 0, y: -10 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -8 }}
+              transition={{
+                duration: 0.26,
+                ease: [0.22, 1, 0.36, 1],
+              }}
               className="fixed top-18 left-3 right-3 z-899 md:hidden overflow-hidden rounded-2xl p-2"
               style={{
                 background: "var(--ph-mobile-menu-bg)",
@@ -267,6 +275,8 @@ export default function Navbar() {
                 WebkitBackdropFilter: "blur(24px)",
                 border: "1px solid var(--ph-border-medium)",
                 boxShadow: "0 24px 60px rgba(0,0,0,0.35), 0 6px 20px rgba(0,0,0,0.2)",
+                willChange: "transform, opacity",
+                transform: "translateZ(0)",
               }}
             >
               {navLinks.map((link, i) => {
@@ -274,9 +284,13 @@ export default function Navbar() {
                 return (
                   <motion.button
                     key={link.href}
-                    initial={{ opacity: 0, x: -12 }}
+                    initial={{ opacity: 0, x: -10 }}
                     animate={{ opacity: 1, x: 0 }}
-                    transition={{ delay: 0.04 + i * 0.05 }}
+                    transition={{
+                      duration: 0.22,
+                      ease: [0.22, 1, 0.36, 1],
+                      delay: 0.03 + i * 0.035,
+                    }}
                     onClick={() => scrollTo(link.href)}
                     className="w-full flex items-center justify-between px-4 py-3.5 rounded-xl transition-colors duration-200"
                     style={{

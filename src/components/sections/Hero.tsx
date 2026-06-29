@@ -65,9 +65,6 @@ function HeroWord({
 export default function Hero() {
   const sectionRef = useRef<HTMLElement>(null);
   const contentRef = useRef<HTMLDivElement>(null);
-  const orb1Ref = useRef<HTMLDivElement>(null);
-  const orb2Ref = useRef<HTMLDivElement>(null);
-  const orb3Ref = useRef<HTMLDivElement>(null);
 
   // Intro phase — gates every entrance animation in this section so they
   // begin exactly when the loader begins exiting (true overlap, no flash).
@@ -82,7 +79,7 @@ export default function Hero() {
     let ctx: { revert: () => void } | null = null;
 
     const init = async () => {
-      const { gsap, ScrollTrigger } = await import("@/lib/gsap");
+      const { gsap } = await import("@/lib/gsap");
 
       const section = sectionRef.current;
       if (!section) return;
@@ -90,15 +87,10 @@ export default function Hero() {
       ctx = gsap.context(() => {
         const st = { trigger: "#hero", start: "top top", end: "bottom top" };
 
-        if (orb1Ref.current) {
-          gsap.to(orb1Ref.current, { y: -150, scrollTrigger: { ...st, scrub: 1.5 } });
-        }
-        if (orb2Ref.current) {
-          gsap.to(orb2Ref.current, { y: -100, scrollTrigger: { ...st, scrub: 2 } });
-        }
-        if (orb3Ref.current) {
-          gsap.to(orb3Ref.current, { y: -60, scrollTrigger: { ...st, scrub: 2.5 } });
-        }
+        // Orbs keep their ambient CSS float (.orb-1/2/3). We intentionally do
+        // NOT also drive them with a GSAP scroll-parallax — two systems writing
+        // `transform` to the same element fight every frame and cause jank.
+        // Only the content gets a (separate) scroll-linked parallax.
         if (contentRef.current) {
           gsap.to(contentRef.current, {
             y: -60,
@@ -106,8 +98,6 @@ export default function Hero() {
             scrollTrigger: { ...st, scrub: 1 },
           });
         }
-
-        ScrollTrigger.refresh();
       }, section);
     };
 
@@ -138,7 +128,6 @@ export default function Hero() {
       {/* Background orbs */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
         <div
-          ref={orb1Ref}
           className="hero-orb-1 orb-1 absolute top-[15%] left-[8%] w-140 h-140 rounded-full blur-[110px]"
           style={{
             background:
@@ -147,7 +136,6 @@ export default function Hero() {
           }}
         />
         <div
-          ref={orb2Ref}
           className="hero-orb-2 orb-2 absolute bottom-[8%] right-[4%] w-160 h-160 rounded-full blur-[130px]"
           style={{
             background:
@@ -156,7 +144,6 @@ export default function Hero() {
           }}
         />
         <div
-          ref={orb3Ref}
           className="hero-orb-3 orb-3 absolute top-[48%] left-[48%] w-110 h-110 rounded-full blur-[90px] -translate-x-1/2 -translate-y-1/2"
           style={{
             background:

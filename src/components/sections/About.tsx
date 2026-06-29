@@ -14,7 +14,7 @@ function SkillBar({ name, level, index }: { name: string; level: number; index: 
     let ctx: { revert: () => void } | null = null;
 
     const init = async () => {
-      const { gsap, ScrollTrigger } = await import("@/lib/gsap");
+      const { gsap } = await import("@/lib/gsap");
 
       const bar = barRef.current;
       const fill = fillRef.current;
@@ -37,8 +37,6 @@ function SkillBar({ name, level, index }: { name: string; level: number; index: 
           }
         );
       }, bar);
-
-      ScrollTrigger.refresh();
     };
 
     init();
@@ -75,7 +73,6 @@ function SkillBar({ name, level, index }: { name: string; level: number; index: 
             width: "0%",
             background: "linear-gradient(90deg, #6366f1, #8b5cf6)",
             boxShadow: "0 0 8px rgba(99, 102, 241, 0.5)",
-            willChange: "width",
           }}
         />
       </div>
@@ -260,7 +257,7 @@ export default function About() {
           <div
             ref={skillsPanelRef}
             className="glass-card p-8 space-y-6"
-            style={{ opacity: 0, willChange: "transform" }}
+            style={{ opacity: 0 }}
           >
             <h3
               className="text-title mb-6"

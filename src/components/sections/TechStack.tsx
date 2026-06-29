@@ -46,7 +46,7 @@ export default function TechStack() {
     let ctx: { revert: () => void } | null = null;
 
     const init = async () => {
-      const { gsap, ScrollTrigger } = await import("@/lib/gsap");
+      const { gsap } = await import("@/lib/gsap");
 
       const section = sectionRef.current;
       if (!section) return;
@@ -88,8 +88,6 @@ export default function TechStack() {
             }
           );
         });
-
-        ScrollTrigger.refresh();
       }, section);
     };
 
@@ -134,7 +132,7 @@ export default function TechStack() {
               <div key={category}>
                 <div
                   className="category-label flex items-center gap-3 mb-6"
-                  style={{ opacity: 0, willChange: "transform" }}
+                  style={{ opacity: 0 }}
                 >
                   <div
                     className="w-2 h-2 rounded-full"
@@ -207,10 +205,7 @@ function TechCard({
     <div
       ref={cardRef}
       className="tech-card relative glass-card p-4 flex flex-col items-center gap-2 cursor-default overflow-hidden"
-      style={{
-        opacity: 0,
-        willChange: "transform",
-      }}
+      style={{ opacity: 0 }}
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
     >

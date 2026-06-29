@@ -59,7 +59,7 @@ export default function MagneticButton({
     <div
       ref={magnetRef}
       className={`relative inline-block ${className}`}
-      style={{ ...style, willChange: "transform" }}
+      style={style}
       onClick={handleClick}
     >
       <div
