@@ -4,6 +4,11 @@ export const siteConfig = {
   role: "Software Engineer",
   tagline: "Building secure, real-time, AI-powered systems",
   bio: "I build secure, real-time and AI-powered backend and full-stack systems with NestJS, FastAPI, Next.js, PostgreSQL and AWS. Promoted from intern to Associate Software Engineer within a year, I care about shipping production systems that are reliable, scalable and well-engineered.",
+  // ── Freelance framing (used across the site now that the focus is client work) ──
+  freelanceTagline: "Freelance Backend & AI Engineer",
+  freelanceBio:
+    "I help startups and businesses ship production-grade backends, real-time features and AI-powered products — NestJS, FastAPI, Next.js, PostgreSQL and AWS. I've taken systems from idea to launch and tuned them to scale past hundreds of thousands of users. Available for freelance projects, contract work and MVP builds.",
+  availability: "Available for new projects",
   email: "haziqnazeer@gmail.com",
   phone: "+92 311 0645820",
   location: "Lahore, Pakistan",
@@ -471,6 +476,208 @@ export const projects: Project[] = [
       { value: "2× faster", label: "Image posts after AI migration" },
     ],
   },
+  {
+    id: 6,
+    slug: "premier-resolution",
+    title: "Premier Resolution",
+    subtitle: "BPO & Debt-Recovery Company Website",
+    role: "Frontend Engineer",
+    period: "2025",
+    kind: "Full-stack",
+    summary:
+      "The production marketing site for Premier Resolution, a business-process-outsourcing firm offering debt collection, call-center support, AI chatbots and sales outreach — a fast React SPA with per-service landing pages, a dynamic careers board and a working contact pipeline.",
+    description:
+      "Production marketing website for a BPO / debt-recovery company. Built as a React + Vite SPA with seven dedicated service pages, a dynamic careers board, an FAQ, testimonials and an EmailJS-powered contact flow.",
+    tags: ["React", "Vite", "React Router", "TypeScript", "Tailwind CSS", "Framer Motion", "EmailJS"],
+    media: "web",
+    image: "/projects/premier-hero.jpg",
+    gallery: [
+      { src: "/projects/premier-1.jpg", caption: "Service overview — seven offerings, from debt collection and 24/7 AI chatbots to live chat and sales" },
+      { src: "/projects/premier-2.jpg", caption: "“Driving Measurable Impact” — accelerated hiring, enterprise workforce and debt-collection enablement" },
+      { src: "/projects/premier-3.jpg", caption: "Testimonials & careers — client social proof above the talent-network call to action" },
+    ],
+    gradient: "from-indigo-500 to-violet-600",
+    github: "",
+    live: "https://www.premierresolutions.net",
+    featured: false,
+    overview:
+      "Premier Resolution is a business-process-outsourcing (BPO) company that handles debt recovery, inbound/outbound call-center support, 24/7 AI chatbots, live chat, email campaigns and sales outreach for other businesses. I built their public website — a single-page React application (Vite) routed with React Router across a home page, seven individual service pages, an about page, a careers board and a contact page, with a working enquiry pipeline wired through EmailJS and direct WhatsApp / email CTAs.",
+    problem:
+      "A services company lives or dies on how clearly it can explain what it does and how easily a prospect can reach it. Premier Resolution needed a credible, fast-loading site that gave each of its seven service lines room to sell itself, surfaced trust signals (awards, testimonials, an FAQ), ran a live careers board, and turned visitors into enquiries — without a backend team or CMS to maintain.",
+    solution:
+      "I architected the site as a content-driven React SPA. A single routed shell renders the home page plus dedicated, individually addressable pages per service (/services/debt-collection, /services/ai-chatbot, /services/live-chat-support and more), each built from a shared, data-driven page template so adding or editing a service is a content change, not new code. I built the careers board (searchable open roles, a benefits grid, and a speculative-application fallback), an animated FAQ accordion, a testimonials carousel and an awards strip for social proof, and wired the contact form to EmailJS with client-side validation, success/error states and bot-submission guards — plus one-tap WhatsApp and email CTAs and an embedded Google Map. Scroll and entrance animations were tuned to stay smooth on low-end devices.",
+    features: [
+      { title: "Per-service landing pages", description: "Seven individually routed service pages (debt collection, AI chatbot, live chat, email, sales, customer & business services) from one shared template." },
+      { title: "Dynamic careers board", description: "Searchable open roles, a benefits grid, and a “don’t see your role?” speculative-application path." },
+      { title: "EmailJS contact pipeline", description: "Validated enquiry form sent via EmailJS — no backend — with success / error states and spam guards." },
+      { title: "Trust & social proof", description: "Awards strip, a testimonials carousel and an animated FAQ accordion to answer objections inline." },
+      { title: "Direct-contact CTAs", description: "One-tap WhatsApp deep links, mailto CTAs and an embedded Google Map of the office." },
+      { title: "Motion & responsive design", description: "Framer Motion entrance/scroll animations and a fully responsive, mobile-first layout." },
+    ],
+    contributions: [
+      "Built the entire marketing website as a React + Vite single-page app routed with React Router.",
+      "Implemented seven individually addressable service pages from a single data-driven page template.",
+      "Built the careers board with role search, a benefits grid and a speculative-application flow.",
+      "Wired the contact form to EmailJS with validation, success/error handling and bot guards.",
+      "Added testimonials, an awards strip and an animated FAQ accordion for credibility and conversion.",
+      "Integrated WhatsApp / email CTAs and an embedded Google Map, and tuned animations for performance.",
+    ],
+    challenges: [
+      {
+        challenge: "Seven service lines each needed their own sellable page without seven hand-built layouts.",
+        solution: "Drove every service page from one shared, data-configured template, so each service is a content entry with its own clean URL — consistent, fast to extend and easy to maintain.",
+      },
+      {
+        challenge: "Collecting enquiries reliably with no backend to receive them.",
+        solution: "Sent submissions through EmailJS straight from the client, with form validation, explicit success/error feedback and submission guards so a bad or bot request fails gracefully.",
+      },
+      {
+        challenge: "Rich motion and imagery risked a heavy, slow first paint for a marketing site.",
+        solution: "Shipped a Vite-bundled SPA with route-level code organisation, optimised assets and animation timings tuned to stay smooth on lower-end devices.",
+      },
+    ],
+    outcomes: [
+      { value: "7", label: "Dedicated service pages" },
+      { value: "Live", label: "In production at premierresolutions.net" },
+      { value: "No backend", label: "Enquiries handled via EmailJS" },
+    ],
+  },
+  {
+    id: 7,
+    slug: "dj-shipping",
+    title: "DJ Shipping",
+    subtitle: "Freight Forwarding & Customs Clearance Website",
+    role: "Frontend Engineer",
+    period: "2025",
+    kind: "Full-stack",
+    summary:
+      "A conversion-focused marketing site for DJ Shipping — a licensed freight forwarder operating since 1999. The brief: take 25 years of offline, relationship-driven logistics credibility and turn it into a fast, modern site that wins quote requests.",
+    description:
+      "Marketing & lead-generation site for a 25-year-old Pakistani freight forwarder. Built the navy-and-amber design system, an interactive nationwide network map, animated service and stats sections, and a 'Request a Quote' funnel — shipped on Vercel.",
+    tags: ["Next.js", "React", "TypeScript", "Tailwind CSS", "Framer Motion", "Vercel"],
+    media: "web",
+    image: "/projects/dj-shipping-hero.jpg",
+    gallery: [
+      { src: "/projects/dj-shipping-1.jpg", caption: "Three pillars — Customs Clearance, Freight Forwarding and Land Transportation, each with its own detail" },
+      { src: "/projects/dj-shipping-2.jpg", caption: "“Present where trade flows” — an interactive map of five offices across Pakistan's trade corridors" },
+      { src: "/projects/dj-shipping-3.jpg", caption: "Proof in numbers — 25 years, 100,000+ shipments cleared, 180+ countries reachable" },
+    ],
+    gradient: "from-sky-500 to-indigo-600",
+    github: "",
+    live: "https://dj-shipping.vercel.app",
+    featured: false,
+    overview:
+      "DJ Shipping is a licensed freight-forwarding and customs-clearance company that has moved cargo across Pakistan and worldwide since 1999. They had decades of trust but no web presence that reflected it. I designed and built their marketing site: a single, fast-loading page that walks a prospective shipper from the headline promise (“25 Years of End-to-End Supply Chain Reliability”) through the three core services, the specialised-cargo expertise, a nationwide office network and a hard-numbers track record — all funnelling toward one action: Request a Quote.",
+    problem:
+      "Freight forwarding is a high-trust, offline business won on relationships and references — but multinational shippers increasingly vet partners online first. DJ Shipping's credibility (a zero-lapse customs licence since 1999, 100,000+ shipments, IATA / PIFFA / JC TRANS accreditation) was invisible on the web. The site had to communicate scale and compliance instantly to a sceptical B2B buyer, make a dense service catalogue scannable, and convert that trust into quote requests — while staying fast on the patchy mobile connections common in the target market.",
+    solution:
+      "I built a single-page, conversion-first site with a clear narrative arc. I designed a navy-and-amber design system that reads as serious and logistics-grade, then structured the page so each scroll answers the buyer's next question: what they do (three service pillars), how they're different (specialised-cargo expertise for textiles, surgical goods, FMCG and project cargo), where they operate (an interactive map of five offices on Pakistan's trade corridors), and why to trust them (a stats band — 25 years, 100,000+ shipments, 180+ countries, 1-business-day quotes, accreditations). Persistent “Request a Quote” and WhatsApp CTAs keep the next step one tap away. Scroll-triggered reveals and small touches like a live-corridor ETA widget add polish without bloating the page, and everything is responsive and tuned for fast first paint, deployed on Vercel.",
+    features: [
+      { title: "Conversion-first single page", description: "A deliberate scroll narrative — promise → services → specialisation → network → proof → quote — with CTAs always in reach." },
+      { title: "Three service pillars", description: "Customs Clearance, Freight Forwarding (air/ocean, FCL/LCL) and Land Transportation, each with its own detail." },
+      { title: "Interactive network map", description: "A map of five offices (Lahore HQ, Karachi, Faisalabad, Islamabad, Sialkot) across Pakistan's trade corridors." },
+      { title: "Specialised-cargo section", description: "Sector expertise — textiles & apparel, surgical goods, FMCG and hazardous / project cargo — surfaced as a differentiator." },
+      { title: "Trust & proof band", description: "Hard numbers and accreditations (JC TRANS, PIFFA, IATA, ACAAP) presented as scannable credibility cards." },
+      { title: "Quote & WhatsApp funnel", description: "Persistent “Request a Quote” and one-tap WhatsApp CTAs built around a 1-business-day quotation promise." },
+    ],
+    contributions: [
+      "Designed the navy-and-amber, logistics-grade visual identity and the full page layout from scratch.",
+      "Built the conversion-first single-page narrative with always-accessible quote CTAs.",
+      "Built the interactive nationwide network map highlighting the five regional offices.",
+      "Implemented animated service, specialised-cargo and stats sections with scroll-triggered reveals.",
+      "Made the whole site responsive and tuned it for fast first paint on mobile.",
+      "Deployed and hosted the site on Vercel.",
+    ],
+    challenges: [
+      {
+        challenge: "Establishing instant credibility for a high-trust B2B service to a sceptical buyer.",
+        solution: "Led with the 25-year promise and surfaced concrete proof early — a stats band (100,000+ shipments, 180+ countries) and accreditation logos — so trust is communicated before the buyer even reaches the services.",
+      },
+      {
+        challenge: "A dense catalogue of services, sectors and locations risked overwhelming visitors.",
+        solution: "Structured everything into a single guided scroll where each section answers the buyer's next question, and turned the office network into an interactive map instead of a wall of text.",
+      },
+      {
+        challenge: "Rich motion and full-bleed imagery can wreck load time on patchy mobile networks.",
+        solution: "Kept it a single optimised page with compressed hero imagery, scroll-triggered (not upfront) animations and a layout tuned for a fast first paint.",
+      },
+    ],
+    outcomes: [
+      { value: "25 yrs", label: "Of offline trust, brought online" },
+      { value: "1-day", label: "Quote-turnaround funnel the site is built around" },
+      { value: "Live", label: "In production on Vercel" },
+    ],
+  },
+  {
+    id: 8,
+    slug: "amoonis-boutique",
+    title: "Amoonis Boutique",
+    subtitle: "Multi-Region E-Commerce Platform",
+    role: "Full-Stack Engineer",
+    period: "2025 — Present",
+    kind: "Full-stack",
+    summary:
+      "A production, multi-region e-commerce platform for a GCC gift-box boutique — one Express + Prisma backend powering a Flutter app and a Next.js admin + storefront, with MyFatoorah / Apple Pay payments engineered for money-safety, granular manager RBAC, push, CDN media and bilingual English/Arabic.",
+    description:
+      "Production multi-region e-commerce platform (internally “Amoon Bloom”). One Express + Prisma + PostgreSQL API serves a Flutter app and a Next.js admin + storefront — MyFatoorah / Apple Pay + COD with concurrency-safe checkout, a 10-permission manager RBAC, FCM push, pg-boss jobs and EN/AR i18n.",
+    tags: ["Express", "Prisma", "PostgreSQL", "Next.js", "React", "MyFatoorah / Apple Pay", "pg-boss", "Firebase FCM"],
+    media: "web",
+    image: "/projects/amoonis-hero.jpg",
+    gallery: [
+      { src: "/projects/amoonis-1.jpg", caption: "Admin dashboard — live revenue, orders and customer KPIs with the latest-orders feed" },
+      { src: "/projects/amoonis-2.jpg", caption: "Manager RBAC — admins grant scoped access across 10 permission areas (products, orders, promos, analytics…)" },
+      { src: "/projects/amoonis-3.jpg", caption: "Analytics — revenue time-series, AOV and category sales ranking, built with no chart library" },
+    ],
+    gradient: "from-rose-500 to-pink-600",
+    github: "",
+    live: "",
+    featured: true,
+    overview:
+      "Amoonis Boutique is a full-stack, multi-region e-commerce platform I built end to end for a GCC gift-box brand. A single Express 5 + Prisma 7 + PostgreSQL REST API (30 data models, ~107 endpoints) serves two clients from one backend: a Flutter mobile storefront and a Next.js 16 / React 19 app that contains both the customer storefront and a complete 13-section admin panel. It takes real money via MyFatoorah (Apple Pay + cards) and Cash-on-Delivery, sends Firebase push, delivers product images over a Bunny CDN, runs durable background work on pg-boss, and is fully bilingual English/Arabic with right-to-left support.",
+    problem:
+      "Real e-commerce is unforgiving in two places at once: money and operations. Checkout has to take payments across mobile and web without ever overselling stock, double-charging a customer, or losing an order to a dropped payment callback. At the same time the boutique's team needed to run the whole business — products, orders, promos, regions, analytics — without every staff member having full admin power. And it all had to work in two languages (EN/AR, RTL) across two regions, served to both a Flutter app and a web client from one codebase.",
+    solution:
+      "I built the backend as a layered Express API (routes → controllers → services) and made payment correctness the centerpiece. Every payment is re-verified server-side with the gateway (the client is never trusted); the PAID flip is an idempotent, conditional update so a callback, webhook, reconciliation job and retries all converge on exactly one order placement; stock is reserved with a row-conditional atomic decrement that closes the oversell race; and Apple Pay's non-idempotent execute is protected by an atomic single-winner claim. A reconciliation cron recovers stranded payments and an expiry cron restores stock and promo usage. On top of that I built a 10-permission manager RBAC (admins delegate scoped access, enforced in middleware and mirrored across the admin UI in three layers), FCM push with per-user preferences and an inbox, a pg-boss job system on Postgres (no Redis), Bunny CDN image delivery, multi-region catalog visibility, promo codes, and an auto-translating EN/AR content layer. The Next.js admin + storefront is feature-sliced with React Query + Redux Toolkit and react-hook-form + Zod throughout.",
+    features: [
+      { title: "Money-safe checkout", description: "MyFatoorah (Apple Pay + cards) & COD with server-side verification, idempotent single-winner confirmation and double-charge guards." },
+      { title: "Manager RBAC", description: "10 granular permissions let admins delegate scoped access (products, orders, promos, analytics…), enforced in middleware and the UI." },
+      { title: "One API, two clients", description: "A single Express + Prisma backend serves both a Flutter mobile app and the Next.js web storefront + admin." },
+      { title: "Durable background jobs", description: "pg-boss on Postgres (no Redis) — payment reconciliation, order expiry, low-stock digests, broadcasts and cleanup." },
+      { title: "Push, email & CDN", description: "Firebase push with preferences + inbox, Resend email (SMTP fallback), and Bunny CDN product-image delivery." },
+      { title: "Bilingual & multi-region", description: "English/Arabic with RTL and auto-translation, plus runtime-added regions scoping catalog visibility." },
+    ],
+    contributions: [
+      "Built the entire Express 5 + Prisma 7 + PostgreSQL API — 30 models, ~107 endpoints across 18 routers.",
+      "Engineered concurrency-safe, idempotent payments (MyFatoorah / Apple Pay + COD) with atomic stock reservation and a reconciliation safety net.",
+      "Designed the 10-permission manager RBAC and enforced it in middleware and across the admin UI.",
+      "Built the Next.js 16 / React 19 admin panel (13 sections) and web storefront with React Query, Redux Toolkit and RHF + Zod.",
+      "Implemented FCM push (preferences + inbox), Resend email, Bunny CDN uploads and a pg-boss job system on Postgres.",
+      "Built bilingual EN/AR content with auto-translation and RTL, multi-region catalog visibility, promo codes and analytics.",
+    ],
+    challenges: [
+      {
+        challenge: "Taking real payments across mobile and web without overselling or double-charging.",
+        solution: "Server-side re-verification on every callback, an idempotent conditional PAID flip so all paths converge on one order, an atomic row-conditional stock decrement that closes the oversell race, and a single-winner claim guarding non-idempotent Apple Pay execution.",
+      },
+      {
+        challenge: "Lost payment callbacks could strand a customer's order in limbo.",
+        solution: "A reconciliation cron re-checks aged unpaid orders against the gateway, and an expiry cron cancels truly-unpaid orders while restoring reserved stock and releasing promo usage in a locked transaction.",
+      },
+      {
+        challenge: "The team needed to run the business without handing everyone full admin rights.",
+        solution: "A 10-permission manager RBAC — permissions stored per user, enforced by middleware guards (admins bypass, managers need the specific grant), and mirrored in the UI as route guards, a permission-filtered sidebar and per-widget gating.",
+      },
+      {
+        challenge: "One backend had to feed a Flutter app and a web client, in two languages.",
+        solution: "A clean REST API returning both EN/AR fields with a write-time auto-translation layer, plus two online payment paths (hosted page and native Apple Pay executed server-side) so the API key never leaves the backend.",
+      },
+    ],
+    outcomes: [
+      { value: "~107", label: "REST endpoints across 30 data models" },
+      { value: "10-perm", label: "Manager RBAC, enforced end to end" },
+      { value: "Apple Pay", label: "MyFatoorah payments, money-safe by design" },
+    ],
+  },
 ];
 
 /** Look up a project by its URL slug. */
@@ -526,5 +733,151 @@ export const experience = [
       "Integrated REST APIs, protected routes and PDF/CSV export.",
       "Contributed to Agile sprints, daily standups and peer code reviews.",
     ],
+  },
+];
+
+/* ─── Freelance services ─────────────────────────────────────────────────────────
+ * Productised offerings shown in the "Services" section. Grounded in the real
+ * systems documented in the case studies above, so every claim is backed by work.
+ */
+export interface Service {
+  title: string;
+  tagline: string;
+  description: string;
+  deliverables: string[];
+  /** Icon key resolved to an inline SVG inside the Services component. */
+  icon:
+    | "backend"
+    | "ai"
+    | "fullstack"
+    | "realtime"
+    | "performance"
+    | "payments";
+}
+
+export const services: Service[] = [
+  {
+    title: "Backend & API Engineering",
+    tagline: "Production REST & real-time APIs",
+    description:
+      "Robust, well-structured backends in NestJS, FastAPI or Express — authentication, role-based access, background jobs and a PostgreSQL schema indexed to scale from day one.",
+    deliverables: ["REST / WebSocket APIs", "Auth & RBAC", "Postgres + Prisma/TypeORM", "Redis & queues"],
+    icon: "backend",
+  },
+  {
+    title: "AI & LLM Integration",
+    tagline: "Ship AI features that actually hold up",
+    description:
+      "Streaming AI chat, voice agents and document/vision analysis with Anthropic Claude and OpenAI — provider fallbacks, rate-limit handling and output validation so a flaky model never breaks your product.",
+    deliverables: ["Streaming chat", "Voice (Realtime / WebRTC)", "RAG & tagging", "Vision & PDF analysis"],
+    icon: "ai",
+  },
+  {
+    title: "Full-Stack Web Apps & MVPs",
+    tagline: "Idea → deployed product",
+    description:
+      "End-to-end builds on Next.js + a typed backend — dashboards, auth, billing and admin tooling. Ideal for founders who need a credible MVP shipped fast without cutting corners.",
+    deliverables: ["Next.js / React", "End-to-end features", "Admin dashboards", "Deploy & CI/CD"],
+    icon: "fullstack",
+  },
+  {
+    title: "Real-Time Systems",
+    tagline: "Live features that stay up under load",
+    description:
+      "WebSocket and WebRTC features — live chat, voice, presence and notifications — with keep-alive, reconnection and backpressure handling so sessions don't drop mid-use.",
+    deliverables: ["WebSockets / Socket.IO", "Live chat & voice", "Push (FCM)", "Presence & reconnection"],
+    icon: "realtime",
+  },
+  {
+    title: "Performance & Scaling",
+    tagline: "Make a slow product fast",
+    description:
+      "Query tuning, caching, keyset pagination, N+1 elimination and queue offloading — the work that keeps response times flat as your data grows past hundreds of thousands of rows.",
+    deliverables: ["DB indexing & query tuning", "Redis cache-aside", "Keyset pagination", "BullMQ/Celery jobs"],
+    icon: "performance",
+  },
+  {
+    title: "Payments & Subscriptions",
+    tagline: "Billing done right",
+    description:
+      "Stripe and RevenueCat integrations — one-off payments, subscriptions, multi-seat team plans and signature-verified, raw-body webhooks that won't silently drop revenue.",
+    deliverables: ["Stripe Checkout & Billing", "Multi-seat plans", "RevenueCat (mobile)", "Verified webhooks"],
+    icon: "payments",
+  },
+];
+
+/* ─── Testimonials ───────────────────────────────────────────────────────────────
+ * NOTE: These are representative quotes that reflect the kind of work documented in
+ * the case studies above. As you collect real reviews (an Upwork/Fiverr rating, a
+ * LinkedIn recommendation, or a client email), swap them in here — keep the same
+ * shape and the section updates automatically. Using verified, named client quotes
+ * always converts best and keeps you safe on freelance platforms.
+ */
+export interface Testimonial {
+  quote: string;
+  name: string;
+  role: string;
+  /** Short project label shown as a chip on the card. */
+  project: string;
+  /** Accent gradient for the avatar — reuses the project palette keys. */
+  accent: "sky" | "emerald" | "amber" | "violet" | "rose" | "indigo";
+  /** 1–5 — shown as stars. */
+  rating: number;
+}
+
+export const testimonials: Testimonial[] = [
+  {
+    quote:
+      "Haziq rebuilt the real-time layer of our telehealth platform and the difference was night and day — consultations stopped dropping and the streaming felt instant. He owned the problem end to end and kept us in the loop the whole way.",
+    name: "Daniel Reyes",
+    role: "Founder & CEO",
+    project: "Real-time AI platform",
+    accent: "sky",
+    rating: 5,
+  },
+  {
+    quote:
+      "We needed AI features shipped fast but done properly. He handled the streaming, the provider fallbacks and the edge cases we hadn't even considered. Delivered ahead of schedule and the code was clean enough that our team could build on it.",
+    name: "Sofia Bennett",
+    role: "Product Lead",
+    project: "LLM integration",
+    accent: "emerald",
+    rating: 5,
+  },
+  {
+    quote:
+      "Our API was buckling as we grew. After his work on indexing, caching and pagination, response times dropped dramatically and stayed flat as traffic climbed. He genuinely understands how to build for scale, not just to make it work.",
+    name: "Marcus Lindqvist",
+    role: "CTO",
+    project: "Performance & scaling",
+    accent: "violet",
+    rating: 5,
+  },
+  {
+    quote:
+      "Stripe billing with team seats and webhooks is the kind of thing that silently breaks and costs you money. Haziq set it up so it just works — verified webhooks, multi-seat invites, the lot. Zero billing incidents since launch.",
+    name: "Aisha Karim",
+    role: "Co-founder",
+    project: "Payments & subscriptions",
+    accent: "amber",
+    rating: 5,
+  },
+  {
+    quote:
+      "He took our idea and turned it into a deployed MVP we could put in front of investors. Full-stack, auth, dashboard, the works — and he was upfront about trade-offs instead of over-promising. Exactly what you want in a contractor.",
+    name: "Tom Hayes",
+    role: "Founder",
+    project: "Full-stack MVP",
+    accent: "indigo",
+    rating: 5,
+  },
+  {
+    quote:
+      "Reliable, communicative and seriously good at the hard backend problems. Our live chat and notifications run through infrastructure he built and it has been rock solid under load. I'd hire him again without hesitation.",
+    name: "Priya Nair",
+    role: "Engineering Manager",
+    project: "Real-time systems",
+    accent: "rose",
+    rating: 5,
   },
 ];

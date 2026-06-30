@@ -668,18 +668,20 @@ export default function ProjectCaseStudy({
               style={{ background: "linear-gradient(135deg, #6366f1, #8b5cf6)" }}
             >
               <h3 className="text-heading mb-2" style={{ color: "#fff", fontFamily: "var(--font-heading)" }}>
-                Like what you see?
+                Want something like this built?
               </h3>
               <p className="text-meta mb-6" style={{ color: "rgba(255,255,255,0.85)" }}>
-                I&apos;m open to new opportunities. Let&apos;s build something great together.
+                {/* Job-seeker copy (kept, commented out): I'm open to new opportunities. Let's build something great together. */}
+                I&apos;m available for freelance work. Let&apos;s build yours.
               </p>
               <Link
                 href="/#contact"
-                data-cursor-text="Say hi"
+                data-cursor-text="Hire me"
                 className="inline-flex items-center gap-2 self-start px-6 py-3 rounded-full transition-transform duration-300 hover:scale-105"
                 style={{ background: "#fff", color: "#4f46e5", fontFamily: "var(--font-body)", fontWeight: 600, fontSize: "0.85rem" }}
               >
-                Get in touch
+                {/* Job-seeker copy (kept, commented out): Get in touch */}
+                Hire me
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} className="w-4 h-4">
                   <path strokeLinecap="round" strokeLinejoin="round" d="M17.25 8.25L21 12m0 0l-3.75 3.75M21 12H3" />
                 </svg>

@@ -3,9 +3,11 @@ import ScrollProgress from "@/components/ScrollProgress";
 import Navbar from "@/components/Navbar";
 import Hero from "@/components/sections/Hero";
 import About from "@/components/sections/About";
+import Services from "@/components/sections/Services";
 import TechStack from "@/components/sections/TechStack";
 import Projects from "@/components/sections/Projects";
 import Experience from "@/components/sections/Experience";
+import Testimonials from "@/components/sections/Testimonials";
 import Contact from "@/components/sections/Contact";
 import Footer from "@/components/sections/Footer";
 
@@ -22,9 +24,13 @@ export default function Home() {
       <main>
         <Hero />
         <About />
+        {/* Freelance: what I offer, shown right after the intro */}
+        <Services />
         <TechStack />
         <Projects />
         <Experience />
+        {/* Freelance: social proof before the contact CTA */}
+        <Testimonials />
         <Contact />
       </main>
 

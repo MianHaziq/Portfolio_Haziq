@@ -1,10 +1,17 @@
 "use client";
 
 import { useEffect, useRef, useState, FormEvent } from "react";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
+import emailjs from "@emailjs/browser";
 import { siteConfig } from "@/lib/data";
 import { SectionHeading } from "@/components/ui/AnimatedText";
 import MagneticButton from "@/components/ui/MagneticButton";
+
+/* EmailJS config — set these in .env.local (see .env.local.example).
+   All three are public-safe (NEXT_PUBLIC_*) — EmailJS keys are client-side by design. */
+const EMAILJS_SERVICE_ID = process.env.NEXT_PUBLIC_EMAILJS_SERVICE_ID;
+const EMAILJS_TEMPLATE_ID = process.env.NEXT_PUBLIC_EMAILJS_TEMPLATE_ID;
+const EMAILJS_PUBLIC_KEY = process.env.NEXT_PUBLIC_EMAILJS_PUBLIC_KEY;
 
 const socialLinks = [
   {
@@ -77,6 +84,23 @@ export default function Contact() {
   const [formState, setFormState] = useState({ name: "", email: "", message: "" });
   const [submitted, setSubmitted] = useState(false);
   const [sending, setSending] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const [toast, setToast] = useState<{ type: "success" | "error"; message: string } | null>(
+    null
+  );
+  const toastTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  const showToast = (type: "success" | "error", message: string) => {
+    if (toastTimer.current) clearTimeout(toastTimer.current);
+    setToast({ type, message });
+    toastTimer.current = setTimeout(() => setToast(null), 5000);
+  };
+
+  useEffect(() => {
+    return () => {
+      if (toastTimer.current) clearTimeout(toastTimer.current);
+    };
+  }, []);
 
   useEffect(() => {
     if (typeof window === "undefined") return;
@@ -135,10 +159,48 @@ export default function Contact() {
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
+    setError(null);
+
+    // Guard: surface a clear message if the env vars aren't configured yet,
+    // instead of failing silently. Set them in .env.local (see .env.local.example).
+    if (!EMAILJS_SERVICE_ID || !EMAILJS_TEMPLATE_ID || !EMAILJS_PUBLIC_KEY) {
+      const msg =
+        "Email isn't configured yet. Please reach me directly at " + siteConfig.email + ".";
+      setError(msg);
+      showToast("error", msg);
+      return;
+    }
+
     setSending(true);
-    await new Promise((r) => setTimeout(r, 1200));
-    setSending(false);
-    setSubmitted(true);
+    try {
+      await emailjs.send(
+        EMAILJS_SERVICE_ID,
+        EMAILJS_TEMPLATE_ID,
+        {
+          // These keys must match the variables in your EmailJS template.
+          from_name: formState.name,
+          from_email: formState.email,
+          reply_to: formState.email,
+          message: formState.message,
+          to_name: siteConfig.name,
+        },
+        { publicKey: EMAILJS_PUBLIC_KEY }
+      );
+      setSubmitted(true);
+      setFormState({ name: "", email: "", message: "" });
+      showToast("success", "Message sent! I'll get back to you within 24 hours.");
+    } catch (err) {
+      const e = err as { status?: number; text?: string };
+      console.error("EmailJS send failed:", e?.status, e?.text || err);
+      const msg =
+        "Something went wrong sending your message. Please try again, or email me at " +
+        siteConfig.email +
+        ".";
+      setError(msg);
+      showToast("error", msg);
+    } finally {
+      setSending(false);
+    }
   };
 
   const baseInputStyle: React.CSSProperties = {
@@ -323,6 +385,18 @@ export default function Contact() {
                       )}
                     </button>
                   </MagneticButton>
+
+                  {error && (
+                    <motion.p
+                      initial={{ opacity: 0, y: -6 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      role="alert"
+                      className="text-meta text-center"
+                      style={{ color: "#f43f5e" }}
+                    >
+                      {error}
+                    </motion.p>
+                  )}
                 </form>
               )}
             </div>
@@ -423,14 +497,91 @@ export default function Contact() {
                 }}
               />
               <p className="text-sm" style={{ color: "var(--ph-t2)" }}>
+                {/* Job-seeker copy (kept, commented out): Currently open to new opportunities */}
                 Currently{" "}
-                <span style={{ color: "#22c55e" }}>open</span> to new
-                opportunities
+                <span style={{ color: "#22c55e" }}>available</span> for freelance
+                projects
               </p>
             </div>
           </div>
         </div>
       </div>
+
+      {/* Toast notification */}
+      <AnimatePresence>
+        {toast && (
+          <motion.div
+            key="contact-toast"
+            initial={{ opacity: 0, y: 24, scale: 0.95 }}
+            animate={{ opacity: 1, y: 0, scale: 1 }}
+            exit={{ opacity: 0, y: 16, scale: 0.95 }}
+            transition={{ type: "spring", stiffness: 380, damping: 28 }}
+            role="status"
+            aria-live="polite"
+            className="glass-card fixed z-50 bottom-6 right-6 left-6 sm:left-auto sm:max-w-sm flex items-start gap-3 p-4 pr-5 rounded-2xl shadow-2xl"
+            style={{
+              borderColor:
+                toast.type === "success"
+                  ? "rgba(34,197,94,0.35)"
+                  : "rgba(244,63,94,0.35)",
+            }}
+          >
+            <div
+              className="w-9 h-9 shrink-0 rounded-full flex items-center justify-center text-base font-bold"
+              style={{
+                background:
+                  toast.type === "success"
+                    ? "rgba(34,197,94,0.15)"
+                    : "rgba(244,63,94,0.15)",
+                color: toast.type === "success" ? "#22c55e" : "#f43f5e",
+                boxShadow:
+                  toast.type === "success"
+                    ? "0 0 16px rgba(34,197,94,0.25)"
+                    : "0 0 16px rgba(244,63,94,0.25)",
+              }}
+            >
+              {toast.type === "success" ? "✓" : "!"}
+            </div>
+            <div className="flex-1 min-w-0">
+              <p
+                className="text-sm font-semibold mb-0.5"
+                style={{
+                  color: "var(--ph-t0)",
+                  fontFamily: "var(--font-heading)",
+                }}
+              >
+                {toast.type === "success" ? "Message sent" : "Couldn't send"}
+              </p>
+              <p className="text-xs leading-relaxed" style={{ color: "var(--ph-t3)" }}>
+                {toast.message}
+              </p>
+            </div>
+            <button
+              type="button"
+              aria-label="Dismiss notification"
+              onClick={() => setToast(null)}
+              className="shrink-0 -mr-1 -mt-1 w-6 h-6 rounded-md flex items-center justify-center text-sm transition-opacity duration-200 opacity-50 hover:opacity-100"
+              style={{ color: "var(--ph-t3)" }}
+            >
+              ✕
+            </button>
+            {/* Auto-dismiss progress bar */}
+            <motion.div
+              key={toast.message}
+              initial={{ scaleX: 1 }}
+              animate={{ scaleX: 0 }}
+              transition={{ duration: 5, ease: "linear" }}
+              className="absolute bottom-0 left-0 right-0 h-0.5 origin-left rounded-b-2xl"
+              style={{
+                background:
+                  toast.type === "success"
+                    ? "linear-gradient(90deg, #22c55e, #4ade80)"
+                    : "linear-gradient(90deg, #f43f5e, #fb7185)",
+              }}
+            />
+          </motion.div>
+        )}
+      </AnimatePresence>
     </section>
   );
 }

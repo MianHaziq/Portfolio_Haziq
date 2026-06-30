@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef } from "react";
+import Image from "next/image";
 import { motion } from "framer-motion";
 import { siteConfig } from "@/lib/data";
 import { useIntro } from "@/contexts/IntroContext";
@@ -122,7 +123,7 @@ export default function Hero() {
       initial={{ scale: 0.985, opacity: 0 }}
       animate={isIntroDone ? { scale: 1, opacity: 1 } : { scale: 0.985, opacity: 0 }}
       transition={{ duration: 1.4, ease: EASE_EXPO }}
-      className="relative min-h-screen flex flex-col items-center justify-start md:justify-center overflow-hidden pt-28 pb-20 md:py-0"
+      className="relative min-h-screen flex flex-col items-center justify-center overflow-hidden pt-32 pb-24 md:pt-36 md:pb-28"
       style={{ background: "var(--ph-bg-0)", willChange: "transform, opacity" }}
     >
       {/* Background orbs */}
@@ -170,12 +171,49 @@ export default function Hero() {
         className="relative z-10 max-w-5xl mx-auto px-6 text-center"
         style={{ willChange: "transform" }}
       >
+        {/* Profile avatar */}
+        <motion.div
+          initial={{ opacity: 0, y: 20, scale: 0.85 }}
+          animate={isIntroDone ? { opacity: 1, y: 0, scale: 1 } : { opacity: 0, y: 20, scale: 0.85 }}
+          transition={{ delay: 0, duration: 0.7, ease: EASE_EXPO }}
+          className="mb-7 flex justify-center"
+        >
+          <div className="relative">
+            {/* Soft glow halo */}
+            <div
+              className="absolute -inset-3 rounded-full blur-2xl"
+              style={{ background: "radial-gradient(circle, rgba(99,102,241,0.45), transparent 70%)" }}
+            />
+            {/* Gradient ring */}
+            <div
+              className="relative rounded-full p-[2.5px]"
+              style={{ background: "linear-gradient(135deg, #6366f1, #8b5cf6, #a855f7)" }}
+            >
+              <Image
+                src="/haziq-portrait.jpg"
+                alt="Haziq Nazeer"
+                width={120}
+                height={120}
+                priority
+                sizes="(max-width: 768px) 92px, 116px"
+                className="relative w-[92px] h-[92px] md:w-[116px] md:h-[116px] rounded-full object-cover"
+                style={{ border: "3px solid var(--ph-bg-0)" }}
+              />
+            </div>
+            {/* Availability dot */}
+            <span
+              className="absolute bottom-1.5 right-1.5 w-4 h-4 rounded-full"
+              style={{ background: "#22c55e", border: "3px solid var(--ph-bg-0)", boxShadow: "0 0 10px #22c55e" }}
+            />
+          </div>
+        </motion.div>
+
         {/* Availability badge */}
         <motion.div
           initial={{ opacity: 0, y: 16, scale: 0.94 }}
           animate={isIntroDone ? { opacity: 1, y: 0, scale: 1 } : { opacity: 0, y: 16, scale: 0.94 }}
-          transition={{ delay: 0, duration: 0.55, ease: "easeOut" }}
-          className="mb-10 flex justify-center"
+          transition={{ delay: 0.1, duration: 0.55, ease: "easeOut" }}
+          className="mb-8 flex justify-center"
         >
           <div
             className="inline-flex items-center gap-2.5 px-5 py-2 rounded-full text-eyebrow"
@@ -193,7 +231,8 @@ export default function Hero() {
                 animation: "pulse 2s infinite",
               }}
             />
-            Available for opportunities
+            {/* Job-seeker copy (kept, commented out): Available for opportunities */}
+            {siteConfig.availability}
           </div>
         </motion.div>
 
@@ -312,7 +351,8 @@ export default function Hero() {
           animate={isIntroDone ? { opacity: 1, y: 0 } : { opacity: 0, y: 18 }}
           transition={{ delay: 0.88, duration: 0.65, ease: "easeOut" }}
         >
-          {siteConfig.bio}
+          {/* Job-seeker bio (kept, commented out): {siteConfig.bio} */}
+          {siteConfig.freelanceBio}
         </motion.p>
 
         {/* CTAs */}
@@ -363,7 +403,8 @@ export default function Hero() {
               (e.currentTarget as HTMLElement).style.borderColor = "var(--ph-border-medium)";
             }}
           >
-            Get In Touch
+            {/* Job-seeker copy (kept, commented out): Get In Touch */}
+            Hire Me
           </button>
         </motion.div>
 

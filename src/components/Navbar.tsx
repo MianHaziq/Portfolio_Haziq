@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect, useRef } from "react";
+import Image from "next/image";
 import { motion, AnimatePresence } from "framer-motion";
 import ThemeToggle from "@/components/ui/ThemeToggle";
 import { useIntro } from "@/contexts/IntroContext";
@@ -8,9 +9,11 @@ import { scrollToId } from "@/lib/lenis";
 
 const navLinks = [
   { label: "About", href: "#about" },
+  { label: "Services", href: "#services" },
   { label: "Stack", href: "#stack" },
   { label: "Projects", href: "#projects" },
   { label: "Experience", href: "#experience" },
+  { label: "Testimonials", href: "#testimonials" },
   { label: "Contact", href: "#contact" },
 ];
 
@@ -124,17 +127,21 @@ export default function Navbar() {
           style={{ opacity: 0 }}
         >
           <div
-            className="w-8 h-8 rounded-lg flex items-center justify-center text-white"
+            className="rounded-full p-[1.5px] shrink-0"
             style={{
               background: "linear-gradient(135deg, #6366f1, #8b5cf6)",
-              boxShadow: "0 4px 15px rgba(99, 102, 241, 0.4)",
-              fontFamily: "var(--font-display)",
-              fontSize: "1.1rem",
-              fontWeight: 700,
-              fontStyle: "italic",
+              boxShadow: "0 4px 15px rgba(99, 102, 241, 0.35)",
             }}
           >
-            H
+            <Image
+              src="/haziq-portrait.jpg"
+              alt="Haziq Nazeer"
+              width={36}
+              height={36}
+              priority
+              className="w-8 h-8 rounded-full object-cover block transition-transform duration-300 group-hover:scale-105"
+              style={{ border: "2px solid var(--ph-bg-0)" }}
+            />
           </div>
           <span
             className="block"

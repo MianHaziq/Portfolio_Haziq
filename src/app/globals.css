@@ -447,6 +447,67 @@ nav,
 .orb-2 { animation: orb-float-2 16s ease-in-out infinite; }
 .orb-3 { animation: orb-float-3 10s ease-in-out infinite; }
 
+/* Opaque elevated card surface — no backdrop-filter, so it composites cheaply
+   while scrolling and fully masks the rotating border beam behind it. */
+.solid-card { background: #14141c; }
+[data-theme="light"] .solid-card { background: #ffffff; }
+
+/* ─── Services: animated gradient border (masked ring — can never bleed inward) ──
+   A conic gradient whose angle is animated via a registered custom property, then
+   masked to a 1.5px ring with mask-composite. Works identically in light & dark. */
+@property --ph-angle {
+  syntax: "<angle>";
+  initial-value: 0deg;
+  inherits: false;
+}
+@keyframes ph-rotate { to { --ph-angle: 360deg; } }
+
+.svc-ring {
+  padding: 1.5px;
+  background: conic-gradient(
+    from var(--ph-angle),
+    rgba(99, 102, 241, 0.15),
+    #6366f1,
+    #a855f7,
+    #ec4899,
+    #6366f1,
+    rgba(99, 102, 241, 0.15)
+  );
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  mask-composite: exclude;
+  opacity: 0.4;
+  transition: opacity 0.4s ease;
+  /* No idle animation — a conic gradient repaints every frame (CPU raster, not
+     GPU-composited), so 6 of them running forever would tax scroll. At rest the
+     ring is painted ONCE; it only animates while a single card is hovered. */
+}
+.svc-card:hover .svc-ring {
+  opacity: 1;
+  animation: ph-rotate 3s linear infinite;
+}
+.svc-card {
+  transition: transform 0.4s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.4s ease;
+}
+.svc-card:hover {
+  box-shadow: 0 24px 60px rgba(99, 102, 241, 0.22);
+}
+@media (prefers-reduced-motion: reduce) {
+  .svc-ring { animation: none !important; }
+}
+
+/* ─── Testimonials: seamless marquee (translateX; pauses on hover) ───────────── */
+@keyframes ph-marquee { to { transform: translateX(-50%); } }
+.ph-marquee-track {
+  animation: ph-marquee var(--marquee-duration, 48s) linear infinite;
+  will-change: transform;
+}
+.ph-marquee:hover .ph-marquee-track { animation-play-state: paused; }
+@media (prefers-reduced-motion: reduce) {
+  .svc-beam, .ph-marquee-track { animation: none !important; }
+}
+
 /* ─── Scrollbar ──────────────────────────────────────────────────────────────── */
 ::-webkit-scrollbar       { width: 4px; }
 ::-webkit-scrollbar-track { background: var(--ph-scrollbar-track); transition: background 0.45s ease; }
