@@ -67,11 +67,12 @@ export const metadata: Metadata = {
 };
 
 export const viewport: Viewport = {
+  // Light is the primary theme, so it's listed first.
   themeColor: [
-    { media: "(prefers-color-scheme: dark)", color: "#0a0a0f" },
     { media: "(prefers-color-scheme: light)", color: "#f4f6ff" },
+    { media: "(prefers-color-scheme: dark)", color: "#0a0a0f" },
   ],
-  colorScheme: "dark light",
+  colorScheme: "light dark",
 };
 
 export default function RootLayout({
@@ -82,15 +83,16 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      data-theme="dark"
+      data-theme="light"
       suppressHydrationWarning
       className={`${cormorant.variable} ${sora.variable} ${manrope.variable}`}
     >
       <head>
-        {/* Prevent flash of wrong theme — runs before React hydrates */}
+        {/* Prevent flash of wrong theme — runs before React hydrates. Light is
+            the primary default; only a previously saved choice overrides it. */}
         <script
           dangerouslySetInnerHTML={{
-            __html: `(function(){try{var t=localStorage.getItem('ph-theme');if(!t){t=window.matchMedia('(prefers-color-scheme: light)').matches?'light':'dark';}document.documentElement.setAttribute('data-theme',t);}catch(e){}})();`,
+            __html: `(function(){try{var t=localStorage.getItem('ph-theme');document.documentElement.setAttribute('data-theme',t==='dark'?'dark':'light');}catch(e){}})();`,
           }}
         />
       </head>
