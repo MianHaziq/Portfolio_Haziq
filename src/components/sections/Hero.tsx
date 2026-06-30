@@ -1,10 +1,10 @@
 "use client";
 
 import { useEffect, useRef } from "react";
-import Image from "next/image";
 import { motion } from "framer-motion";
 import { siteConfig } from "@/lib/data";
 import { useIntro } from "@/contexts/IntroContext";
+import HeroNameReveal from "@/components/sections/HeroNameReveal";
 
 const EASE_EXPO = [0.22, 1, 0.36, 1] as const;
 
@@ -38,30 +38,6 @@ const socialLinks = [
   },
 ];
 
-function HeroWord({
-  word,
-  delay,
-  isReady,
-  className = "",
-}: {
-  word: string;
-  delay: number;
-  isReady: boolean;
-  className?: string;
-}) {
-  return (
-    <span className="word-mask inline-block mr-[0.22em] last:mr-0">
-      <motion.span
-        className={`inline-block ${className}`}
-        initial={{ y: "115%", opacity: 0 }}
-        animate={isReady ? { y: "0%", opacity: 1 } : { y: "115%", opacity: 0 }}
-        transition={{ delay, duration: 0.82, ease: EASE_EXPO }}
-      >
-        {word}
-      </motion.span>
-    </span>
-  );
-}
 
 export default function Hero() {
   const sectionRef = useRef<HTMLElement>(null);
@@ -171,43 +147,6 @@ export default function Hero() {
         className="relative z-10 max-w-5xl mx-auto px-6 text-center"
         style={{ willChange: "transform" }}
       >
-        {/* Profile avatar */}
-        <motion.div
-          initial={{ opacity: 0, y: 20, scale: 0.85 }}
-          animate={isIntroDone ? { opacity: 1, y: 0, scale: 1 } : { opacity: 0, y: 20, scale: 0.85 }}
-          transition={{ delay: 0, duration: 0.7, ease: EASE_EXPO }}
-          className="mb-7 flex justify-center"
-        >
-          <div className="relative">
-            {/* Soft glow halo */}
-            <div
-              className="absolute -inset-3 rounded-full blur-2xl"
-              style={{ background: "radial-gradient(circle, rgba(99,102,241,0.45), transparent 70%)" }}
-            />
-            {/* Gradient ring */}
-            <div
-              className="relative rounded-full p-[2.5px]"
-              style={{ background: "linear-gradient(135deg, #6366f1, #8b5cf6, #a855f7)" }}
-            >
-              <Image
-                src="/haziq-portrait.jpg"
-                alt="Haziq Nazeer"
-                width={120}
-                height={120}
-                priority
-                sizes="(max-width: 768px) 92px, 116px"
-                className="relative w-[92px] h-[92px] md:w-[116px] md:h-[116px] rounded-full object-cover"
-                style={{ border: "3px solid var(--ph-bg-0)" }}
-              />
-            </div>
-            {/* Availability dot */}
-            <span
-              className="absolute bottom-1.5 right-1.5 w-4 h-4 rounded-full"
-              style={{ background: "#22c55e", border: "3px solid var(--ph-bg-0)", boxShadow: "0 0 10px #22c55e" }}
-            />
-          </div>
-        </motion.div>
-
         {/* Availability badge */}
         <motion.div
           initial={{ opacity: 0, y: 16, scale: 0.94 }}
@@ -259,28 +198,9 @@ export default function Hero() {
           </span>
         </div>
 
-        {/* Hero name */}
-        <h1
-          className="text-hero mb-5 flex flex-wrap justify-center"
-          aria-label="Haziq Nazeer"
-          style={{ fontFamily: "var(--font-display)" }}
-        >
-          <HeroWord word="Haziq" delay={0.16} isReady={isIntroDone} className="text-hero" />
-          <span className="word-mask inline-block">
-            <motion.span
-              className="inline-block gradient-text-shimmer text-hero"
-              initial={{ y: "115%", opacity: 0 }}
-              animate={isIntroDone ? { y: "0%", opacity: 1 } : { y: "115%", opacity: 0 }}
-              transition={{ delay: 0.30, duration: 0.82, ease: EASE_EXPO }}
-              style={{
-                fontFamily: "var(--font-display)",
-                fontStyle: "italic",
-              }}
-            >
-              Nazeer.
-            </motion.span>
-          </span>
-        </h1>
+        {/* Hero name — cinematic split-reveal with the portrait as centerpiece */}
+        <h1 className="sr-only">Haziq Nazeer</h1>
+        <HeroNameReveal start={isIntroDone} />
 
         {/* Role */}
         <div

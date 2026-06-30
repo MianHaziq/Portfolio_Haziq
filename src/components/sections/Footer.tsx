@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import { siteConfig } from "@/lib/data";
 
 export default function Footer() {
@@ -23,18 +24,22 @@ export default function Footer() {
       <div className="max-w-6xl mx-auto px-6 py-10">
         <div className="flex flex-col md:flex-row items-center justify-between gap-6">
           {/* Logo */}
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-3 group">
             <div
-              className="w-8 h-8 rounded-lg flex items-center justify-center text-white"
+              className="rounded-full p-[1.5px] shrink-0"
               style={{
                 background: "linear-gradient(135deg, #6366f1, #8b5cf6)",
-                fontFamily: "var(--font-display)",
-                fontSize: "1.1rem",
-                fontWeight: 700,
-                fontStyle: "italic",
+                boxShadow: "0 4px 15px rgba(99, 102, 241, 0.35)",
               }}
             >
-              H
+              <Image
+                src="/haziq-portrait.jpg"
+                alt="Haziq Nazeer"
+                width={36}
+                height={36}
+                className="w-8 h-8 rounded-full object-cover block transition-transform duration-300 group-hover:scale-105"
+                style={{ border: "2px solid var(--ph-bg-0)" }}
+              />
             </div>
             <span
               style={{

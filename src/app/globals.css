@@ -22,9 +22,11 @@
   --z-9999: 9999;
 }
 
-/* ─── Dark Theme (Default) ───────────────────────────────────────────────────── */
-:root,
-[data-theme="dark"] {
+/* ─── Dark Theme (Secondary / opt-in) ────────────────────────────────────────── */
+/* `:root[data-theme="dark"]` (specificity 0,2,0) intentionally outranks the
+   light block's `:root` (0,1,0) so dark wins whenever it's set, regardless of
+   source order — this is what makes the toggle actually switch. */
+:root[data-theme="dark"] {
   color-scheme: dark;
 
   /* Backgrounds */
@@ -95,7 +97,8 @@
   --ph-loader-orb-opacity: 0.22;
 }
 
-/* ─── Light Theme ────────────────────────────────────────────────────────────── */
+/* ─── Light Theme (Primary / default) ────────────────────────────────────────── */
+:root,
 [data-theme="light"] {
   color-scheme: light;
 
@@ -412,10 +415,11 @@ nav,
 .tech-card {
   backdrop-filter: none;
   -webkit-backdrop-filter: none;
-  background: rgba(255, 255, 255, 0.045);
-}
-[data-theme="light"] .tech-card {
+  /* Light is the primary theme → light surface is the base; dark overrides. */
   background: rgba(255, 255, 255, 0.85);
+}
+[data-theme="dark"] .tech-card {
+  background: rgba(255, 255, 255, 0.045);
 }
 
 .glass-card-hover {
@@ -449,8 +453,8 @@ nav,
 
 /* Opaque elevated card surface — no backdrop-filter, so it composites cheaply
    while scrolling and fully masks the rotating border beam behind it. */
-.solid-card { background: #14141c; }
-[data-theme="light"] .solid-card { background: #ffffff; }
+.solid-card { background: #ffffff; }
+[data-theme="dark"] .solid-card { background: #14141c; }
 
 /* ─── Services: animated gradient border (masked ring — can never bleed inward) ──
    A conic gradient whose angle is animated via a registered custom property, then

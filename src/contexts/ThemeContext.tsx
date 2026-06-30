@@ -10,17 +10,21 @@ interface ThemeContextValue {
 }
 
 const ThemeContext = createContext<ThemeContextValue>({
-  theme: "dark",
+  theme: "light",
   toggle: () => {},
 });
 
 export function ThemeProvider({ children }: { children: ReactNode }) {
-  const [theme, setTheme] = useState<Theme>("dark");
+  // Light ("white") is the brand's primary theme — it's the default for every
+  // new visitor. Dark is the secondary, opt-in theme. A previously saved choice
+  // always wins so returning visitors keep their preference. We intentionally
+  // do NOT fall back to the OS prefers-color-scheme, so the primary white theme
+  // shows by default even on dark-mode machines.
+  const [theme, setTheme] = useState<Theme>("light");
 
   useEffect(() => {
     const saved = localStorage.getItem("ph-theme") as Theme | null;
-    const prefersDark = !window.matchMedia("(prefers-color-scheme: light)").matches;
-    const initial: Theme = saved ?? (prefersDark ? "dark" : "light");
+    const initial: Theme = saved ?? "light";
     setTheme(initial);
     document.documentElement.setAttribute("data-theme", initial);
   }, []);
