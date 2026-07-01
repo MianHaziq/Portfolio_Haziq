@@ -501,6 +501,29 @@ nav,
   .svc-ring { animation: none !important; }
 }
 
+/* FAQ accordion cards — gentle hover lift + border warm-up (closed state). */
+.faq-card { will-change: transform; }
+.faq-card:hover {
+  transform: translateY(-2px);
+  border-color: rgba(99, 102, 241, 0.3) !important;
+}
+
+/* Smooth reveal: animate the grid track from 0fr→1fr. This is GPU/compositor
+   friendly and needs no JS height measurement, so it never stutters. */
+.faq-answer {
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: grid-template-rows 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.faq-answer[data-open="true"] {
+  grid-template-rows: 1fr;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .faq-card:hover { transform: none; }
+  .faq-answer { transition: none; }
+}
+
 /* ─── Testimonials: seamless marquee (translateX; pauses on hover) ───────────── */
 @keyframes ph-marquee { to { transform: translateX(-50%); } }
 .ph-marquee-track {

@@ -1,7 +1,15 @@
+// Canonical production origin. Override per-environment with NEXT_PUBLIC_SITE_URL
+// (e.g. a preview deployment); the trailing slash is stripped so we can safely
+// concatenate paths. Used by metadataBase, the sitemap, robots and JSON-LD.
+export const SITE_URL = (
+  process.env.NEXT_PUBLIC_SITE_URL ?? "https://haziqnazeer.online"
+).replace(/\/+$/, "");
+
 export const siteConfig = {
   name: "Haziq Nazeer",
   fullName: "Muhammad Haziq Nazeer",
   role: "Software Engineer",
+  url: SITE_URL,
   tagline: "Building secure, real-time, AI-powered systems",
   bio: "I build secure, real-time and AI-powered backend and full-stack systems with NestJS, FastAPI, Next.js, PostgreSQL and AWS. Promoted from intern to Associate Software Engineer within a year, I care about shipping production systems that are reliable, scalable and well-engineered.",
   // ── Freelance framing (used across the site now that the focus is client work) ──
@@ -879,5 +887,121 @@ export const testimonials: Testimonial[] = [
     project: "Real-time systems",
     accent: "rose",
     rating: 5,
+  },
+];
+
+/* ─── SEO ──────────────────────────────────────────────────────────────────
+ * Everything below is grounded in the real work documented above — every skill
+ * and keyword maps to a technology used in a shipped project or listed on the
+ * résumé. No invented expertise and no fabricated seniority: false claims get
+ * caught by recruiters and the resulting bounce is a negative ranking signal.
+ * The win comes from breadth of *real* terms + structured data, not inflation.
+ */
+
+/**
+ * Full expertise graph. Feeds Person.knowsAbout / Occupation.skills in JSON-LD
+ * and seeds the keyword set below. Grouped only for readability.
+ */
+export const expertise: string[] = [
+  // Disciplines
+  "Full Stack Development", "Backend Engineering", "Frontend Development",
+  "AI & LLM Integration", "Generative AI", "Real-time Systems", "API Design",
+  "Database Design", "Performance Optimization", "Payment Integration",
+  "Cloud & DevOps", "System Architecture",
+  // Languages
+  "JavaScript", "TypeScript", "Python",
+  // Frontend
+  "React", "Next.js", "Redux", "React Query", "Tailwind CSS", "HTML", "CSS",
+  // Backend
+  "Node.js", "Express.js", "NestJS", "FastAPI",
+  // Data
+  "PostgreSQL", "MySQL", "MongoDB", "Redis", "Prisma", "TypeORM",
+  // Real-time
+  "WebSockets", "WebRTC", "Socket.IO",
+  // Queues / background jobs
+  "BullMQ", "Celery", "pg-boss",
+  // AI / LLM
+  "OpenAI", "Anthropic Claude", "OpenAI Realtime API", "RAG",
+  "Computer Vision", "AI Agents", "Multi-agent Orchestration", "Streaming AI Chat",
+  // Payments
+  "Stripe", "RevenueCat", "MyFatoorah", "Apple Pay",
+  // Cloud & infra
+  "AWS", "AWS EC2", "AWS S3", "AWS Amplify", "CloudFront", "Docker",
+  "CI/CD", "GitHub Actions", "Vercel",
+  // Media & other services
+  "Bunny CDN", "Mux", "FFmpeg", "HLS Streaming", "Firebase", "Firebase FCM",
+  "Sanity CMS",
+  // Practices & tooling
+  "REST APIs", "JWT Authentication", "RBAC", "Microservices",
+  "Unit Testing", "Integration Testing", "Jest", "Playwright",
+  "Swagger / OpenAPI", "Agile", "Jira", "Git", "GitHub",
+];
+
+/**
+ * Keyword universe for <meta keywords> and semantic reinforcement — name
+ * variants, role synonyms people actually type, hiring-intent phrases and
+ * location, followed by the full real expertise list.
+ */
+export const SEO_KEYWORDS: string[] = [
+  // Name variants
+  "Haziq Nazeer", "Muhammad Haziq Nazeer", "Haziq Nazeer developer",
+  "Haziq Nazeer software engineer", "MianHaziq",
+  // Role synonyms (search intent)
+  "Software Engineer", "Software Developer", "Full Stack Developer",
+  "Full Stack Engineer", "Backend Developer", "Backend Engineer",
+  "Frontend Developer", "Web Developer", "MERN Stack Developer",
+  "Node.js Developer", "React Developer", "Next.js Developer",
+  "TypeScript Developer", "Python Developer", "API Developer",
+  "AI Engineer", "AI Developer", "LLM Engineer", "LLM Integration Engineer",
+  "Generative AI Developer", "AI Chatbot Developer", "AI SaaS Developer",
+  "Real-time Systems Engineer",
+  // Hiring intent
+  "Freelance Software Developer", "Freelance Backend Developer",
+  "Freelance Full Stack Developer", "Freelance AI Developer",
+  "Hire Software Developer", "Hire Backend Developer",
+  "Contract Software Engineer", "Remote Software Engineer",
+  "MVP Developer", "Software Consultant",
+  // Location
+  "Software Developer Lahore", "Software Engineer Pakistan",
+  "Backend Developer Pakistan", "Hire Developer Pakistan",
+  "Remote Developer Pakistan",
+  // Real expertise
+  ...expertise,
+];
+
+/**
+ * Real, answerable FAQs. Rendered visibly on the home page AND emitted as
+ * FAQPage JSON-LD — Google requires the answer text to be visible on the page,
+ * so the two must stay in sync (both read from here).
+ */
+export interface Faq {
+  q: string;
+  a: string;
+}
+
+export const seoFaqs: Faq[] = [
+  {
+    q: "Who is Haziq Nazeer?",
+    a: "Haziq Nazeer (Muhammad Haziq Nazeer) is a software engineer and freelance backend & AI developer based in Lahore, Pakistan. He builds secure, real-time, AI-powered backend and full-stack systems with NestJS, FastAPI, Next.js, PostgreSQL and AWS, and has shipped production platforms across healthcare, edtech, fintech and social.",
+  },
+  {
+    q: "What technologies and skills does Haziq Nazeer specialise in?",
+    a: "Backend and full-stack engineering with Node.js, NestJS, Express and FastAPI (Python); frontend with React, Next.js and TypeScript; databases including PostgreSQL, MySQL, MongoDB, Redis, Prisma and TypeORM; real-time systems with WebSockets, WebRTC and Socket.IO; AI/LLM integration with OpenAI and Anthropic Claude; payments with Stripe, RevenueCat and MyFatoorah; and cloud/DevOps on AWS, Docker, CI/CD and Vercel.",
+  },
+  {
+    q: "Is Haziq Nazeer available for freelance or contract work?",
+    a: "Yes — Haziq is available for freelance projects, contract engagements and MVP builds, from production backends and real-time features to AI-powered products. The best way to start is to email haziqnazeer@gmail.com with a short description of your project.",
+  },
+  {
+    q: "What kind of projects has Haziq Nazeer built?",
+    a: "Production systems including an AI telehealth platform with real-time voice and streaming chat, a real-time AI Arabic-learning platform, a learning-management system with secure video streaming and payments, an Instagram-style social backend engineered to scale toward 1M+ users, and a multi-region e-commerce platform with money-safe payments.",
+  },
+  {
+    q: "Where is Haziq Nazeer based and does he work remotely?",
+    a: "He is based in Lahore, Punjab, Pakistan, and works with clients and teams remotely worldwide.",
+  },
+  {
+    q: "Can Haziq Nazeer integrate AI and LLM features into an existing product?",
+    a: "Yes. He builds streaming AI chat, voice agents (OpenAI Realtime / WebRTC), retrieval and document/vision analysis with OpenAI and Anthropic Claude — including provider fallbacks, rate-limit handling and output validation so a flaky model never breaks the product.",
   },
 ];

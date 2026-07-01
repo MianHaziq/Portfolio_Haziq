@@ -198,8 +198,12 @@ export default function Hero() {
           </span>
         </div>
 
-        {/* Hero name — cinematic split-reveal with the portrait as centerpiece */}
-        <h1 className="sr-only">Haziq Nazeer</h1>
+        {/* Hero name — cinematic split-reveal with the portrait as centerpiece.
+            The visible reveal is animated/decorative, so the real, keyword-rich
+            document <h1> lives here (screen-reader-only, strong SEO signal). */}
+        <h1 className="sr-only">
+          Haziq Nazeer — Software Engineer &amp; Freelance Backend / AI Developer
+        </h1>
         <HeroNameReveal start={isIntroDone} />
 
         {/* Role */}
