@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef, type ReactNode, type CSSProperties } from "react";
+import { useRef, useEffect, type ReactNode, type CSSProperties } from "react";
 import { motion } from "framer-motion";
 import { useMagnetic } from "@/hooks/useMagnetic";
 
@@ -18,13 +18,27 @@ export default function MagneticButton({
   style,
 }: MagneticButtonProps) {
   const magnetRef = useMagnetic<HTMLDivElement>({ strength });
-  const rippleContainerRef = useRef<HTMLDivElement>(null);
+  const rippleLayerRef = useRef<HTMLDivElement>(null);
+
+  // Keep the ripple's clip shape in sync with the button's OWN border-radius
+  // (pill, rounded-xl, …). This lets the ripple stay contained inside the
+  // button without wrapping the button in an overflow:hidden box — which was
+  // clipping the button's rounded edges into square corners when it scaled up
+  // on hover.
+  useEffect(() => {
+    const magnet = magnetRef.current;
+    const layer = rippleLayerRef.current;
+    const btn =
+      magnet?.querySelector<HTMLElement>("a, button") ??
+      (magnet?.firstElementChild as HTMLElement | null);
+    if (layer && btn) layer.style.borderRadius = getComputedStyle(btn).borderRadius;
+  });
 
   const handleClick = async (e: React.MouseEvent<HTMLDivElement>) => {
-    const container = rippleContainerRef.current;
-    if (!container) return;
+    const layer = rippleLayerRef.current;
+    if (!layer) return;
 
-    const rect = container.getBoundingClientRect();
+    const rect = layer.getBoundingClientRect();
     const x = e.clientX - rect.left;
     const y = e.clientY - rect.top;
 
@@ -38,12 +52,11 @@ export default function MagneticButton({
       width: 0;
       height: 0;
       border-radius: 50%;
-      background: rgba(255,255,255,0.2);
+      background: rgba(255,255,255,0.22);
       transform: translate(-50%, -50%);
       pointer-events: none;
-      z-index: 10;
     `;
-    container.appendChild(ripple);
+    layer.appendChild(ripple);
 
     gsap.to(ripple, {
       width: Math.max(rect.width, rect.height) * 2.5,
@@ -62,14 +75,24 @@ export default function MagneticButton({
       style={style}
       onClick={handleClick}
     >
+      <motion.div whileTap={{ scale: 0.95 }} style={{ display: "contents" }}>
+        {children}
+      </motion.div>
+
+      {/* Ripple layer — overlays the button and clips only the ripple to the
+          button's shape. It never wraps the button, so the button is free to
+          scale on hover without being clipped. */}
       <div
-        ref={rippleContainerRef}
-        style={{ position: "relative", overflow: "hidden", borderRadius: "inherit" }}
-      >
-        <motion.div whileTap={{ scale: 0.95 }} style={{ display: "contents" }}>
-          {children}
-        </motion.div>
-      </div>
+        ref={rippleLayerRef}
+        aria-hidden
+        style={{
+          position: "absolute",
+          inset: 0,
+          overflow: "hidden",
+          pointerEvents: "none",
+          zIndex: 2,
+        }}
+      />
     </div>
   );
 }

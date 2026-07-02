@@ -180,11 +180,14 @@ export default function About() {
                 {siteConfig.bio}
               </p>
               <p className="text-body" style={{ color: "var(--ph-t3)" }}>
-                My focus is the backend — real-time pipelines, AI integrations,
-                secure auth and clean data models — but I&apos;m comfortable across
-                the full stack. Whether it&apos;s a streaming inference pipeline or a
-                rock-solid API, I care deeply about the craft. Currently open to
-                relocating to Germany / the EU.
+                I&apos;m equally at home on both ends of the stack. On the
+                backend I love real-time pipelines, AI integrations, secure
+                authentication and clean data models; on the frontend I love
+                turning ideas into smooth, pixel-perfect websites with thoughtful
+                motion and detail. Whether it&apos;s a streaming inference
+                pipeline or a landing page that has to feel alive, I follow modern
+                industry best practices, sweat the details, and ship work
+                I&apos;m proud to put my name on.
               </p>
             </div>
 

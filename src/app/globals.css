@@ -508,15 +508,21 @@ nav,
   border-color: rgba(99, 102, 241, 0.3) !important;
 }
 
-/* Smooth reveal: animate the grid track from 0fr→1fr. This is GPU/compositor
-   friendly and needs no JS height measurement, so it never stutters. */
+/* Smooth reveal: animate the grid track from 0fr→1fr. Needs no JS height
+   measurement, so it never stutters. Easing is asymmetric — the way motion
+   designers cut transitions: OPENING decelerates (starts fast, settles slow)
+   so it feels responsive and premium; CLOSING accelerates a touch quicker so
+   the panel tucks away decisively instead of dragging. */
 .faq-answer {
   display: grid;
   grid-template-rows: 0fr;
-  transition: grid-template-rows 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+  /* CLOSING curve */
+  transition: grid-template-rows 0.38s cubic-bezier(0.4, 0, 0.2, 1);
 }
 .faq-answer[data-open="true"] {
   grid-template-rows: 1fr;
+  /* OPENING curve — decelerating "premium drawer" ease */
+  transition: grid-template-rows 0.52s cubic-bezier(0.32, 0.72, 0, 1);
 }
 
 @media (prefers-reduced-motion: reduce) {

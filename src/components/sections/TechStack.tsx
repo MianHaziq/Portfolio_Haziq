@@ -30,6 +30,11 @@ const categoryColors: Record<string, { bg: string; border: string; glow: string 
     border: "rgba(244, 63, 94, 0.3)",
     glow: "rgba(244, 63, 94, 0.15)",
   },
+  Payments: {
+    bg: "rgba(20, 184, 166, 0.1)",
+    border: "rgba(20, 184, 166, 0.3)",
+    glow: "rgba(20, 184, 166, 0.15)",
+  },
   "Cloud & Tools": {
     bg: "rgba(96, 165, 250, 0.1)",
     border: "rgba(96, 165, 250, 0.3)",

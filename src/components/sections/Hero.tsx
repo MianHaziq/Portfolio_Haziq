@@ -44,8 +44,11 @@ export default function Hero() {
   const contentRef = useRef<HTMLDivElement>(null);
 
   // Intro phase — gates every entrance animation in this section so they
-  // begin exactly when the loader begins exiting (true overlap, no flash).
-  const { isIntroDone } = useIntro();
+  // begin exactly when the loader begins handing off (true overlap, no flash).
+  //   isIntroDone → the section + peripheral text fade in to frame the arriving
+  //                 name (fires while the loader wordmark is still morphing).
+  //   hasArrived  → the morphing wordmark has landed; the real hero name resolves.
+  const { isIntroDone, hasArrived } = useIntro();
 
   const scrollTo = (id: string) =>
     document.getElementById(id)?.scrollIntoView({ behavior: "smooth" });
@@ -90,17 +93,20 @@ export default function Hero() {
       id="hero"
       ref={sectionRef}
       /*
-       * Cinematic envelope: a gentle 0.985 → 1 scale + opacity rise on the
-       * whole section, played in parallel with the loader's exit. The slow
-       * 1.4s expo-out curve makes the page feel like it "settles in" rather
-       * than just appearing — the foundation under all the staggered text
-       * reveals below.
+       * Cinematic envelope: a slow opacity rise on the whole section, in
+       * parallel with the loader's exit, so the page "settles in".
+       *
+       * NOTE: deliberately opacity-ONLY (no scale). The loader's morphing
+       * wordmark flies to the measured resting box of the hero name — if the
+       * section also scaled 0.985 → 1 during that flight, the name would still
+       * be moving when the clone lands, and the handoff would visibly jump.
+       * A static target = a pixel-exact landing.
        */
-      initial={{ scale: 0.985, opacity: 0 }}
-      animate={isIntroDone ? { scale: 1, opacity: 1 } : { scale: 0.985, opacity: 0 }}
+      initial={{ opacity: 0 }}
+      animate={isIntroDone ? { opacity: 1 } : { opacity: 0 }}
       transition={{ duration: 1.4, ease: EASE_EXPO }}
       className="relative min-h-screen flex flex-col items-center justify-center overflow-hidden pt-32 pb-24 md:pt-36 md:pb-28"
-      style={{ background: "var(--ph-bg-0)", willChange: "transform, opacity" }}
+      style={{ background: "var(--ph-bg-0)", willChange: "opacity" }}
     >
       {/* Background orbs */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
@@ -204,7 +210,7 @@ export default function Hero() {
         <h1 className="sr-only">
           Haziq Nazeer — Software Engineer &amp; Freelance Backend / AI Developer
         </h1>
-        <HeroNameReveal start={isIntroDone} />
+        <HeroNameReveal start={hasArrived} />
 
         {/* Role */}
         <div

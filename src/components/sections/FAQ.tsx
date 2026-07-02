@@ -56,7 +56,7 @@ function FaqItem({
             transform: isOpen ? "scaleY(1)" : "scaleY(0)",
             opacity: isOpen ? 1 : 0,
             transition:
-              "transform 0.45s cubic-bezier(0.22,1,0.36,1), opacity 0.3s ease",
+              "transform 0.52s cubic-bezier(0.32,0.72,0,1), opacity 0.3s ease",
           }}
         />
 
@@ -139,7 +139,10 @@ function FaqItem({
                 className="w-4 h-4"
                 initial={false}
                 animate={{ rotate: isOpen ? 135 : 0 }}
-                transition={{ duration: 0.4, ease: EASE_EXPO }}
+                transition={{
+                  duration: isOpen ? 0.52 : 0.38,
+                  ease: isOpen ? [0.32, 0.72, 0, 1] : [0.4, 0, 0.2, 1],
+                }}
               >
                 <path d="M12 5v14M5 12h14" />
               </motion.svg>
@@ -160,9 +163,13 @@ function FaqItem({
               className="px-5 sm:px-7 pb-6 pl-5 sm:pl-[3.9rem]"
               style={{
                 opacity: isOpen ? 1 : 0,
-                transform: isOpen ? "translateY(0)" : "translateY(-6px)",
-                transition:
-                  "opacity 0.35s ease 0.05s, transform 0.35s cubic-bezier(0.22,1,0.36,1) 0.05s",
+                transform: isOpen ? "translateY(0)" : "translateY(-8px)",
+                // Synced to the panel reveal: on OPEN the content eases in a
+                // beat behind the height so it arrives as space appears; on
+                // CLOSE it fades out fast up-front so nothing lingers mid-collapse.
+                transition: isOpen
+                  ? "opacity 0.42s ease 0.12s, transform 0.52s cubic-bezier(0.32,0.72,0,1) 0.1s"
+                  : "opacity 0.18s ease, transform 0.28s cubic-bezier(0.4,0,0.2,1)",
               }}
             >
               {/* Gradient hairline divider */}

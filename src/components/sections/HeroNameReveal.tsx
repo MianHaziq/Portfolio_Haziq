@@ -7,12 +7,16 @@ import { useAnimate, useReducedMotion } from "framer-motion";
 /**
  * Cinematic hero wordmark.
  *
- * Choreographed master timeline (Framer Motion `useAnimate`):
- *   1. "Haziq Nazeer" mask-reveals in as a tight, single wordmark (no gap, no
- *      image).
- *   2. After a beat (~1s), the two words split apart on a weighted spring,
- *      opening a real layout gap in the centre — the words ride outward, they
- *      are never overlapped.
+ * This wordmark is the LANDING target of the preloader→hero morph: the loader's
+ * flying "Haziq Nazeer" clone comes to rest exactly over this element (which is
+ * why the container carries `data-hero-name` — the loader measures it). So the
+ * usual mask-slide entrance is skipped here; by the time `start` flips true the
+ * assembly has already been shown by the morphing clone. We pick up mid-story:
+ *
+ *   1. The already-assembled wordmark simply resolves in (a soft opacity/scale
+ *      settle) as the clone crossfades out over the same pixels — seamless.
+ *   2. After a beat, the two words split apart on a weighted spring, opening a
+ *      real layout gap in the centre — the words ride outward, never overlapped.
  *   3. The portrait materialises into that reserved gap: a circular mask-wipe
  *      (clip-path) + scale-up from 0.82 + blur-to-sharp, landing perfectly
  *      centred so the composition reads  Haziq · {portrait} · Nazeer.
@@ -62,21 +66,20 @@ export default function HeroNameReveal({ start }: { start: boolean }) {
 
     const run = async () => {
       await animate([
-        // 1 — wordmark reveals (left then right, tight together). Explicit
-        // from→to keyframes so the mask fade-up + blur-to-sharp always plays
-        // (target-only values let Framer snap from an unparsed start).
+        // 1 — the assembly is ALREADY on screen (the morphing loader clone just
+        // landed here). We only resolve the real name in over the same pixels —
+        // a soft opacity + micro-scale settle, no slide — while the clone
+        // crossfades out. This is the seamless handoff, not a fresh entrance.
         [
-          "[data-name-word='left']",
-          { y: ["115%", "0%"], opacity: [0, 1], filter: ["blur(6px)", "blur(0px)"] },
-          { duration: 0.9, ease: EASE_EXPO },
-        ],
-        [
-          "[data-name-word='right']",
-          { y: ["115%", "0%"], opacity: [0, 1], filter: ["blur(6px)", "blur(0px)"] },
-          { duration: 0.9, ease: EASE_EXPO, at: "<0.12" },
+          // opacity ONLY — no scale/translate/blur — so the real name resolves
+          // in exactly where the loader's clone landed, and the handoff between
+          // the (already sharp) clone and the real name is seamless.
+          "[data-name-word]",
+          { y: "0%", opacity: [0, 1] },
+          { duration: 0.45, ease: EASE_EXPO },
         ],
         // 2 — hold on the assembled wordmark, then split apart on a weighted spring
-        ["[data-name-gap]", open, { type: "spring", stiffness: 120, damping: 18, mass: 1.05, at: "+0.7" }],
+        ["[data-name-gap]", open, { type: "spring", stiffness: 120, damping: 18, mass: 1.05, at: "+0.55" }],
         // 3 — portrait materialises as the gap opens (explicit keyframes)
         ["[data-name-deco]", { opacity: [0, 1] }, { duration: 0.7, ease: "easeOut", at: "<0.25" }],
         [
@@ -108,16 +111,18 @@ export default function HeroNameReveal({ start }: { start: boolean }) {
   return (
     <div
       ref={scope}
+      data-hero-name
       aria-label="Haziq Nazeer"
       className="mb-5 flex flex-col md:flex-row items-center justify-center gap-y-1"
       style={{ fontFamily: "var(--font-display)" }}
     >
-      {/* Haziq */}
+      {/* Haziq — starts assembled (y:0) but invisible: the morphing loader clone
+          stands in for it until it lands, then this resolves in over the top. */}
       <span className="word-mask inline-block" aria-hidden>
         <span
           data-name-word="left"
           className="inline-block text-hero"
-          style={{ transform: "translateY(115%)", opacity: 0, filter: "blur(6px)", color: "var(--ph-t0)" }}
+          style={{ transform: "translateY(0%)", opacity: 0, color: "var(--ph-t0)" }}
         >
           Haziq
         </span>
@@ -173,7 +178,7 @@ export default function HeroNameReveal({ start }: { start: boolean }) {
         <span
           data-name-word="right"
           className="inline-block gradient-text-shimmer text-hero"
-          style={{ transform: "translateY(115%)", opacity: 0, filter: "blur(6px)", fontStyle: "italic" }}
+          style={{ transform: "translateY(0%)", opacity: 0, fontStyle: "italic" }}
         >
           Nazeer.
         </span>

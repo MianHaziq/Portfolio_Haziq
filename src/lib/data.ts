@@ -11,11 +11,11 @@ export const siteConfig = {
   role: "Software Engineer",
   url: SITE_URL,
   tagline: "Building secure, real-time, AI-powered systems",
-  bio: "I build secure, real-time and AI-powered backend and full-stack systems with NestJS, FastAPI, Next.js, PostgreSQL and AWS. Promoted from intern to Associate Software Engineer within a year, I care about shipping production systems that are reliable, scalable and well-engineered.",
+  bio: "I'm Muhammad Haziq Nazeer — a full-stack software engineer who builds fast, beautiful, production-grade products end to end. On the backend I engineer secure, real-time, AI-powered systems with NestJS, FastAPI, PostgreSQL and AWS; on the frontend I love crafting polished, high-performance websites in Next.js and React, built to modern industry best practices. Promoted from intern to Associate Software Engineer in under a year, I've carried products from first commit to production at scale, serving hundreds of thousands of users. I don't just ship code that works — I build systems that stay fast and reliable, and interfaces people genuinely enjoy using.",
   // ── Freelance framing (used across the site now that the focus is client work) ──
   freelanceTagline: "Freelance Backend & AI Engineer",
   freelanceBio:
-    "I help startups and businesses ship production-grade backends, real-time features and AI-powered products — NestJS, FastAPI, Next.js, PostgreSQL and AWS. I've taken systems from idea to launch and tuned them to scale past hundreds of thousands of users. Available for freelance projects, contract work and MVP builds.",
+    "I help startups and businesses ship production-grade backends, real-time features and AI-powered products — NestJS, FastAPI, Next.js, PostgreSQL and AWS. I've taken systems from idea to launch and tuned them to scale past hundreds of thousands of users.",
   availability: "Available for new projects",
   email: "haziqnazeer@gmail.com",
   phone: "+92 311 0645820",
@@ -39,7 +39,7 @@ export const skills = [
   { name: "Python / FastAPI", level: 80, category: "backend" },
   { name: "WebSockets / Real-time", level: 80, category: "backend" },
   { name: "Redis / BullMQ", level: 78, category: "backend" },
-  { name: "AWS (S3, EC2)", level: 75, category: "devops" },
+  { name: "AWS", level: 75, category: "devops" },
 ];
 
 // `icon` points to an SVG in public/tech/. `mono` marks single-color (black)
@@ -74,10 +74,15 @@ export const techStack = {
     { name: "OpenAI", icon: "/tech/openai.svg", mono: true },
     { name: "Anthropic Claude", icon: "/tech/claude.svg" },
   ],
-  "Cloud & Tools": [
-    { name: "AWS (S3, EC2)", icon: "/tech/aws.svg" },
-    { name: "Git & GitHub", icon: "/tech/git.svg" },
+  Payments: [
     { name: "Stripe", icon: "/tech/stripe.svg" },
+    { name: "RevenueCat", icon: "/tech/revenuecat.svg" },
+    { name: "Apple Pay", icon: "/tech/applepay.svg", mono: true },
+    { name: "MyFatoorah", icon: "/tech/myfatoorah.svg" },
+  ],
+  "Cloud & Tools": [
+    { name: "AWS", icon: "/tech/aws.svg" },
+    { name: "Git & GitHub", icon: "/tech/git.svg" },
     { name: "Firebase (FCM)", icon: "/tech/firebase.svg" },
     { name: "Postman", icon: "/tech/postman.svg" },
     { name: "Jira / Agile", icon: "/tech/jira.svg" },
@@ -372,14 +377,15 @@ export const projects: Project[] = [
     problem:
       "A social feed has to stay fast as data grows into the millions of rows: offset pagination collapses, naïve queries trigger N+1 explosions, ephemeral content must expire reliably, media can't be pushed through the API, and blocks / privacy must be enforced on every read — all without slowing the hot path.",
     solution:
-      "I designed the data model and queries for scale from day one. The feed uses keyset (cursor) pagination backed by composite (createdAt DESC, id DESC) indexes — 37 indexes and uniques across 24 models — so feed reads stay O(limit) regardless of table size. Viewer reactions and context are batch-loaded to kill N+1s; hot signals (Pick-of-the-Litter, viral cutoff) are precomputed off the request path and cached in Redis. Three independent BullMQ queues (media, notifications, push) isolate retry domains, an hourly cron expires Stories in bounded batches, and media uploads go direct to S3 via presigned URLs with an FFmpeg HLS transcode worker that streams from S3 to stay memory-light. Engineered to scale toward 1M+ users.",
+      "I designed the data model and queries for scale from day one. The feed uses keyset (cursor) pagination backed by composite (createdAt DESC, id DESC) indexes — 37 indexes and uniques across 24 models — so feed reads stay O(limit) regardless of table size. Viewer reactions and context are batch-loaded to kill N+1s; hot signals (Pick-of-the-Litter, viral cutoff) are precomputed off the request path and cached in Redis. Three independent BullMQ queues (media, notifications, push) isolate retry domains, an hourly cron expires Stories in bounded batches, and media uploads go direct to S3 via presigned URLs with a background FFmpeg worker that streams from S3 to stay memory-light. For Reels, that worker compresses every upload into a YouTube-style adaptive-bitrate HLS ladder with an auto-generated poster thumbnail, served from the CloudFront CDN — so instead of streaming a large raw MP4 on every view, players fetch small edge-cached segments at the right resolution and start instantly, cutting Reel load times by ~95%. Engineered to scale toward 1M+ users.",
     features: [
       { title: "Dual feed", description: "Photo / text Posts and video Reels, with FOR_YOU, followers and friends scopes." },
       { title: "Keyset pagination", description: "Cursor pagination on every list, backed by composite indexes — O(limit) reads." },
       { title: "Ephemeral Stories", description: "24-hour Stories with hourly, batched, memory-bounded TTL cleanup." },
       { title: "Social graph", description: "Followers (“pawollers”), mutual friends and symmetric blocks." },
       { title: "“Wolf Pack” communities", description: "Group spaces with bidirectional invite / request join negotiation." },
-      { title: "HLS video pipeline", description: "FFmpeg adaptive-bitrate transcode with instant-playback fallback." },
+      { title: "HLS video pipeline", description: "YouTube-style adaptive-bitrate HLS — a background FFmpeg worker compresses every Reel into multiple renditions with an auto-generated poster thumbnail." },
+      { title: "Instant Reel loads", description: "Adaptive HLS + CloudFront CDN + compression cut Reel start / load time by ~95%." },
       { title: "Aggregated push", description: "“X and N others” deduped notifications delivered via Firebase FCM." },
     ],
     contributions: [
@@ -387,7 +393,7 @@ export const projects: Project[] = [
       "Designed the indexed schema (37 indexes / uniques) and the keyset-paginated, privacy- and block-aware feed engine.",
       "Eliminated N+1s by batch-loading viewer reactions and context per page.",
       "Built the event-driven notification + FCM push pipeline across 3 BullMQ queues with independent retries.",
-      "Built the S3 + CloudFront media layer and the FFmpeg HLS transcode worker that streams from S3.",
+      "Built the S3 + CloudFront media layer and the background FFmpeg pipeline that compresses each Reel into an adaptive-bitrate HLS ladder with poster thumbnails — cutting video load times by ~95%.",
       "Built ephemeral Stories with cron-driven, batched TTL cleanup and Redis-cached feed signals.",
     ],
     challenges: [
@@ -407,8 +413,13 @@ export const projects: Project[] = [
         challenge: "A Firebase outage shouldn't corrupt notification state or double-send pushes.",
         solution: "Split push into its own BullMQ queue with per-device jobs, idempotency via a pushSentAt marker, and dead-token pruning.",
       },
+      {
+        challenge: "Reels loaded slowly — large raw MP4s were streamed straight from storage on every view, so playback stalled and buffered.",
+        solution: "A background FFmpeg worker now compresses each upload into an adaptive-bitrate HLS ladder (multiple resolutions) with an auto-generated poster thumbnail, delivered over the CloudFront CDN — so players fetch small, edge-cached segments and start at the right quality instantly. Reel load / start time dropped by ~95%.",
+      },
     ],
     outcomes: [
+      { value: "~95%", label: "Faster Reel load time" },
       { value: "1M+", label: "Designed to scale to users" },
       { value: "37", label: "Targeted DB indexes" },
       { value: "O(limit)", label: "Keyset-paginated feed" },
