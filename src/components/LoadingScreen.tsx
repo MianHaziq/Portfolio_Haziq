@@ -133,7 +133,10 @@ export default function LoadingScreen() {
       //   …and "Nazeer."'s solid fill melts away to reveal its gradient.
       animate(
         "[data-morph-nazeer]",
-        { WebkitTextFillColor: [ink, "rgba(127,127,127,0)"] },
+        // Framer types style keys off CSSStyleDeclaration, so the vendor-prefixed
+        // property is camelCase with a lowercase leading "w" (webkitTextFillColor),
+        // unlike React's `style` prop which uses `WebkitTextFillColor`.
+        { webkitTextFillColor: [ink, "rgba(127,127,127,0)"] },
         { duration: D * 0.7, ease: "easeInOut", delay: D * 0.22 },
       );
 
