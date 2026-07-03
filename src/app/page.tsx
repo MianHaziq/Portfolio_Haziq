@@ -9,6 +9,7 @@ import Projects from "@/components/sections/Projects";
 import Experience from "@/components/sections/Experience";
 import Testimonials from "@/components/sections/Testimonials";
 import FAQ from "@/components/sections/FAQ";
+import Presence from "@/components/sections/Presence";
 import Contact from "@/components/sections/Contact";
 import Footer from "@/components/sections/Footer";
 import { seoFaqs } from "@/lib/data";
@@ -54,6 +55,8 @@ export default function Home() {
         <Testimonials />
         {/* SEO: real, crawlable Q&A backing the FAQPage structured data */}
         <FAQ />
+        {/* Verified, clickable proof of identity across the web */}
+        <Presence />
         <Contact />
       </main>
 

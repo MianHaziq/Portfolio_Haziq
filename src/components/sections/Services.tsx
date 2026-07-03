@@ -1,5 +1,6 @@
 "use client";
 
+import { useState } from "react";
 import Link from "next/link";
 import { motion } from "framer-motion";
 import { services, type Service } from "@/lib/data";
@@ -31,14 +32,22 @@ const ICONS: Record<Service["icon"], React.ReactNode> = {
   ),
 };
 
-function ServiceCard({ service, index }: { service: Service; index: number }) {
+function ServiceCard({
+  service,
+  index,
+  className = "",
+}: {
+  service: Service;
+  index: number;
+  className?: string;
+}) {
   return (
     <motion.div
       initial={{ opacity: 0, y: 40 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, margin: "-60px" }}
       transition={{ duration: 0.6, delay: (index % 3) * 0.09, ease: EASE_EXPO }}
-      className="h-full"
+      className={`h-full ${className}`}
     >
       {/* TiltCard: 3D tilt + glare on hover (GPU transforms, hover-only — zero idle cost).
           svc-card: animated gradient ring (masked → never bleeds) + glow on hover. */}
@@ -111,7 +120,13 @@ function ServiceCard({ service, index }: { service: Service; index: number }) {
   );
 }
 
+// How many service cards to show on mobile before the "View all" toggle.
+// Desktop (sm+) always shows every card.
+const MOBILE_PREVIEW = 3;
+
 export default function Services() {
+  const [showAll, setShowAll] = useState(false);
+
   return (
     <section
       id="services"
@@ -141,9 +156,47 @@ export default function Services() {
 
         <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
           {services.map((service, i) => (
-            <ServiceCard key={service.title} service={service} index={i} />
+            <ServiceCard
+              key={service.title}
+              service={service}
+              index={i}
+              // On mobile, hide everything past the preview until "View all".
+              // sm+ always shows the card.
+              className={!showAll && i >= MOBILE_PREVIEW ? "hidden sm:block" : ""}
+            />
           ))}
         </div>
+
+        {/* Mobile-only "View all" toggle — desktop shows every card already */}
+        {services.length > MOBILE_PREVIEW && (
+          <div className="mt-8 flex justify-center sm:hidden">
+            <button
+              type="button"
+              onClick={() => setShowAll((v) => !v)}
+              aria-expanded={showAll}
+              className="inline-flex items-center gap-2 px-6 py-3 rounded-full transition-transform duration-200 active:scale-95"
+              style={{
+                background: "var(--ph-surface)",
+                border: "1px solid var(--ph-border-medium)",
+                color: "var(--ph-t2)",
+                fontFamily: "var(--font-body)",
+                fontWeight: 600,
+                fontSize: "0.9rem",
+              }}
+            >
+              {showAll ? "Show less" : `View all ${services.length} services`}
+              <svg
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth={2}
+                className={`w-4 h-4 transition-transform duration-300 ${showAll ? "rotate-180" : ""}`}
+              >
+                <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" />
+              </svg>
+            </button>
+          </div>
+        )}
 
         {/* CTA */}
         <div className="mt-14 flex flex-col items-center gap-4 text-center">
